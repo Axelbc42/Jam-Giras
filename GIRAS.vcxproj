@@ -143,6 +143,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\core\AssetManager.cpp" />
     <ClCompile Include="src\systems\Dialogue.cpp" />
     <ClCompile Include="src\scenes\MainMenu.cpp" />
     <ClCompile Include="src\entities\Clickable.cpp" />
@@ -157,6 +158,7 @@
     <ClCompile Include="lib\rlImGui\rlImGui.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\AssetManager.h" />
     <ClInclude Include="src\systems\Dialogue.h" />
     <ClInclude Include="src\scenes\MainMenu.h" />
     <ClInclude Include="src\entities\Clickable.h" />
@@ -171,6 +173,20 @@
     <ClInclude Include="lib\rlImGui\rlImGui.h" />
     <ClInclude Include="lib\rlImGui\rlImGuiColors.h" />
     <ClInclude Include="src\core\SceneManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\images\Backgrounds\Plaza.jpg" />
+    <Image Include="assets\images\backgrounds\Plaza.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="assets\audio\music\placeholder.mp3" />
+    <Media Include="assets\audio\sfx\placeholder.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="assets\data\json.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="assets\fonts\Matcha Style.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

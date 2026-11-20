@@ -35,6 +35,8 @@ private:
 
     // --- Prueba temporal: un hotspot clicable ---
     Rectangle m_hotspot{ 0, 0, 0, 0 };
+    Texture m_hotspotTexture{};
+    Font m_font{};
     bool m_hotspotHover = false;
     std::string m_message;
     float m_messageTimer = 0.0f;

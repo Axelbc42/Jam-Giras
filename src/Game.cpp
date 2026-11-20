@@ -2,6 +2,7 @@
 
 #include "imgui.h"
 #include "rlImGui.h"
+#include "core/AssetManager.h"
 
 namespace
 {
@@ -44,8 +45,10 @@ Game::~Game()
 {
     if (m_windowReady)
     {
-        rlImGuiShutdown();
-        CloseWindow();
+        AssetManager::Release();   // 1) recursos (necesitan la ventana y el audio abiertos)
+        CloseAudioDevice();        // 2) audio
+        rlImGuiShutdown();         // 3) ImGui
+        CloseWindow();             // 4) ventana
     }
 }
 
@@ -58,6 +61,7 @@ bool Game::initWindow()
     if (!IsWindowReady())
         return false;
 
+    InitAudioDevice();
     SetTargetFPS(60);
     rlImGuiSetup(true);   // true = tema oscuro
     m_windowReady = true;
@@ -66,11 +70,12 @@ bool Game::initWindow()
 
 void Game::initGame()
 {
-    // Aqui iran la carga de recursos y la primera escena.
-    m_hotspot = Rectangle{ 800.0f, 200.0f, 200.0f, 350.0f };
-    m_message = "Haz clic en la puerta";
-}
+    m_hotspotTexture = AssetManager::Instance()->GetTexture(Textures::BACKGROUND_PLAZA);
+    m_font = AssetManager::Instance()->GetFont(Fonts::MAIN);
 
+    m_hotspot = Rectangle{ 400.0f, 200.0f, 500.0f, 350.0f };
+    m_message = "Haz clic en la plaza";
+}
 // ---------------------------------------------------------------
 // Bucle principal
 // ---------------------------------------------------------------
@@ -99,7 +104,7 @@ void Game::update(float dt)
 
     if (m_hotspotHover && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
     {
-        m_message = "Has hecho clic en la puerta";
+        m_message = "Has hecho clic en la plaza";
         m_messageTimer = 2.0f;
     }
 }
@@ -110,9 +115,13 @@ void Game::draw()
     ClearBackground(Color{ 40, 44, 52, 255 });
 
     // --- Mundo del juego ---
-    DrawRectangleRec(m_hotspot, m_hotspotHover ? Color{ 200, 160, 60, 255 }
-    : Color{ 120, 90, 40, 255 });
-    DrawText("PUERTA", (int)m_hotspot.x + 50, (int)m_hotspot.y + 160, 24, RAYWHITE);
+    //DrawRectangleRec(m_hotspot, m_hotspotHover ? Color{ 200, 160, 60, 255 } : Color{ 120, 90, 40, 255 });
+
+    Rectangle origen = { 0.0f, 0.0f, (float)m_hotspotTexture.width, (float)m_hotspotTexture.height };
+    Color tinte = m_hotspotHover ? WHITE : Color{ 200, 200, 200, 255 };
+    DrawTexturePro(m_hotspotTexture, origen, m_hotspot, Vector2{ 0, 0 }, 0.0f, tinte);
+
+    DrawTextEx(m_font, "PLAZA", Vector2{ m_hotspot.x, m_hotspot.y - 50 }, 50.0f, 2.0f, RAYWHITE);
 
     // --- Interfaz del juego ---
     DrawText(m_message.c_str(), 20, kScreenHeight - 50, 24, RAYWHITE);
