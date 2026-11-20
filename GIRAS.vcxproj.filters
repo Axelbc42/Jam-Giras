@@ -63,6 +63,9 @@
     <ClCompile Include="src\core\AudioManager.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="src\scenes\SceneTextTest.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\imgui\imconfig.h">
@@ -122,6 +125,9 @@
     <ClInclude Include="src\utilities\GameConstants.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="src\scenes\SceneTextTest.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\images\Backgrounds\Plaza.jpg">
@@ -136,9 +142,9 @@
     <Media Include="assets\audio\sfx\placeholder.mp3" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="assets\data\json.txt" />
+    <Font Include="assets\fonts\Matcha Style.ttf" />
   </ItemGroup>
   <ItemGroup>
-    <Font Include="assets\fonts\Matcha Style.ttf" />
+    <Text Include="assets\data\Tutorial.txt" />
   </ItemGroup>
 </Project>

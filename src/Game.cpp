@@ -5,9 +5,8 @@
 #include "core/AssetManager.h"
 #include "core/AudioManager.h"
 #include "core/SceneManager.h"
-
-#include "scenes/PlazaScene.h"
 #include "utilities/GameConstants.h"
+#include "scenes/PlazaScene.h"
 
 Game* Game::s_instance = nullptr;
 
@@ -16,27 +15,27 @@ Game* Game::s_instance = nullptr;
 // ---------------------------------------------------------------
 bool Game::Init()
 {
-    if (s_instance != nullptr)
-        return true;
+	if (s_instance != nullptr)
+		return true;
 
-    s_instance = new Game();
-    if (!s_instance->initWindow())
-    {
-        Release();
-        return false;
-    }
-    return true;
+	s_instance = new Game();
+	if (!s_instance->initWindow())
+	{
+		Release();
+		return false;
+	}
+	return true;
 }
 
 Game* Game::Instance()
 {
-    return s_instance;
+	return s_instance;
 }
 
 void Game::Release()
 {
-    delete s_instance;
-    s_instance = nullptr;
+	delete s_instance;
+	s_instance = nullptr;
 }
 
 Game::~Game()
@@ -61,11 +60,11 @@ bool Game::initWindow()
     if (!IsWindowReady())
         return false;
 
-    AudioManager::Instance()->Init();
-    SetTargetFPS(60);
-    rlImGuiSetup(true);   
-    m_windowReady = true;
-    return true;
+	AudioManager::Instance()->Init();
+	SetTargetFPS(60);
+	rlImGuiSetup(true);
+	m_windowReady = true;
+	return true;
 }
 
 void Game::initGame()
@@ -79,25 +78,25 @@ void Game::initGame()
 // ---------------------------------------------------------------
 void Game::start()
 {
-    while (!WindowShouldClose())
-    {
-        update(GetFrameTime());
-        draw();
-    }
+	while (!WindowShouldClose())
+	{
+		update(GetFrameTime());
+		draw();
+	}
 }
 
 void Game::update(float dt)
 {
-    if (IsKeyPressed(KEY_F1))
-        m_debug = !m_debug;
+	if (IsKeyPressed(KEY_F1))
+		m_debug = !m_debug;
 
     SceneManager::Instance()->Update(dt);
 }
 
 void Game::draw()
 {
-    BeginDrawing();
-    ClearBackground(Color{ 40, 44, 52, 255 });
+	BeginDrawing();
+	ClearBackground(Color{ 40, 44, 52, 255 });
 
     // --- Mundo del juego ---
     SceneManager::Instance()->Draw();
@@ -115,18 +114,18 @@ void Game::draw()
 
 void Game::drawDebugUI()
 {
-    ImGui::Begin("Depuracion");
-    ImGui::Text("FPS: %d", GetFPS());
+	ImGui::Begin("Depuracion");
+	ImGui::Text("FPS: %d", GetFPS());
 
-    const Vector2 mouse = GetMousePosition();
-    ImGui::Text("Raton: %.0f, %.0f", mouse.x, mouse.y);
+	const Vector2 mouse = GetMousePosition();
+	ImGui::Text("Raton: %.0f, %.0f", mouse.x, mouse.y);
 
     SceneManager::Instance()->DrawDebugUI();
 
-    ImGui::Separator();
-    ImGui::Checkbox("Demo de ImGui", &m_showImGuiDemo);
-    ImGui::End();
+	ImGui::Separator();
+	ImGui::Checkbox("Demo de ImGui", &m_showImGuiDemo);
+	ImGui::End();
 
-    if (m_showImGuiDemo)
-        ImGui::ShowDemoWindow(&m_showImGuiDemo);
+	if (m_showImGuiDemo)
+		ImGui::ShowDemoWindow(&m_showImGuiDemo);
 }

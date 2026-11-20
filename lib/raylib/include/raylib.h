@@ -501,6 +501,14 @@ typedef struct Music {
     void *ctxData;              // Audio context data, depends on type
 } Music;
 
+//Provisional por ahora, no se que puede ser necesario o no
+typedef struct Text {
+    const char* fileName;
+    char* text;
+    int lineCount;
+    char** lines;
+} Text;
+
 // VrDeviceInfo, Head-Mounted-Display device parameters
 typedef struct VrDeviceInfo {
     int hResolution;                // Horizontal resolution in pixels
