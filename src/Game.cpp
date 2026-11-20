@@ -7,6 +7,7 @@
 #include "core/SceneManager.h"
 
 #include "scenes/PlazaScene.h"
+#include "scenes/MainMenu.h"
 #include "utilities/GameConstants.h"
 
 Game* Game::s_instance = nullptr;
@@ -71,8 +72,9 @@ bool Game::initWindow()
 void Game::initGame()
 {
     SceneManager::Instance();
+    SceneManager::Instance()->AddScene(new MainMenu("Menu"));
     SceneManager::Instance()->AddScene(new PlazaScene("Plaza"));
-    SceneManager::Instance()->ChangeScene("Plaza");
+    SceneManager::Instance()->ChangeScene("Menu");
 }
 // ---------------------------------------------------------------
 // Bucle principal
