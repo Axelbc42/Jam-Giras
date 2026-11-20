@@ -11,7 +11,7 @@ namespace Textures {
 }
 
 namespace Sounds {
-    constexpr const char* CLICK = "placeholder.mp3";
+    constexpr const char* CLICK = "placeholder.wav";
 }
 
 namespace Musics {

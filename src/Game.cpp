@@ -3,6 +3,7 @@
 #include "imgui.h"
 #include "rlImGui.h"
 #include "core/AssetManager.h"
+#include "core/AudioManager.h"
 
 namespace
 {
@@ -46,6 +47,7 @@ Game::~Game()
     if (m_windowReady)
     {
         AssetManager::Release();   // 1) recursos (necesitan la ventana y el audio abiertos)
+        AudioManager::Release();
         CloseAudioDevice();        // 2) audio
         rlImGuiShutdown();         // 3) ImGui
         CloseWindow();             // 4) ventana
@@ -61,15 +63,18 @@ bool Game::initWindow()
     if (!IsWindowReady())
         return false;
 
-    InitAudioDevice();
+    AudioManager::Instance()->Init();
     SetTargetFPS(60);
-    rlImGuiSetup(true);   // true = tema oscuro
+    rlImGuiSetup(true);   
     m_windowReady = true;
     return true;
 }
 
 void Game::initGame()
 {
+    clickSound = AssetManager::Instance()->GetSound(Sounds::CLICK);
+    TraceLog(LOG_INFO, "Sound loaded: %d", clickSound.frameCount);
+
     m_hotspotTexture = AssetManager::Instance()->GetTexture(Textures::BACKGROUND_PLAZA);
     m_font = AssetManager::Instance()->GetFont(Fonts::MAIN);
 
@@ -104,6 +109,7 @@ void Game::update(float dt)
 
     if (m_hotspotHover && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
     {
+        AudioManager::Instance()->PlaySound(clickSound);
         m_message = "Has hecho clic en la plaza";
         m_messageTimer = 2.0f;
     }

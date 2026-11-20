@@ -143,6 +143,9 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\core\AudioManager.cpp" />
+    <ClCompile Include="src\scenes\PlazaScene.cpp" />
+    <ClCompile Include="src\scenes\Scene.cpp" />
     <ClCompile Include="src\core\AssetManager.cpp" />
     <ClCompile Include="src\systems\Dialogue.cpp" />
     <ClCompile Include="src\scenes\MainMenu.cpp" />
@@ -158,6 +161,9 @@
     <ClCompile Include="lib\rlImGui\rlImGui.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\AudioManager.h" />
+    <ClInclude Include="src\scenes\PlazaScene.h" />
+    <ClInclude Include="src\scenes\Scene.h" />
     <ClInclude Include="src\core\AssetManager.h" />
     <ClInclude Include="src\systems\Dialogue.h" />
     <ClInclude Include="src\scenes\MainMenu.h" />
