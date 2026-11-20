@@ -17,8 +17,8 @@ void MainMenu::Init()
     m_font = AssetManager::Instance()->GetFont(Fonts::MAIN);
 
     _backgroundHS = Rectangle{ 0.0f, 0, 1280.0f, 720.0f };
-    _buttonHS = Rectangle{ 640.0f, 360, 160.0f, 160.0f };
-    m_message = "Haz clic en \nel boton ngr";
+    _buttonHS = Rectangle{ 640.0f, 360, 360, 160.0f };
+    m_message = "Haz clic en el boton \n67 skibidy sigma \nperdon";
 }
 
 void MainMenu::Update(float dt)
@@ -36,13 +36,15 @@ void MainMenu::Update(float dt)
 
 void MainMenu::Draw()
 {
-    Rectangle origen = { 0.0f, 0.0f, (float)_background.width, (float)_background.height };
+    Rectangle origenFondo = { 0.0f, 0.0f, (float)_background.width, (float)_background.height };
+    Rectangle origenBoton = { 0.0f, 0.0f, (float)_button.width,     (float)_button.height };
     Color tinte = _buttonHSHover ? WHITE : Color{ 200, 200, 200, 255 };
-    DrawTexturePro(_background, origen, _backgroundHS, Vector2{ 0, 0 }, 0.0f, WHITE);
-    DrawTexturePro(_button, origen, _buttonHS, Vector2{ 0, 0 }, 0.0f, tinte);
+
+    DrawTexturePro(_background, origenFondo, _backgroundHS, Vector2{ 0, 0 }, 0.0f, WHITE);
+    DrawTexturePro(_button, origenBoton, _buttonHS, Vector2{ 0, 0 }, 0.0f, tinte);
 
     // --- Interfaz del juego ---
-    DrawText(m_message.c_str(), _buttonHS.x + 10, _buttonHS.y + 10, 24, BLACK);
+    DrawText(m_message.c_str(), _buttonHS.x + 60, _buttonHS.y + 30, 24, BLACK);
     DrawText("F1: panel de depuracion", 20, GameConstants::kScreenHeight - 50, 24, BLACK);
 }
 
