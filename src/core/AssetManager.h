@@ -11,11 +11,11 @@ namespace Textures {
 }
 
 namespace Sounds {
-    constexpr const char* CLICK = "click.wav";
+    constexpr const char* CLICK = "placeholder.mp3";
 }
 
 namespace Musics {
-    constexpr const char* MENU = "menu.wav";
+    constexpr const char* MENU = "placeholder.mp3";
 }
 
 namespace Fonts {
@@ -33,6 +33,8 @@ public:
     Sound   GetSound(const std::string& name);
     Music   GetMusic(const std::string& name);
     Font    GetFont(const std::string& name);
+
+    //GetModel() y GetShader() también se pueden implementar si los necesitamos para modelos 3D y shaders
 
     void UnloadAll();
 
