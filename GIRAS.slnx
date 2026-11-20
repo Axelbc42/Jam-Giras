@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="GIRAS.vcxproj" Id="873d6a5f-beb9-413a-baf3-860fa8a78230" />
+</Solution>
