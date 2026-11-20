@@ -143,7 +143,12 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GIRAS.cpp" />
+    <ClCompile Include="src\systems\Dialogue.cpp" />
+    <ClCompile Include="src\scenes\MainMenu.cpp" />
+    <ClCompile Include="src\entities\Clickable.cpp" />
+    <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\core\SceneManager.cpp" />
+    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="lib\imgui\imgui.cpp" />
     <ClCompile Include="lib\imgui\imgui_demo.cpp" />
     <ClCompile Include="lib\imgui\imgui_draw.cpp" />
@@ -152,6 +157,10 @@
     <ClCompile Include="lib\rlImGui\rlImGui.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\systems\Dialogue.h" />
+    <ClInclude Include="src\scenes\MainMenu.h" />
+    <ClInclude Include="src\entities\Clickable.h" />
+    <ClInclude Include="src\Game.h" />
     <ClInclude Include="lib\imgui\imconfig.h" />
     <ClInclude Include="lib\imgui\imgui.h" />
     <ClInclude Include="lib\imgui\imgui_internal.h" />
@@ -161,6 +170,7 @@
     <ClInclude Include="lib\rlImGui\imgui_impl_raylib.h" />
     <ClInclude Include="lib\rlImGui\rlImGui.h" />
     <ClInclude Include="lib\rlImGui\rlImGuiColors.h" />
+    <ClInclude Include="src\core\SceneManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
