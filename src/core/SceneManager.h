@@ -1,15 +1,37 @@
 #pragma once
 #include "../scenes/Scene.h"
 
-#include <vector>
+#include <unordered_map>
 
 class SceneManager
 {
 
 public:
-	void AddScene();
-	void ChangeScene();
+	static SceneManager* Instance();
+	static void Release();
+
+	void AddScene(Scene* scene);
+	void ChangeScene(int id);
+	void ChangeScene(std::string name);
+
+	void Draw();
+	void DrawDebugUI();
+	void Update(float dt);
+
 private:
-	std::vector<Scene*> scenes;
+	SceneManager() = default;
+	~SceneManager() = default;
+
+	SceneManager(const SceneManager&) = delete;
+	SceneManager& operator=(const SceneManager&) = delete;
+
+	void Unload();
+
+	std::unordered_map<int, Scene*> scenes;
+	std::unordered_map<std::string, int> ids;
+
+	int currentScene = 0;
+
+	static SceneManager* s_instance;
 };
 

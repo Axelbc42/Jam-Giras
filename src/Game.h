@@ -32,14 +32,4 @@ private:
     // --- Depuracion ---
     bool m_debug = true;         // F1 muestra/oculta el panel de ImGui
     bool m_showImGuiDemo = false;
-
-    // --- Prueba temporal: un hotspot clicable ---
-    Rectangle m_hotspot{ 0, 0, 0, 0 };
-    Texture m_hotspotTexture{};
-    Font m_font{};
-    Sound clickSound;
-
-    bool m_hotspotHover = false;
-    std::string m_message;
-    float m_messageTimer = 0.0f;
 };

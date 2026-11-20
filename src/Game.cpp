@@ -4,13 +4,10 @@
 #include "rlImGui.h"
 #include "core/AssetManager.h"
 #include "core/AudioManager.h"
+#include "core/SceneManager.h"
 
-namespace
-{
-    const int kScreenWidth = 1280;
-    const int kScreenHeight = 720;
-    const char* kTitle = "Jam-Giras";
-}
+#include "scenes/PlazaScene.h"
+#include "utilities/GameConstants.h"
 
 Game* Game::s_instance = nullptr;
 
@@ -48,6 +45,7 @@ Game::~Game()
     {
         AssetManager::Release();   // 1) recursos (necesitan la ventana y el audio abiertos)
         AudioManager::Release();
+        SceneManager::Release();
         CloseAudioDevice();        // 2) audio
         rlImGuiShutdown();         // 3) ImGui
         CloseWindow();             // 4) ventana
@@ -59,7 +57,7 @@ Game::~Game()
 // ---------------------------------------------------------------
 bool Game::initWindow()
 {
-    InitWindow(kScreenWidth, kScreenHeight, kTitle);
+    InitWindow(GameConstants::kScreenWidth, GameConstants::kScreenHeight, GameConstants::kTitle);
     if (!IsWindowReady())
         return false;
 
@@ -72,14 +70,9 @@ bool Game::initWindow()
 
 void Game::initGame()
 {
-    clickSound = AssetManager::Instance()->GetSound(Sounds::CLICK);
-    TraceLog(LOG_INFO, "Sound loaded: %d", clickSound.frameCount);
-
-    m_hotspotTexture = AssetManager::Instance()->GetTexture(Textures::BACKGROUND_PLAZA);
-    m_font = AssetManager::Instance()->GetFont(Fonts::MAIN);
-
-    m_hotspot = Rectangle{ 400.0f, 200.0f, 500.0f, 350.0f };
-    m_message = "Haz clic en la plaza";
+    SceneManager::Instance();
+    SceneManager::Instance()->AddScene(new PlazaScene("Plaza"));
+    SceneManager::Instance()->ChangeScene("Plaza");
 }
 // ---------------------------------------------------------------
 // Bucle principal
@@ -98,21 +91,7 @@ void Game::update(float dt)
     if (IsKeyPressed(KEY_F1))
         m_debug = !m_debug;
 
-    if (m_messageTimer > 0.0f)
-        m_messageTimer -= dt;
-
-    // Si el raton esta sobre una ventana de ImGui, el juego no recibe el clic.
-    const bool imguiCapturaRaton = ImGui::GetIO().WantCaptureMouse;
-
-    const Vector2 mouse = GetMousePosition();
-    m_hotspotHover = !imguiCapturaRaton && CheckCollisionPointRec(mouse, m_hotspot);
-
-    if (m_hotspotHover && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-    {
-        AudioManager::Instance()->PlaySound(clickSound);
-        m_message = "Has hecho clic en la plaza";
-        m_messageTimer = 2.0f;
-    }
+    SceneManager::Instance()->Update(dt);
 }
 
 void Game::draw()
@@ -121,17 +100,7 @@ void Game::draw()
     ClearBackground(Color{ 40, 44, 52, 255 });
 
     // --- Mundo del juego ---
-    //DrawRectangleRec(m_hotspot, m_hotspotHover ? Color{ 200, 160, 60, 255 } : Color{ 120, 90, 40, 255 });
-
-    Rectangle origen = { 0.0f, 0.0f, (float)m_hotspotTexture.width, (float)m_hotspotTexture.height };
-    Color tinte = m_hotspotHover ? WHITE : Color{ 200, 200, 200, 255 };
-    DrawTexturePro(m_hotspotTexture, origen, m_hotspot, Vector2{ 0, 0 }, 0.0f, tinte);
-
-    DrawTextEx(m_font, "PLAZA", Vector2{ m_hotspot.x, m_hotspot.y - 50 }, 50.0f, 2.0f, RAYWHITE);
-
-    // --- Interfaz del juego ---
-    DrawText(m_message.c_str(), 20, kScreenHeight - 50, 24, RAYWHITE);
-    DrawText("F1: panel de depuracion", 20, 20, 20, LIGHTGRAY);
+    SceneManager::Instance()->Draw();
 
     // --- Depuracion con ImGui ---
     if (m_debug)
@@ -140,6 +109,7 @@ void Game::draw()
         drawDebugUI();
         rlImGuiEnd();
     }
+
     EndDrawing();
 }
 
@@ -151,12 +121,7 @@ void Game::drawDebugUI()
     const Vector2 mouse = GetMousePosition();
     ImGui::Text("Raton: %.0f, %.0f", mouse.x, mouse.y);
 
-    ImGui::Separator();
-    ImGui::Text("Hotspot de prueba");
-    ImGui::DragFloat("x", &m_hotspot.x, 1.0f);
-    ImGui::DragFloat("y", &m_hotspot.y, 1.0f);
-    ImGui::DragFloat("ancho", &m_hotspot.width, 1.0f, 10.0f, 1280.0f);
-    ImGui::DragFloat("alto", &m_hotspot.height, 1.0f, 10.0f, 720.0f);
+    SceneManager::Instance()->DrawDebugUI();
 
     ImGui::Separator();
     ImGui::Checkbox("Demo de ImGui", &m_showImGuiDemo);

@@ -179,6 +179,7 @@
     <ClInclude Include="lib\rlImGui\rlImGui.h" />
     <ClInclude Include="lib\rlImGui\rlImGuiColors.h" />
     <ClInclude Include="src\core\SceneManager.h" />
+    <ClInclude Include="src\utilities\GameConstants.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\images\Backgrounds\Plaza.jpg" />
