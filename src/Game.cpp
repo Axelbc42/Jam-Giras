@@ -3,6 +3,8 @@
 #include "imgui.h"
 #include "rlImGui.h"
 #include "core/AssetManager.h"
+#include "Config.h"
+#include <iostream>
 
 namespace
 {
@@ -64,6 +66,7 @@ bool Game::initWindow()
     InitAudioDevice();
     SetTargetFPS(60);
     rlImGuiSetup(true);   // true = tema oscuro
+    SetWindowState(Config::window_mode);
     m_windowReady = true;
     return true;
 }
@@ -83,8 +86,21 @@ void Game::start()
 {
     while (!WindowShouldClose())
     {
+        float frame_start_time = GetTime();
+
         update(GetFrameTime());
         draw();
+
+        float frame_end_time = GetTime();
+
+        float delta_time = frame_end_time - frame_start_time;
+
+        if (delta_time < Config::objective_frame_time) 
+        {
+            float wait_time = Config::objective_frame_time - delta_time;
+            WaitTime(wait_time);
+            std::cout << delta_time << std::endl;
+        }
     }
 }
 
@@ -92,6 +108,12 @@ void Game::update(float dt)
 {
     if (IsKeyPressed(KEY_F1))
         m_debug = !m_debug;
+
+    if (IsKeyPressed(KEY_F)) 
+    {
+        //ToggleFullscreen();
+        //Config::SetWindowMode(FLAG_WINDOW_MAXIMIZED);
+    }
 
     if (m_messageTimer > 0.0f)
         m_messageTimer -= dt;
@@ -112,28 +134,30 @@ void Game::update(float dt)
 void Game::draw()
 {
     BeginDrawing();
-    ClearBackground(Color{ 40, 44, 52, 255 });
+    //ClearBackground(Color{ 40, 44, 52, 255 });
 
-    // --- Mundo del juego ---
-    //DrawRectangleRec(m_hotspot, m_hotspotHover ? Color{ 200, 160, 60, 255 } : Color{ 120, 90, 40, 255 });
+    //// --- Mundo del juego ---
+    ////DrawRectangleRec(m_hotspot, m_hotspotHover ? Color{ 200, 160, 60, 255 } : Color{ 120, 90, 40, 255 });
 
-    Rectangle origen = { 0.0f, 0.0f, (float)m_hotspotTexture.width, (float)m_hotspotTexture.height };
-    Color tinte = m_hotspotHover ? WHITE : Color{ 200, 200, 200, 255 };
-    DrawTexturePro(m_hotspotTexture, origen, m_hotspot, Vector2{ 0, 0 }, 0.0f, tinte);
+    //Rectangle origen = { 0.0f, 0.0f, (float)m_hotspotTexture.width, (float)m_hotspotTexture.height };
+    //Color tinte = m_hotspotHover ? WHITE : Color{ 200, 200, 200, 255 };
+    //DrawTexturePro(m_hotspotTexture, origen, m_hotspot, Vector2{ 0, 0 }, 0.0f, tinte);
 
-    DrawTextEx(m_font, "PLAZA", Vector2{ m_hotspot.x, m_hotspot.y - 50 }, 50.0f, 2.0f, RAYWHITE);
+    DrawTextEx(m_font, "PLAZA", Vector2{ 0,0 }, 50.0f, 2.0f, RAYWHITE);
 
-    // --- Interfaz del juego ---
-    DrawText(m_message.c_str(), 20, kScreenHeight - 50, 24, RAYWHITE);
-    DrawText("F1: panel de depuracion", 20, 20, 20, LIGHTGRAY);
+    //// --- Interfaz del juego ---
+    //DrawText(m_message.c_str(), 20, kScreenHeight - 50, 24, RAYWHITE);
+    //DrawText("F1: panel de depuracion", 20, 20, 20, LIGHTGRAY);
 
-    // --- Depuracion con ImGui ---
-    if (m_debug)
-    {
-        rlImGuiBegin();
-        drawDebugUI();
-        rlImGuiEnd();
-    }
+    //// --- Depuracion con ImGui ---
+    //if (m_debug)
+    //{
+    //    rlImGuiBegin();
+    //    drawDebugUI();
+    //    rlImGuiEnd();
+    //}
+
+
     EndDrawing();
 }
 

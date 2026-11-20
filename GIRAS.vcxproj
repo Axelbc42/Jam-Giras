@@ -143,6 +143,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Config.cpp" />
     <ClCompile Include="src\core\AssetManager.cpp" />
     <ClCompile Include="src\systems\Dialogue.cpp" />
     <ClCompile Include="src\scenes\MainMenu.cpp" />
@@ -158,6 +159,7 @@
     <ClCompile Include="lib\rlImGui\rlImGui.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Config.h" />
     <ClInclude Include="src\core\AssetManager.h" />
     <ClInclude Include="src\systems\Dialogue.h" />
     <ClInclude Include="src\scenes\MainMenu.h" />
