@@ -8,6 +8,8 @@ namespace Textures {
     constexpr const char* BACKGROUND_PLAZA = "backgrounds/Plaza.png";
     constexpr const char* CURSOR_DEFAULT = "ui/cursor.png";
     constexpr const char* ITEM_KEY = "objects/key.png";
+    constexpr const char* BACKGROUND_MENU = "backgrounds/FondoMenu.png";
+    constexpr const char* BUTON1 = "UI/tile_0001.png";
 }
 
 namespace Sounds {
