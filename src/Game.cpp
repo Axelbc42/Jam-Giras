@@ -54,6 +54,7 @@ Game::~Game()
         AudioManager::Release();
         SceneManager::Release();
 		DialogueManager::Release();
+		NavigationManager::Release();
         CloseAudioDevice();        // 2) audio
         rlImGuiShutdown();         // 3) ImGui
         CloseWindow();             // 4) ventana

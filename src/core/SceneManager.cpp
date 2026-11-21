@@ -76,7 +76,6 @@ void SceneManager::ChangeToLastScene() {
     int id = lastScene;
     lastScene = currentScene;
     currentScene = id;
-    it->second->Init();
     NavigationManager::Instance()->UpdateArrows(scenes[currentScene]);
 }
 
