@@ -1,4 +1,5 @@
 #include "SceneManager.h"
+#include "NavigationManager.h"
 #include "raylib.h"
 
 SceneManager* SceneManager::s_instance = nullptr;
@@ -63,6 +64,7 @@ void SceneManager::ChangeScene(int id)
 
     currentScene = id;
     it->second->Init();
+    NavigationManager::Instance()->UpdateArrows(scenes[currentScene]);
 }
 
 void SceneManager::ChangeScene(std::string name)
@@ -75,4 +77,15 @@ void SceneManager::ChangeScene(std::string name)
     }
 
     ChangeScene(it->second);
+}
+
+Scene* SceneManager::GetScene(std::string name) {
+    auto it = ids.find(name);
+
+    if (it == ids.end()) {
+        TraceLog(LOG_INFO, "ESCENA NO ENCONTRADA");
+        return nullptr;
+    }
+
+    return scenes[it->second];
 }

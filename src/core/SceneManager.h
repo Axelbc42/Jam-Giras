@@ -13,6 +13,7 @@ public:
 	void AddScene(Scene* scene);
 	void ChangeScene(int id);
 	void ChangeScene(std::string name);
+	Scene* GetScene(std::string name);
 
 	void Draw();
 	void DrawDebugUI();

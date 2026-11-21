@@ -6,9 +6,11 @@
 #include "core/AudioManager.h"
 #include "core/SceneManager.h"
 #include "core/DialogueManager.h"
-#include "scenes/PlazaScene.h"
-#include "scenes/MainMenu.h"
+#include "core/NavigationManager.h"
 #include "utilities/GameConstants.h"
+
+#include "scenes/MainMenu.h"
+#include "scenes/PlazaScene.h"
 #include "scenes/SceneTextTest.h"
 
 Game* Game::s_instance = nullptr;
@@ -74,10 +76,14 @@ bool Game::initWindow()
 void Game::initGame()
 {
     SceneManager::Instance();
+	NavigationManager::Instance();
+
     SceneManager::Instance()->AddScene(new MainMenu("Menu"));
 	SceneManager::Instance()->AddScene(new PlazaScene("Plaza"));
 	SceneManager::Instance()->AddScene(new SceneTextTest("TextTest"));
     SceneManager::Instance()->ChangeScene("TextTest");
+
+	NavigationManager::Instance()->AddAdjacents("Menu", {"Plaza", "TextTest", "", ""});
 }
 // ---------------------------------------------------------------
 // Bucle principal

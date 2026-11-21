@@ -14,7 +14,6 @@ public:
     void Release() override;
 
 private:
-    Texture2D m_background{};
     Rectangle m_hotspot{};
     Texture m_hotspotTexture{};
     Font m_font{};

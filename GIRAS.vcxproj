@@ -143,6 +143,8 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\entities\GameObject.cpp" />
+    <ClCompile Include="src\core\NavigationManager.cpp" />
     <ClCompile Include="src\core\AudioManager.cpp" />
     <ClCompile Include="src\core\DialogueManager.cpp" />
     <ClCompile Include="src\scenes\PlazaScene.cpp" />
@@ -163,6 +165,8 @@
     <ClCompile Include="lib\rlImGui\rlImGui.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\entities\GameObject.h" />
+    <ClInclude Include="src\core\NavigationManager.h" />
     <ClInclude Include="src\core\AudioManager.h" />
     <ClInclude Include="src\core\DialogueManager.h" />
     <ClInclude Include="src\scenes\PlazaScene.h" />
