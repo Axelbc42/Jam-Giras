@@ -12,6 +12,7 @@
 #include "scenes/MainMenu.h"
 #include "scenes/PlazaScene.h"
 #include "scenes/SceneTextTest.h"
+#include "scenes/PauseMenu.h"
 
 #include "utilities/CursorState.h"
 
@@ -84,10 +85,12 @@ void Game::initGame()
     SceneManager::Instance()->AddScene(new MainMenu("Menu"));
 	SceneManager::Instance()->AddScene(new PlazaScene("Plaza"));
 	SceneManager::Instance()->AddScene(new SceneTextTest("TextTest"));
+	SceneManager::Instance()->AddScene(new PauseMenu("PauseMenu"));
 
 	NavigationManager::Instance()->AddAdjacents("Menu", { "Plaza", "TextTest", "", "" });
 	NavigationManager::Instance()->AddAdjacents("Plaza", { "Menu", "TextTest", "", "" });
-	NavigationManager::Instance()->AddAdjacents("TextTest", {"", "Plaza", "Menu", ""});
+	NavigationManager::Instance()->AddAdjacents("TextTest", { "", "Plaza", "Menu", "" });
+	NavigationManager::Instance()->AddAdjacents("PauseMenu", { "", "", "", "" });
 
 	SceneManager::Instance()->ChangeScene("TextTest");
 }
@@ -106,7 +109,7 @@ void Game::start()
 void Game::update(float dt)
 {
 	if (IsKeyPressed(KEY_F1))
-		m_debug = !m_debug;
+		m_debug = !m_debug;		
 
 	CursorState::BeginFrame();                    
 

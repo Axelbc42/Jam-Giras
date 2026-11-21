@@ -11,6 +11,7 @@ public:
 	static void Release();
 
 	void AddScene(Scene* scene);
+	void ChangeToLastScene();
 	void ChangeScene(int id);
 	void ChangeScene(std::string name);
 	Scene* GetScene(std::string name);
@@ -18,6 +19,8 @@ public:
 	void Draw();
 	void DrawDebugUI();
 	void Update(float dt);
+
+	void ChangePauseMenu() { pauseMenu = !pauseMenu; }
 
 private:
 	SceneManager() = default;
@@ -32,6 +35,9 @@ private:
 	std::unordered_map<std::string, int> ids;
 
 	int currentScene = 0;
+	int lastScene = 0;
+
+	bool pauseMenu = false;
 
 	static SceneManager* s_instance;
 };

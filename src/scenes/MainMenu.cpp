@@ -16,7 +16,7 @@ void MainMenu::Init()
     _button = AssetManager::Instance()->GetTexture(Textures::BUTON1);
     m_font = AssetManager::Instance()->GetFont(Fonts::MAIN);
 
-    _backgroundHS = Rectangle{ 0.0f, 0, 1280.0f, 720.0f };
+    _backgroundHS = Rectangle{ 0.0f, 0, GameConstants::kScreenWidth, GameConstants::kScreenHeight };
     _buttonHS = Rectangle{ 640.0f, 360, 360, 160.0f };
     m_message = "Haz clic en el boton \n67 skibidy sigma \nperdon";
 }
