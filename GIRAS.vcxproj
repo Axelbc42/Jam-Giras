@@ -149,8 +149,9 @@
     <ClCompile Include="src\core\AudioManager.cpp" />
     <ClCompile Include="src\core\DialogueManager.cpp" />
     <ClCompile Include="src\scenes\PlazaScene.cpp" />
-    <ClCompile Include="src\scenes\Scene.cpp" />
+    <ClCompile Include="src\scenes\puzzles\MirrorPuzzle.cpp" />
     <ClCompile Include="src\core\AssetManager.cpp" />
+    <ClCompile Include="src\scenes\Scene.cpp" />
     <ClCompile Include="src\scenes\SceneTextTest.cpp" />
     <ClCompile Include="src\systems\Dialogue.cpp" />
     <ClCompile Include="src\scenes\MainMenu.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="src\core\DialogueManager.h" />
     <ClInclude Include="src\entities\Interactuable.h" />
     <ClInclude Include="src\scenes\PlazaScene.h" />
+    <ClInclude Include="src\scenes\puzzles\MirrorPuzzle.h" />
     <ClInclude Include="src\scenes\Scene.h" />
     <ClInclude Include="src\core\AssetManager.h" />
     <ClInclude Include="src\scenes\SceneTextTest.h" />

@@ -61,6 +61,8 @@ void SceneManager::AddScene(Scene* scene)
 
     scenes.emplace(id, scene);
     ids.emplace(scene->GetName(), id);
+
+    scene->Init();
 }
 
 void SceneManager::ChangeToLastScene() {
@@ -89,7 +91,7 @@ void SceneManager::ChangeScene(int id)
 
     lastScene = currentScene;
     currentScene = id;
-    it->second->Init();
+
     NavigationManager::Instance()->UpdateArrows(scenes[currentScene]);
 }
 

@@ -3,8 +3,6 @@
 #include <string>
 #include "raylib.h"
 #include "Scene.h"
-#include "../entities/Clickable.h"
-#include "../entities/Draggable.h"
 
 class PlazaScene : public Scene
 {
@@ -18,8 +16,8 @@ public:
     void DrawDebugUI() override;
 
 private:
-    Clickable m_plaza;    
-    Draggable m_item;     
+    Clickable* m_plaza = nullptr;
+    Draggable* m_item = nullptr;
 
     Sound clickSound{};
     Font m_font{};

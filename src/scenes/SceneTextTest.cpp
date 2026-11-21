@@ -8,6 +8,7 @@
 
 void SceneTextTest::Init()
 {
+    Scene::Init();
 
     m_hotspotTexture = AssetManager::Instance()->GetTexture(Textures::BACKGROUND_PLAZA);
     m_font = AssetManager::Instance()->GetFont(Fonts::MAIN);

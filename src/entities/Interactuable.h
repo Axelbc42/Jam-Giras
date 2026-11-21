@@ -11,6 +11,7 @@ public:
 	}
 
 	bool IsHovered() const { return m_hovered; }
+	void ClearHover() { m_hovered = false; }
 
 	void Update(float dt) override
 	{
