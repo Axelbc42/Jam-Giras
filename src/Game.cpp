@@ -114,7 +114,7 @@ void Game::update(float dt)
 		m_debug = !m_debug;		
 
 	CursorState::BeginFrame();                    
-	DialogueManager::Instance()->Update();
+	DialogueManager::Instance()->Update(dt);
     SceneManager::Instance()->Update(dt);
 	NavigationManager::Instance()->Update(dt);
 

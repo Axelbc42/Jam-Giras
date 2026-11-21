@@ -1,10 +1,8 @@
 #include "DialogueManager.h"
-
 #include "raymath.h" 
 #include <cassert>
 #include "AssetManager.h"
 #include "imgui.h"
-
 
 DialogueManager* DialogueManager::_instance = nullptr;
 
@@ -20,17 +18,17 @@ void DialogueManager::Init() {
 	const float mboxHeight = 140.f;
 	const Rectangle mainbox = createDialogueBox(mboxWidth, mboxHeight, 40.f, GameConstants::kScreenHeight - 180.f);
 
-	const float cboxWidth = 180.f;
-	const float cboxHeight = 100.f;
+	const float cboxWidth = 230.f;
+	const float cboxHeight = 150.f;
 	const Rectangle centerbox = createDialogueBox(cboxWidth, cboxHeight, centerX - cboxWidth / 2.f, centerY - cboxHeight / 2.f);
 
 	//--DIALOGOS--
 	//---Cargar todos los dialogos antes de usar---
-	DialogueManager::Instance()->LoadDialogue(FileName::TUTORIAL, mainbox);
-	DialogueManager::Instance()->LoadDialogue(FileName::LOREMIPSUM, centerbox, 18.f, GREEN, mainFont);
+	DialogueManager::Instance()->LoadDialogue(FileName::TUTORIAL, mainbox, 14.f, BLUE, RED, BEIGE, mainFont);
+	DialogueManager::Instance()->LoadDialogue(FileName::LOREMIPSUM, centerbox, 18.f, GREEN, RED, BLACK, mainFont);
 	DialogueManager::Instance()->LoadDialogue(FileName::TUTEJEMPLO, mainbox);
 
-	//Esto es solo para el debug
+	//--- Nombre de los archivos para el debug
 	const int n = sizeof(FileName::COLECCION_FILES) / sizeof(FileName::COLECCION_FILES[0]);
 	for (size_t i = 0; i < n; i++)
 	{
@@ -62,7 +60,8 @@ DialogueManager* DialogueManager::Instance() {
 	return _instance;
 }
 
-void DialogueManager::LoadDialogue(const std::string fileName, Rectangle box, float fontSize, Color color, Font font) {
+void DialogueManager::LoadDialogue(const std::string fileName, Rectangle box, float fontSize,
+	Color textColor, Color headerColor, Color bodyColor, Font font) {
 	assert(AssetManager::Instance()); //tiene que existir antes, sino lo crea in situ?, no estoy seguro
 	if (_dialogues.count(fileName)) return; //Si ya existe nada
 
@@ -75,19 +74,19 @@ void DialogueManager::LoadDialogue(const std::string fileName, Rectangle box, fl
 	std::string titNoExt = fileName;
 	info._title = titNoExt.erase(titNoExt.length() - 4); //para quitar el ".txt"
 	info._content = content;
-	info._box = box;
+	BoxInfo b{ box ,headerColor, bodyColor };
+	info._box = b;
 	info._fontSize = fontSize;
-	info._color = color;
+	info._color = textColor;
 	info._font = font;
 
 	const float padding = 12.f; //horizontal y vertical
 
-	//calculo dinamico del titulo y su zona
+	//--- Calculo dinamico del titulo y su zona
 	Vector2 titleSize = MeasureTextEx(font, info._title.c_str(), info._fontSize, info._lineSpacing);
-
 	const float headerHeight = titleSize.y + padding * 2.f;
 
-	//la region visible
+	//--- Region ocupable dentro de la caja
 	info._viewport = {
 	box.x + padding,
 	box.y + headerHeight,
@@ -96,17 +95,17 @@ void DialogueManager::LoadDialogue(const std::string fileName, Rectangle box, fl
 	};
 
 	info._scrollBar = {
-	.x = (float)box.x - 5,
-	.y = info._viewport.y,
-	.width = 5,
-	.height = 10
+	box.x - 5,
+	info._viewport.y,
+	5,
+	10
 	};
 
-	const float wrapWidth = info._viewport.width; //se corta en el limite de arriba
-
+	const float wrapWidth = info._viewport.width; //se corta en el limite de horizontal
 	std::string currentLine;
 	std::string word;
 
+	//--- Logica de lectura del contenido y calculo del wrapping
 	for (int i = 0; i <= (int)content.size(); i++)
 	{
 		char c;
@@ -114,7 +113,6 @@ void DialogueManager::LoadDialogue(const std::string fileName, Rectangle box, fl
 			c = content[i];
 		}
 		else  c = '\n';
-
 
 		if (c == ' ' || c == '\n')
 		{
@@ -133,10 +131,7 @@ void DialogueManager::LoadDialogue(const std::string fileName, Rectangle box, fl
 					info._lines.push_back(currentLine);
 					currentLine = word;
 				}
-				else
-				{
-					currentLine = candidate;
-				}
+				else currentLine = candidate;
 
 				word.clear();
 			}
@@ -155,14 +150,12 @@ void DialogueManager::LoadDialogue(const std::string fileName, Rectangle box, fl
 	if (!currentLine.empty()) //para la linea sobrante (por si no termino en un salto de linea)
 		info._lines.push_back(currentLine);
 
-	// Altura total del contenido
+	//--- Calculo de lo que ocupa todo el texto verticalmente y el tope del scroll
 	info._lineHeight = MeasureTextEx(font, "texto centinela pa k tenga ref", info._fontSize, info._lineSpacing).y + info._linePadding;
-
 	info._textHeight = info._lineHeight * info._lines.size();
-
 	info._maxScroll = fmaxf(0.f, info._textHeight - info._viewport.height);
 
-	//----Scrollbar
+	//--- Scrollbar
 	float thumbHeight = info._viewport.height;
 
 	if (info._textHeight > info._viewport.height)
@@ -170,8 +163,7 @@ void DialogueManager::LoadDialogue(const std::string fileName, Rectangle box, fl
 		thumbHeight = info._viewport.height * (info._viewport.height / info._textHeight);
 	}
 
-	// Evitar que sea demasiado pequeño
-	thumbHeight = fmaxf(20.f, thumbHeight);
+	thumbHeight = fmaxf(20.f, thumbHeight); // Evitar que sea demasiado pequeño
 
 	info._scrollBar = {
 		box.x + box.width - 8.f,
@@ -180,7 +172,7 @@ void DialogueManager::LoadDialogue(const std::string fileName, Rectangle box, fl
 		thumbHeight
 	};
 
-	_dialogues[fileName] = info;
+	_dialogues[fileName] = info; //Se guarda la info
 }
 
 void DialogueManager::Close() {
@@ -192,19 +184,18 @@ void DialogueManager::Draw() {
 	if (_active.empty()) return;
 
 	DialogueInfo& diagInf = _dialogues.at(_active); //Si esto falla chao pescao
+	Rectangle box = diagInf._box._rect;
 
-	Rectangle box = diagInf._box;
-
-	// Fondo, editar luego por si se quiere otro color de fondo o bordes
-	DrawRectangleRec(box, Fade(BLACK, 0.85f));
+	//-- Mostrar Fondo y bordes
+	DrawRectangleRec(box, diagInf._box._bodyColor);
 	DrawRectangleLinesEx(box, 2.f, diagInf._color);
 
-	//El header, altura y color habria que definir constante o que sea parametrizable
-	DrawRectangle(box.x, box.y, box.width, diagInf._viewport.y - box.y, BEIGE);
+	//-- Mostrar header
+	DrawRectangle(box.x, box.y, box.width, diagInf._viewport.y - box.y, diagInf._box._headerColor);
 	DrawTextEx(diagInf._font, diagInf._title.c_str(), Vector2(box.x + 10.f, box.y + 12.f), diagInf._fontSize,
 		diagInf._lineSpacing, diagInf._color);
 
-	//--
+	//-- Mostrar el texto en el vw
 	BeginScissorMode(diagInf._viewport.x, diagInf._viewport.y, diagInf._viewport.width, diagInf._viewport.height);
 
 	float y = diagInf._viewport.y - diagInf._scrollY;
@@ -217,8 +208,8 @@ void DialogueManager::Draw() {
 	}
 
 	EndScissorMode();
-	// --
 
+	//-- Mostrar el scrollbar
 	if (diagInf._maxScroll <= 0.f) return; //Solo mostrar si hay que desplazar
 	// Fondo de la scrollbar
 	DrawRectangleRec({ diagInf._scrollBar.x, diagInf._viewport.y, 4.f, diagInf._viewport.height }, DARKGRAY);
@@ -235,31 +226,42 @@ void DialogueManager::OpenText(const std::string& assetName) {
 	_active = it->first;
 }
 
-void DialogueManager::Update() {
+void DialogueManager::Update(float dt) {
 	if (_active.empty()) return;
-	//Si se llega al maximo de abajo del scrollBar enseñar algo para cerrar el dialogo
-	//Para que se cierre el dialogo solo con clickar fuera creo que habria que acoplar logica en el GAME
 
 	DialogueInfo& info = _dialogues.at(_active);
-	if (CheckCollisionPointRec(GetMousePosition(), info._viewport)) //solo funciona con el mouse en la cajita
+	if (CheckCollisionPointRec(GetMousePosition(), info._viewport)) //solo funciona con el mouse dentro de la cajita
 	{
 		float wheel = GetMouseWheelMove();
-
 		info._scrollY -= wheel * 20.f;
-
 		info._scrollY = Clamp(info._scrollY, 0.f, info._maxScroll);
+
+		//--- Posibilidad de cerrar el texto
+		if (info._maxScroll == info._scrollY) //estamos en el final del viewport
+			if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+				Close();
+			}
 	}
 
+	//% del scrollbar que se muestra
 	float scrollRatio = 0.f;
-
 	if (info._maxScroll > 0.f)
 		scrollRatio = info._scrollY / info._maxScroll;
-
 	float availableTravel = info._viewport.height - info._scrollBar.height;
-
 	info._scrollBar.y = info._viewport.y + availableTravel * scrollRatio;
 
 
+	// --- PROVISIONALLLLLLL feedback para saber que puede quitar el texto al clickar
+	_elapsed += dt;
+	if (_elapsed >= 1000.f)_elapsed -= 1000.f; //hago esto por que no hay un getTIME desde que empezo el juego
+	float osc = (std::sin(_elapsed * _VEL_OSC) + 1) * 0.5f; //[0,1]
+	float alpha = Lerp(0.85, 0.6, osc);
+	if (info._maxScroll == info._scrollY) {
+		info._box._bodyColor.a = (unsigned char)(alpha * 255.f);
+	}
+	else {
+		info._box._bodyColor.a = (int)(255.f * 0.85f); //Ya empiezan con transparencia
+	}
 }
 
 void DialogueManager::DrawDebugUI() {
@@ -273,9 +275,8 @@ void DialogueManager::DrawDebugUI() {
 
 	ImGui::Text("Cajita Texto");
 
-	ImGui::DragFloat2("Posicion", &info._box.x, 1.f);
-	ImGui::DragFloat2("Tamano", &info._box.width, 1.f);
-
+	ImGui::DragFloat2("Posicion", &info._box._rect.x, 1.f);
+	ImGui::DragFloat2("Tamano", &info._box._rect.width, 1.f);
 
 	for (size_t i = 0; i < _filesAvaibles.size(); i++)
 	{

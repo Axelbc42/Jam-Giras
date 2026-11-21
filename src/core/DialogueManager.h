@@ -12,12 +12,13 @@ public:
 	void Init();
 
 	//el tamaño del display lo decidimos aqui
-	void LoadDialogue(std::string fileName, Rectangle box, float fontSize = 12, Color color = RED, Font = GetFontDefault());
+	void LoadDialogue(std::string fileName, Rectangle box, float fontSize = 12,
+		Color textColor = RED, Color headerColor = BEIGE, Color bodyColor = BLACK, Font = GetFontDefault());
 	void OpenText(const std::string& fileName);
 	bool isActive() const { return !_active.empty(); }
 	void Close();
 	void Draw(); //La key
-	void Update();
+	void Update(float dt);
 	void DrawDebugUI();
 private: //privados para que no accedais por error sin el wrapper
 	DialogueManager() = default;
@@ -30,6 +31,12 @@ private: //privados para que no accedais por error sin el wrapper
 private:
 
 	static DialogueManager* _instance;
+
+	struct BoxInfo {
+		Rectangle _rect{};
+		Color _headerColor = BEIGE;
+		Color _bodyColor = BLACK;
+	};
 
 	struct DialogueInfo {
 		std::string _fileName;
@@ -47,7 +54,7 @@ private:
 		float _scrollY = 0.f;
 		float _maxScroll = 0.f;
 
-		Rectangle _box{}; //ya con esto sabemos lo que queremos que mida la cajita
+		BoxInfo _box{}; //ya con esto sabemos lo que queremos que mida la cajita
 		Rectangle _viewport{};
 		Rectangle _scrollBar{};
 
@@ -58,6 +65,8 @@ private:
 
 	std::string _active = ""; //asumo que solo un texto por pantalla
 	std::string _lastActive;
+	float _elapsed = 0.f;
+	static constexpr float _VEL_OSC = 5.f;
 	std::unordered_map<std::string, DialogueInfo> _dialogues;
 	std::vector< std::string> _filesAvaibles;
 };
