@@ -16,6 +16,7 @@ void SceneTextTest::Init()
 
 
 	DialogueManager::Instance()->OpenText(FileName::LOREMIPSUM); //Esto es lo que tiene que llamar al callback
+	//DialogueManager::Instance()->OpenText(FileName::TUTEJEMPLO); //Esto es lo que tiene que llamar al callback
 	//Ya lo dibujara Game
 }
 
@@ -31,6 +32,7 @@ void SceneTextTest::Draw()
 void SceneTextTest::Release()
 {
 	// Liberar recursos propios de esta escena
+
 }
 
 void SceneTextTest::DrawDebugUI()

@@ -10,16 +10,32 @@ DialogueManager* DialogueManager::_instance = nullptr;
 
 void DialogueManager::Init() {
 	//Cargar TODO los necesarios
+	const float centerX = GameConstants::kScreenWidth / 2.f;
+	const float centerY = GameConstants::kScreenHeight / 2.f;
+
 	//--FUENTES-- ?
 	const Font mainFont = AssetManager::Instance()->GetFont(Fonts::MAIN);
-	//--CAJAS--
-	const Rectangle mainbox = createDialogueBox(140.f, GameConstants::kScreenWidth - 80.f, 40.f, GameConstants::kScreenHeight - 180.f);
+	//--CAJAS-- h,w,x,y
+	const float mboxWidth = GameConstants::kScreenWidth - 80.f;
+	const float mboxHeight = 140.f;
+	const Rectangle mainbox = createDialogueBox(mboxWidth, mboxHeight, 40.f, GameConstants::kScreenHeight - 180.f);
+
+	const float cboxWidth = 180.f;
+	const float cboxHeight = 100.f;
+	const Rectangle centerbox = createDialogueBox(cboxWidth, cboxHeight, centerX - cboxWidth / 2.f, centerY - cboxHeight / 2.f);
 
 	//--DIALOGOS--
 	//---Cargar todos los dialogos antes de usar---
 	DialogueManager::Instance()->LoadDialogue(FileName::TUTORIAL, mainbox);
-	DialogueManager::Instance()->LoadDialogue(FileName::LOREMIPSUM, mainbox, 24.f, GREEN, mainFont);
+	DialogueManager::Instance()->LoadDialogue(FileName::LOREMIPSUM, centerbox, 18.f, GREEN, mainFont);
 	DialogueManager::Instance()->LoadDialogue(FileName::TUTEJEMPLO, mainbox);
+
+	//Esto es solo para el debug
+	const int n = sizeof(FileName::COLECCION_FILES) / sizeof(FileName::COLECCION_FILES[0]);
+	for (size_t i = 0; i < n; i++)
+	{
+		_filesAvaibles.push_back(FileName::COLECCION_FILES[i]);
+	}
 
 }
 
@@ -27,9 +43,9 @@ void DialogueManager::unloadAll() {
 	_dialogues.clear();
 }
 
-const Rectangle& DialogueManager::createDialogueBox(float h, float w, float x, float y) {
+Rectangle DialogueManager::createDialogueBox(float w, float h, float x, float y) {
 	Rectangle r;
-	r.height = h;r.width = w;
+	r.width = w;r.height = h;
 	r.x = x;r.y = y;
 	return r;
 }
@@ -64,9 +80,12 @@ void DialogueManager::LoadDialogue(const std::string fileName, Rectangle box, fl
 	info._color = color;
 	info._font = font;
 
-
 	const float padding = 12.f; //horizontal y vertical
-	const float headerHeight = 25.f;
+
+	//calculo dinamico del titulo y su zona
+	Vector2 titleSize = MeasureTextEx(font, info._title.c_str(), info._fontSize, info._lineSpacing);
+
+	const float headerHeight = titleSize.y + padding * 2.f;
 
 	//la region visible
 	info._viewport = {
@@ -107,12 +126,7 @@ void DialogueManager::LoadDialogue(const std::string fileName, Rectangle box, fl
 					? word
 					: currentLine + " " + word;
 
-				Vector2 size = MeasureTextEx(
-					font,
-					candidate.c_str(),
-					info._fontSize,
-					info._lineSpacing
-				);
+				Vector2 size = MeasureTextEx(font, candidate.c_str(), info._fontSize, info._lineSpacing);
 
 				if (size.x > wrapWidth && !currentLine.empty())
 				{
@@ -148,10 +162,29 @@ void DialogueManager::LoadDialogue(const std::string fileName, Rectangle box, fl
 
 	info._maxScroll = fmaxf(0.f, info._textHeight - info._viewport.height);
 
+	//----Scrollbar
+	float thumbHeight = info._viewport.height;
+
+	if (info._textHeight > info._viewport.height)
+	{
+		thumbHeight = info._viewport.height * (info._viewport.height / info._textHeight);
+	}
+
+	// Evitar que sea demasiado pequeño
+	thumbHeight = fmaxf(20.f, thumbHeight);
+
+	info._scrollBar = {
+		box.x + box.width - 8.f,
+		info._viewport.y,
+		4.f,
+		thumbHeight
+	};
+
 	_dialogues[fileName] = info;
 }
 
 void DialogueManager::Close() {
+	_lastActive = _active;
 	_active.clear(); //quitamos la key
 }
 
@@ -167,10 +200,11 @@ void DialogueManager::Draw() {
 	DrawRectangleLinesEx(box, 2.f, diagInf._color);
 
 	//El header, altura y color habria que definir constante o que sea parametrizable
-	DrawRectangle(box.x, box.y, box.width, 25, BEIGE);
-	DrawTextEx(diagInf._font, diagInf._title.c_str(), Vector2(box.x + 10.f, box.y + 8.f), diagInf._fontSize,
+	DrawRectangle(box.x, box.y, box.width, diagInf._viewport.y - box.y, BEIGE);
+	DrawTextEx(diagInf._font, diagInf._title.c_str(), Vector2(box.x + 10.f, box.y + 12.f), diagInf._fontSize,
 		diagInf._lineSpacing, diagInf._color);
 
+	//--
 	BeginScissorMode(diagInf._viewport.x, diagInf._viewport.y, diagInf._viewport.width, diagInf._viewport.height);
 
 	float y = diagInf._viewport.y - diagInf._scrollY;
@@ -183,6 +217,13 @@ void DialogueManager::Draw() {
 	}
 
 	EndScissorMode();
+	// --
+
+	if (diagInf._maxScroll <= 0.f) return; //Solo mostrar si hay que desplazar
+	// Fondo de la scrollbar
+	DrawRectangleRec({ diagInf._scrollBar.x, diagInf._viewport.y, 4.f, diagInf._viewport.height }, DARKGRAY);
+	// Indicador
+	DrawRectangleRec(diagInf._scrollBar, GREEN);
 }
 
 void DialogueManager::OpenText(const std::string& assetName) {
@@ -207,14 +248,25 @@ void DialogueManager::Update() {
 		info._scrollY -= wheel * 20.f;
 
 		info._scrollY = Clamp(info._scrollY, 0.f, info._maxScroll);
-
-		info._scrollBar.y = Lerp((float)info._viewport.y, (float)info._viewport.y + info._viewport.height - info._scrollBar.height, 0.5);
 	}
+
+	float scrollRatio = 0.f;
+
+	if (info._maxScroll > 0.f)
+		scrollRatio = info._scrollY / info._maxScroll;
+
+	float availableTravel = info._viewport.height - info._scrollBar.height;
+
+	info._scrollBar.y = info._viewport.y + availableTravel * scrollRatio;
 
 
 }
 
 void DialogueManager::DrawDebugUI() {
+	if (ImGui::Button("Cerrar/Abrir Texto")) {
+		if (DialogueManager::Instance()->isActive()) { DialogueManager::Instance()->Close(); }
+		else DialogueManager::Instance()->OpenText(_lastActive);
+	}
 	if (_active.empty()) return;
 
 	DialogueInfo& info = _dialogues.at(_active);
@@ -223,4 +275,20 @@ void DialogueManager::DrawDebugUI() {
 
 	ImGui::DragFloat2("Posicion", &info._box.x, 1.f);
 	ImGui::DragFloat2("Tamano", &info._box.width, 1.f);
+
+
+	for (size_t i = 0; i < _filesAvaibles.size(); i++)
+	{
+		const std::string f = _filesAvaibles[i];
+		char label[64];
+		snprintf(label, sizeof(label), "%s", f.c_str());
+
+		ImGui::PushID(int(i));
+		if (ImGui::CollapsingHeader(label))
+			if (ImGui::Button("Abrir ")) {
+				DialogueManager::Instance()->Close();
+				DialogueManager::Instance()->OpenText(f);
+			}
+		ImGui::PopID();
+	}
 }
