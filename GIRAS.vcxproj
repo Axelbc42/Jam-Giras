@@ -162,6 +162,7 @@
     <ClCompile Include="lib\imgui\imgui_tables.cpp" />
     <ClCompile Include="lib\imgui\imgui_widgets.cpp" />
     <ClCompile Include="lib\rlImGui\rlImGui.cpp" />
+    <ClCompile Include="src\utilities\CursorState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\entities\Draggable.h" />
@@ -188,6 +189,7 @@
     <ClInclude Include="lib\rlImGui\rlImGui.h" />
     <ClInclude Include="lib\rlImGui\rlImGuiColors.h" />
     <ClInclude Include="src\core\SceneManager.h" />
+    <ClInclude Include="src\utilities\CursorState.h" />
     <ClInclude Include="src\utilities\GameConstants.h" />
   </ItemGroup>
   <ItemGroup>

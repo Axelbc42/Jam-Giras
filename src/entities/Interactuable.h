@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "imgui.h"
+#include "../utilities/CursorState.h"
 
 class Interactuable : public GameObject
 {
@@ -17,6 +18,9 @@ public:
 
 		const bool imguiCapturaRaton = ImGui::GetIO().WantCaptureMouse;
 		m_hovered = !imguiCapturaRaton && Contains(GetMousePosition());
+
+		if (m_hovered)
+			CursorState::RequestHand();
 	}
 
 protected:

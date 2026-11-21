@@ -13,6 +13,8 @@
 #include "scenes/PlazaScene.h"
 #include "scenes/SceneTextTest.h"
 
+#include "utilities/CursorState.h"
+
 Game* Game::s_instance = nullptr;
 
 // ---------------------------------------------------------------
@@ -68,6 +70,7 @@ bool Game::initWindow()
 
 	AudioManager::Instance()->Init();
 	SetTargetFPS(60);
+	SetMouseCursor(MOUSE_CURSOR_DEFAULT);
 	rlImGuiSetup(true);
 	m_windowReady = true;
 	return true;
@@ -105,8 +108,12 @@ void Game::update(float dt)
 	if (IsKeyPressed(KEY_F1))
 		m_debug = !m_debug;
 
+	CursorState::BeginFrame();                    
+
     SceneManager::Instance()->Update(dt);
 	NavigationManager::Instance()->Update(dt);
+
+	CursorState::Apply();                         
 }
 
 void Game::draw()
