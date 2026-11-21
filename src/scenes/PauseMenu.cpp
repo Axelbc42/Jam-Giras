@@ -10,49 +10,49 @@
 void PauseMenu::Init()
 {
     clickSound = AssetManager::Instance()->GetSound(Sounds::CLICK);
-    _pauseBackground = AssetManager::Instance()->GetTexture(Textures::BUTON1);
-    _pauseBackgroundHS = Rectangle{ (GameConstants::kScreenWidth / 2) - 180,
+
+    _pauseBackground.SetActive(true);
+    _pauseBackground.SetTexture(AssetManager::Instance()->GetTexture(Textures::BUTON1));
+    _pauseBackground.SetRect(Rectangle{ (GameConstants::kScreenWidth / 2) - 180,
                                     (GameConstants::kScreenHeight / 2) - 320,
-                                    360, 640 };
+                                    360, 640 });
+    _pauseBackground.SetTint(NORMAL_INK);
 
-    _reaunarButton = AssetManager::Instance()->GetTexture(Textures::BUTON1);
-    _reaunarButtonHS = Rectangle{ (GameConstants::kScreenWidth / 2) - 150,
-                                  (GameConstants::kScreenHeight / 2), 
-                                  300, 100 };
 
-    _salirButton = AssetManager::Instance()->GetTexture(Textures::BUTON1);
-    _salirButtonHS = Rectangle{ (GameConstants::kScreenWidth / 2) - 150,
-                                (GameConstants::kScreenHeight / 2) + 150, 
-                                300, 100 };
+    _reaunarButton.SetActive(true);
+    _reaunarButton.SetTexture(AssetManager::Instance()->GetTexture(Textures::BUTON1));
+    _reaunarButton.SetRect(Rectangle{ (GameConstants::kScreenWidth / 2) - 150, (GameConstants::kScreenHeight / 2), 300, 100 });
+    _reaunarButton.SetTint(NORMAL_INK);
+    _reaunarButton.ResetCallbacks();
+    _reaunarButton.AddCallback([this]() {
+        AudioManager::Instance()->PlaySound(clickSound);
+        SceneManager::Instance()->ChangeToLastScene();
+        SceneManager::Instance()->ChangePauseMenu();
+        });
+
+    _salirButton.SetActive(true);
+    _salirButton.SetTexture(AssetManager::Instance()->GetTexture(Textures::BUTON1));
+    _salirButton.SetRect(Rectangle{ (GameConstants::kScreenWidth / 2) - 150, (GameConstants::kScreenHeight / 2) + 150, 300, 100 });
+    _salirButton.SetTint(NORMAL_INK);
+    _salirButton.ResetCallbacks();
+    _salirButton.AddCallback([this]() {
+        TraceLog(LOG_INFO, "Aqui tendrias q salir");
+        });
 }
 
 void PauseMenu::Update(float dt)
 {
-    Vector2 mouse = GetMousePosition();
-
-    if (CheckCollisionPointRec(mouse, _reaunarButtonHS) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        AudioManager::Instance()->PlaySound(clickSound);
-        SceneManager::Instance()->ChangeToLastScene();
-        SceneManager::Instance()->ChangePauseMenu();
-    }
-
-    if (CheckCollisionPointRec(mouse, _salirButtonHS) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-
-    }
+    _reaunarButton.Update(dt);
+    _salirButton.Update(dt);
 }
 
 void PauseMenu::Draw()
 {
     DrawRectangle(0, 0, GameConstants::kScreenWidth, GameConstants::kScreenWidth, Color { 0, 0, 0, 100 });
 
-    Rectangle pauseBackground = { 0.0f, 0.0f, (float)_pauseBackground.width, (float)_pauseBackground.height };
-    DrawTexturePro(_pauseBackground, pauseBackground, _pauseBackgroundHS, Vector2{ 0, 0 }, 0.0f, WHITE);
-
-    Rectangle pauseButonRec = { 0.0f, 0.0f, (float)_reaunarButton.width, (float)_reaunarButton.height };
-    DrawTexturePro(_reaunarButton, pauseButonRec, _reaunarButtonHS, Vector2{ 0, 0 }, 0.0f, WHITE);
-
-    Rectangle exitButonRec = { 0.0f, 0.0f, (float)_salirButton.width, (float)_salirButton.height };
-    DrawTexturePro(_salirButton, exitButonRec, _salirButtonHS, Vector2{ 0, 0 }, 0.0f, WHITE);
+    _pauseBackground.Draw();
+    _reaunarButton.Draw();
+    _salirButton.Draw();
 }
 
 void PauseMenu::Release()
