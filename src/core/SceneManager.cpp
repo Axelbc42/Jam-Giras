@@ -32,6 +32,8 @@ void SceneManager::Unload()
 
 void SceneManager::Draw()
 {
+    if (pauseMenu)
+        scenes[lastScene]->Draw();
     scenes[currentScene]->Draw();
 }
 
@@ -42,6 +44,14 @@ void SceneManager::DrawDebugUI()
 
 void SceneManager::Update(float dt)
 {
+    if (IsKeyPressed(KEY_SPACE)) {
+        if (!pauseMenu)
+            ChangeScene("PauseMenu");
+        else
+            ChangeToLastScene();
+        ChangePauseMenu();
+    }
+
     scenes[currentScene]->Update(dt);
 }
 
@@ -53,6 +63,21 @@ void SceneManager::AddScene(Scene* scene)
     ids.emplace(scene->GetName(), id);
 }
 
+void SceneManager::ChangeToLastScene() {
+    auto it = scenes.find(lastScene);
+
+    if (it == scenes.end()) {
+        TraceLog(LOG_INFO, "ESCENA NO ENCONTRADA");
+        return;
+    }
+
+    int id = lastScene;
+    lastScene = currentScene;
+    currentScene = id;
+    it->second->Init();
+    NavigationManager::Instance()->UpdateArrows(scenes[currentScene]);
+}
+
 void SceneManager::ChangeScene(int id)
 {
     auto it = scenes.find(id);
@@ -62,6 +87,7 @@ void SceneManager::ChangeScene(int id)
         return;
     }
 
+    lastScene = currentScene;
     currentScene = id;
     it->second->Init();
     NavigationManager::Instance()->UpdateArrows(scenes[currentScene]);

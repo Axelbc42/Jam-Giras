@@ -143,6 +143,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\scenes\PauseMenu.cpp" />
     <ClCompile Include="src\core\NavigationManager.cpp" />
     <ClCompile Include="src\core\AudioManager.cpp" />
     <ClCompile Include="src\core\DialogueManager.cpp" />
@@ -164,6 +165,7 @@
     <ClCompile Include="lib\rlImGui\rlImGui.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\scenes\PauseMenu.h" />
     <ClInclude Include="src\entities\GameObject.h" />
     <ClInclude Include="src\core\NavigationManager.h" />
     <ClInclude Include="src\core\AudioManager.h" />
