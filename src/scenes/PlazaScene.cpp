@@ -60,6 +60,8 @@ void PlazaScene::Update(float dt)
     Scene::Update(dt);   
 
     m_plaza->SetTint(m_plaza->IsHovered() ? WHITE : kTintNormal);
+    if (!itemOcupado)
+        m_plaza.Update(dt);
 }
 
 void PlazaScene::Draw()

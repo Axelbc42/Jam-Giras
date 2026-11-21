@@ -10,6 +10,7 @@ public:
 		return m_active && CheckCollisionPointRec(point, m_rect);
 	}
 
+	void SetHoveredColor(Color c) { m_hoveredColor = c; }
 	bool IsHovered() const { return m_hovered; }
 	void ClearHover() { m_hovered = false; }
 
@@ -22,9 +23,12 @@ public:
 
 		if (m_hovered)
 			CursorState::RequestHand();
+
+		SetTint(m_hovered ? m_normalColor : m_hoveredColor);
 	}
 
 protected:
 	bool m_hovered = false;
-
+	Color m_hoveredColor = LIGHTGRAY;
+	Color m_normalColor = m_tint;
 };

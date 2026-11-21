@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
 #include "raylib.h"
+#include "../entities/Clickable.h"
 
 class PauseMenu : public Scene
 {
@@ -13,13 +14,11 @@ public:
     void Release() override;
 
 private:
-    Texture2D _pauseBackground{};
-    Rectangle _pauseBackgroundHS{};
+    const Color NORMAL_INK = { 200, 200, 200, 255 };
+    GameObject _pauseBackground{};
 
-    Texture2D _reaunarButton{};
-    Rectangle _reaunarButtonHS{};
-    Texture2D _salirButton{};
-    Rectangle _salirButtonHS{};
+    Clickable _reaunarButton{};
+    Clickable _salirButton{};
 
     Sound clickSound;
     Font m_font{};
