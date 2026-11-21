@@ -235,13 +235,13 @@ void DialogueManager::Update(float dt) {
 		float wheel = GetMouseWheelMove();
 		info._scrollY -= wheel * 20.f;
 		info._scrollY = Clamp(info._scrollY, 0.f, info._maxScroll);
-
-		//--- Posibilidad de cerrar el texto
-		if (info._maxScroll == info._scrollY) //estamos en el final del viewport
-			if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-				Close();
-			}
 	}
+
+	//--- Posibilidad de cerrar el texto al clickar en pantalla
+	if (info._maxScroll == info._scrollY) //estamos en el final del viewport
+		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+			Close();
+		}
 
 	//% del scrollbar que se muestra
 	float scrollRatio = 0.f;
