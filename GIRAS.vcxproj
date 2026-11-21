@@ -143,6 +143,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\entities\Draggable.cpp" />
     <ClCompile Include="src\core\NavigationManager.cpp" />
     <ClCompile Include="src\core\AudioManager.cpp" />
     <ClCompile Include="src\core\DialogueManager.cpp" />
@@ -152,7 +153,6 @@
     <ClCompile Include="src\scenes\SceneTextTest.cpp" />
     <ClCompile Include="src\systems\Dialogue.cpp" />
     <ClCompile Include="src\scenes\MainMenu.cpp" />
-    <ClCompile Include="src\entities\Clickable.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\core\SceneManager.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -164,6 +164,7 @@
     <ClCompile Include="lib\rlImGui\rlImGui.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\entities\Draggable.h" />
     <ClInclude Include="src\entities\GameObject.h" />
     <ClInclude Include="src\core\NavigationManager.h" />
     <ClInclude Include="src\core\AudioManager.h" />
