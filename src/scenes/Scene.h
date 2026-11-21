@@ -18,9 +18,7 @@ public:
     virtual void Init() {}
 
     virtual void Update(float dt);
-
     virtual void Draw();
-
     virtual void DrawDebugUI() {}
 
     virtual void OnEnter() {}
@@ -36,9 +34,7 @@ protected:
 
 private:
     void Register(Draggable* d) { m_draggables.push_back(d);}
-
     void Register(Clickable* c){ m_clickables.push_back(c); }
-
     void Register(GameObject* go) { m_gameObjects.push_back(go); }
 
     std::string m_name;

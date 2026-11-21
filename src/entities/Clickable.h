@@ -9,6 +9,8 @@
 class Clickable : public Interactuable
 {
 public:
+	~Clickable() = default;
+
 	void Update(float dt) override{
 		Interactuable::Update(dt);
 

@@ -7,6 +7,7 @@
 class Draggable : public Interactuable
 {
 public:
+	~Draggable() = default;
 	void Update(float dt) override;
 
 	bool IsDragging() const { return m_dragging; }
