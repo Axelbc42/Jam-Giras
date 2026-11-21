@@ -28,6 +28,7 @@ namespace Fonts {
 namespace FileName {
     constexpr const char* TUTORIAL = "Tutorial.txt";
     constexpr const char* TUTEJEMPLO = "Tutorial2.txt";
+    constexpr const char* LOREMIPSUM = "Lorem.txt";
 }
 
 

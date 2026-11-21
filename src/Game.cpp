@@ -82,6 +82,7 @@ void Game::initGame()
 {
     SceneManager::Instance();
 	NavigationManager::Instance()->Init();
+	DialogueManager::Instance()->Init(); //Cargan los textos etc
 
     SceneManager::Instance()->AddScene(new MainMenu("Menu"));
 	SceneManager::Instance()->AddScene(new PlazaScene("Plaza"));
@@ -113,7 +114,7 @@ void Game::update(float dt)
 		m_debug = !m_debug;		
 
 	CursorState::BeginFrame();                    
-
+	DialogueManager::Instance()->Update();
     SceneManager::Instance()->Update(dt);
 	NavigationManager::Instance()->Update(dt);
 
@@ -128,6 +129,7 @@ void Game::draw()
     // --- Mundo del juego ---
 	SceneManager::Instance()->Draw();
 	NavigationManager::Instance()->Draw();
+	DialogueManager::Instance()->Draw();
 
     // --- Depuracion con ImGui ---
     if (m_debug)
@@ -152,8 +154,13 @@ void Game::drawDebugUI()
 
 	ImGui::Separator();
 	ImGui::Checkbox("Demo de ImGui", &m_showImGuiDemo);
-	ImGui::End();
 
+
+	//DialogueManager
+	ImGui::Separator();
+	DialogueManager::Instance()->DrawDebugUI();
+
+	ImGui::End();
 	if (m_showImGuiDemo)
 		ImGui::ShowDemoWindow(&m_showImGuiDemo);
 }

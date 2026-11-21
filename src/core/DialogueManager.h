@@ -12,10 +12,12 @@ public:
 	void Init();
 
 	//el tamaño del display lo decidimos aqui
-	void loadDialogue(std::string fileName, int windowW = GameConstants::kScreenWidth / 6,
-		int windowH = GameConstants::kScreenHeight / 6, int fontSize = 12, Color color= RED); //Ver si se puede elegir FONT
-	void showText(const std::string& fileName); //La key
-	void updateText();
+	void LoadDialogue(std::string fileName, Rectangle box, float fontSize = 12, Color color = RED, Font = GetFontDefault());
+	void OpenText(const std::string& fileName);
+	void Close();
+	void Draw(); //La key
+	void Update();
+	void DrawDebugUI();
 private: //privados para que no accedais por error sin el wrapper
 	DialogueManager() = default;
 	~DialogueManager() = default;
@@ -23,24 +25,37 @@ private: //privados para que no accedais por error sin el wrapper
 	DialogueManager& operator=(const DialogueManager&) = delete;
 
 	void unloadAll();
+	const Rectangle& createDialogueBox(float h, float w, float x, float y);
 private:
 
 	static DialogueManager* _instance;
 
 	struct DialogueInfo {
-		std::string _fileName;
-		int _windowWidth = -1;
-		int _windowHeight = -1;
-		int _textTop = -1;
-		int _fontSize = -1;
+		std::string _fileName; 
+		std::string _title = ""; //podria interpretarse como titulo del objeto que se inspecciona
 		std::string _content = "";
-		int _lineCount = 0;
-		char** _lines = nullptr;
+		std::vector<std::string> _lines; //pa sustituir char** _lines = nullptr; ya no hace falta
+
+		float _fontSize = 12.f;
+		float _lineSpacing = 2.f;
+		float _linePadding = 5.f;
+		float _lineHeight = 10.f; //se calcula luego bien en el load
+
+
+		float _textHeight = 0.f;
+		float _scrollY = 0.f;
+		float _maxScroll = 0.f;
+
+		Rectangle _box{}; //ya con esto sabemos lo que queremos que mida la cajita
+		Rectangle _viewport{};
 		Rectangle _scrollBar{};
-		int _textHeight = 0;
-		Color _color{};
+
+
+		Font _font = GetFontDefault();
+		Color _color = WHITE;
 	};
 
+	std::string _active = ""; //asumo que solo un texto por pantalla
 	std::unordered_map<std::string, DialogueInfo> _dialogues;
 };
 

@@ -12,6 +12,8 @@ public:
     void Release() override;
 
 private:
+    //pa depurar
+
     Texture2D m_background{};
     Rectangle m_hotspot{};
     Texture m_hotspotTexture{};
