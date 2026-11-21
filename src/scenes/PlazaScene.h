@@ -18,7 +18,7 @@ public:
     void DrawDebugUI() override;
 
 private:
-    Clickable m_plaza;    
+    Clickable m_plaza;
     Draggable m_item;     
 
     Sound clickSound{};
