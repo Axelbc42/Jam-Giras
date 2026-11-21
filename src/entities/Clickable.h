@@ -1,28 +1,37 @@
 #pragma once
-#include "GameObject.h"
-#include <functional>
-#include <vector>
 
-class Clickable : public GameObject
+#include <functional>
+#include <utility>
+#include <vector>
+#include "Interactuable.h"
+#include "GameObject.h"
+
+class Clickable : public Interactuable
 {
 public:
+	void Update(float dt) override;
 
-	void AddCallBack(std::function<void()> f) {
-		callbacks.push_back(f);
+	bool IsHovered() const { return m_hovered; }
+
+	void AddCallback(std::function<void()> f){
+		m_callbacks.push_back(std::move(f));
 	}
 
-	void ResetCallbacks() {
-		callbacks.clear();
+	void ResetCallbacks(){
+		m_callbacks.clear();
 	}
 
-	void OnClick(){
-		for (auto f : callbacks) {
-			f();
+	virtual void OnClick(){
+		if (!m_active)
+			return;
+
+		const std::vector<std::function<void()>> copia = m_callbacks;
+		for (const auto& f : copia){
+			if (f) f();
 		}
 	}
 
 private:
-	std::vector<std::function<void()>> callbacks;
-
+	std::vector<std::function<void()>> m_callbacks;
+	bool m_hovered = false;
 };
-

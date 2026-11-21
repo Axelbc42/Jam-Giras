@@ -72,7 +72,7 @@ void SceneManager::ChangeScene(std::string name)
     auto it = ids.find(name);
 
     if (it == ids.end()) {
-        TraceLog(LOG_INFO, "ESCENA NO ENCONTRADA");
+        TraceLog(LOG_WARNING, "ESCENA %s NO ENCONTRADA", name.c_str());
         return;
     }
 
@@ -83,7 +83,7 @@ Scene* SceneManager::GetScene(std::string name) {
     auto it = ids.find(name);
 
     if (it == ids.end()) {
-        TraceLog(LOG_INFO, "ESCENA NO ENCONTRADA");
+        TraceLog(LOG_WARNING, "ESCENA %s NO ENCONTRADA", name.c_str());
         return nullptr;
     }
 

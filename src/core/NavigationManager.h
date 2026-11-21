@@ -2,6 +2,7 @@
 #include <unordered_map>
 #include "../scenes/Scene.h"
 #include "../entities/Clickable.h"
+#include "../entities/GameObject.h"
 #include <array>
 
 class NavigationManager
@@ -9,6 +10,11 @@ class NavigationManager
 public:
 	static NavigationManager* Instance();
 	static void Release();
+
+	void Init();
+	void Unload();
+	void Draw();
+	void Update(float dt);
 
 	struct SceneAdjacent {
 		Scene* up = nullptr;
@@ -34,7 +40,6 @@ public:
 	void SetupArrow(Arrow id, Scene* target);
 
 private:
-
 	NavigationManager() = default;
 	~NavigationManager() = default;
 

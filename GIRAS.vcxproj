@@ -143,7 +143,6 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\entities\GameObject.cpp" />
     <ClCompile Include="src\core\NavigationManager.cpp" />
     <ClCompile Include="src\core\AudioManager.cpp" />
     <ClCompile Include="src\core\DialogueManager.cpp" />
@@ -169,6 +168,7 @@
     <ClInclude Include="src\core\NavigationManager.h" />
     <ClInclude Include="src\core\AudioManager.h" />
     <ClInclude Include="src\core\DialogueManager.h" />
+    <ClInclude Include="src\entities\Interactuable.h" />
     <ClInclude Include="src\scenes\PlazaScene.h" />
     <ClInclude Include="src\scenes\Scene.h" />
     <ClInclude Include="src\core\AssetManager.h" />

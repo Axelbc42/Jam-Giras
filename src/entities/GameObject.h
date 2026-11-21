@@ -17,7 +17,11 @@ public:
             return;
 
         const Rectangle origen = { 0.0f, 0.0f, (float)m_texture.width, (float)m_texture.height };
-        DrawTexturePro(m_texture, origen, m_rect, Vector2{ 0, 0 }, 0.0f, m_tint);
+        const Rectangle destino = { m_rect.x + m_rect.width / 2.0f, m_rect.y + m_rect.height / 2.0f,
+                                    m_rect.width, m_rect.height };
+        const Vector2 pivote = { m_rect.width / 2.0f, m_rect.height / 2.0f };
+
+        DrawTexturePro(m_texture, origen, destino, pivote, m_rotation, m_tint);
     }
 
     bool IsActive() const { return m_active; }
@@ -26,12 +30,14 @@ public:
     const Rectangle& GetRect() const { return m_rect; }
     void SetRect(const Rectangle& rect) { m_rect = rect; }
     void SetPosition(float x, float y) { m_rect.x = x; m_rect.y = y; }
+    void SetRotation(float degrees) { m_rotation = degrees; } 
 
     void SetTexture(const Texture& texture) { m_texture = texture; }
     void SetTint(const Color& tint) { m_tint = tint; }
 
 protected:   
     Rectangle m_rect{};
+    float m_rotation = 0.0f;
     Texture m_texture{};
     Color m_tint = WHITE;
     bool m_active = true;

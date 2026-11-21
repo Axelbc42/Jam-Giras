@@ -76,14 +76,17 @@ bool Game::initWindow()
 void Game::initGame()
 {
     SceneManager::Instance();
-	NavigationManager::Instance();
+	NavigationManager::Instance()->Init();
 
     SceneManager::Instance()->AddScene(new MainMenu("Menu"));
 	SceneManager::Instance()->AddScene(new PlazaScene("Plaza"));
 	SceneManager::Instance()->AddScene(new SceneTextTest("TextTest"));
-    SceneManager::Instance()->ChangeScene("TextTest");
 
-	NavigationManager::Instance()->AddAdjacents("Menu", {"Plaza", "TextTest", "", ""});
+	NavigationManager::Instance()->AddAdjacents("Menu", { "Plaza", "TextTest", "", "" });
+	NavigationManager::Instance()->AddAdjacents("Plaza", { "Menu", "TextTest", "", "" });
+	NavigationManager::Instance()->AddAdjacents("TextTest", {"", "Plaza", "Menu", ""});
+
+	SceneManager::Instance()->ChangeScene("TextTest");
 }
 // ---------------------------------------------------------------
 // Bucle principal
@@ -103,6 +106,7 @@ void Game::update(float dt)
 		m_debug = !m_debug;
 
     SceneManager::Instance()->Update(dt);
+	NavigationManager::Instance()->Update(dt);
 }
 
 void Game::draw()
@@ -111,7 +115,8 @@ void Game::draw()
 	ClearBackground(Color{ 40, 44, 52, 255 });
 
     // --- Mundo del juego ---
-    SceneManager::Instance()->Draw();
+	SceneManager::Instance()->Draw();
+	NavigationManager::Instance()->Draw();
 
     // --- Depuracion con ImGui ---
     if (m_debug)
