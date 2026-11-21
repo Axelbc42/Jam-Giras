@@ -1,24 +1,29 @@
 #pragma once
 
-#include "Scene.h"
+#include <string>
 #include "raylib.h"
+#include "Scene.h"
+#include "../entities/Clickable.h"
+#include "../entities/Draggable.h"
 
 class PlazaScene : public Scene
 {
 public:
-    PlazaScene(std::string name) : Scene(name){}
+    PlazaScene(const std::string& name) : Scene(name) {}
+
     void Init() override;
     void Update(float dt) override;
     void Draw() override;
-    void DrawDebugUI() override;
     void Release() override;
+    void DrawDebugUI() override;
 
 private:
-    Rectangle m_hotspot{};
-    Texture m_hotspotTexture{};
+    Clickable m_plaza;    
+    Draggable m_item;     
+
+    Sound clickSound{};
     Font m_font{};
-    Sound clickSound;
-    bool m_hotspotHover = false;
+
     std::string m_message;
     float m_messageTimer = 0.0f;
 };

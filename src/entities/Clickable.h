@@ -9,9 +9,12 @@
 class Clickable : public Interactuable
 {
 public:
-	void Update(float dt) override;
+	void Update(float dt) override{
+		Interactuable::Update(dt);
 
-	bool IsHovered() const { return m_hovered; }
+		if (m_hovered && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+			OnClick();
+	}
 
 	void AddCallback(std::function<void()> f){
 		m_callbacks.push_back(std::move(f));
@@ -33,5 +36,4 @@ public:
 
 private:
 	std::vector<std::function<void()>> m_callbacks;
-	bool m_hovered = false;
 };
