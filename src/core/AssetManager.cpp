@@ -95,85 +95,20 @@ Font AssetManager::GetFont(const std::string& name)
 	return it->second;
 }
 
-Text AssetManager::GetText(const std::string& name)
+std::string AssetManager::GetText(const std::string& name) //Solo abre el archivo y devuelve todo su contenido
 {
 	auto it = m_texts.find(name);
 	if (it == m_texts.end())
 	{
-		Text textInfo;
-		textInfo.text = LoadFileText((m_root + "data/" + name).c_str());
-		// Si falla, raylib devuelve
-		if (textInfo.text == nullptr)
-			TraceLog(LOG_ERROR, "AssetManager: no se pudo cargar el archivo de texto %s", name.c_str());
-
-		//Vamos a leer todo desde aqui
-
-		int lineCount = 0;
-		char** lines = LoadTextLines(textInfo.text, &lineCount);
-		textInfo.lineCount = lineCount; //Por si luego necesitamos algo que calcular?
-		textInfo.lines = lines;
-
-		//estas 2 constantes son las que se fijaran por el cuadro de texto, no la pantalla
-		//el cuadro tiene que ser obviamente <= dimensiones pantalla
-		const int screenWidth = 300;
-		const int screenHeight = 450;
-		// Stylistic choises
-		int fontSize = 20;
-		int textTop = 25 + fontSize; // Top of the screen from where the text is rendered
-		int wrapWidth = screenWidth - 20;
-
-		// Wrap the lines as needed
-		for (int i = 0; i < lineCount; i++)
-		{
-			int j = 0;
-			int lastSpace = 0;          // Keeping track of last valid space to insert '\n'
-			int lastWrapStart = 0;      // Keeping track of the start of this wrapped line.
-
-			while (j <= strlen(lines[i]))
-			{
-				if (lines[i][j] == ' ' || lines[i][j] == '\0')
-				{
-					char before = lines[i][j];
-					// Making a C Style string by adding a '\0' at the required location so that we can use the MeasureText function
-					lines[i][j] = '\0';
-
-					// Checking if the text has crossed the wrapWidth, then going back and inserting a newline
-					if (MeasureText(lines[i] + lastWrapStart, fontSize) > wrapWidth)
-					{
-						lines[i][lastSpace] = '\n';
-
-						// Since we added a newline the place of wrap changed so we update our lastWrapStart
-						lastWrapStart = lastSpace + 1;
-					}
-
-					if (before != '\0') lines[i][j] = ' ';  // Resetting the space back
-					lastSpace = j; // Since we encountered a new space we update our last encountered space location
-				}
-
-				j++;
-			}
-
+		char* fileText = LoadFileText((m_root + "data/" + name).c_str());
+		if (!fileText) {
+			TraceLog(LOG_ERROR, "AssetManager: No se pudo cargar %s", name.c_str());
+			return "";
 		}
+		std::string content(fileText);
+		UnloadFileText(fileText); // Liberamos el puntero de raylib si ya tenemos el std::string
 
-		// Calculating the total height so that we can show a scrollbar
-		int textHeight = 0;
-
-		for (int i = 0; i < lineCount; i++)
-		{
-			Vector2 size = MeasureTextEx(GetFontDefault(), lines[i], (float)fontSize, 2);
-			textHeight += (int)size.y + 10;
-		}
-
-		// A simple scrollbar on the side to show how far we have read into the file
-		Rectangle scrollBar = {
-			.x = (float)screenWidth - 5,
-			.y = 0,
-			.width = 5,
-			.height = screenHeight * 100.0f / (textHeight - screenHeight) // Scrollbar height is just a percentage
-		};
-
-
-		it = m_texts.insert({ name, textInfo }).first;
+		it = m_texts.insert({ name, content }).first;
 	}
 	return it->second;
 }
@@ -187,12 +122,11 @@ void AssetManager::UnloadAll()
 	for (auto& kv : m_sounds)   UnloadSound(kv.second);
 	for (auto& kv : m_musics)   UnloadMusicStream(kv.second);
 	for (auto& kv : m_fonts)    UnloadFont(kv.second);
-	for (auto& kv : m_texts) { UnloadFileText(kv.second.text); UnloadTextLines(kv.second.lines, kv.second.lineCount);}
-	
 
 
 	m_textures.clear();
 	m_sounds.clear();
 	m_musics.clear();
 	m_fonts.clear();
+	m_texts.clear();
 }

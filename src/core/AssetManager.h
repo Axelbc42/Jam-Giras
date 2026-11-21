@@ -24,7 +24,7 @@ namespace Fonts {
     constexpr const char* MAIN = "MatchaStyle.ttf";
 }
 
-namespace TextFile {
+namespace FileName {
     constexpr const char* TUTORIAL = "Tutorial.txt";
     constexpr const char* TUTEJEMPLO = "Tutorial2.txt";
 }
@@ -40,7 +40,7 @@ public:
     Sound   GetSound(const std::string& name);
     Music   GetMusic(const std::string& name);
     Font    GetFont(const std::string& name);
-    Text    GetText(const std::string& name);
+    std::string   GetText(const std::string& name); //todo el contenido
 
     //GetModel() y GetShader() también se pueden implementar si los necesitamos para modelos 3D y shaders
 
@@ -61,5 +61,5 @@ private:
     std::unordered_map<std::string, Sound>   m_sounds;
     std::unordered_map<std::string, Music>   m_musics;
     std::unordered_map<std::string, Font>    m_fonts;
-    std::unordered_map<std::string, Text>    m_texts;
+    std::unordered_map<std::string, std::string>   m_texts;
 };
