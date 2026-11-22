@@ -49,6 +49,12 @@ public:
     void SetGlobalVolume(float volume);
     float GetGlobalVolume();
 
+    void SetSFXVolumeAM(float v) { SFXVolume = v; }
+    void SetMusicVolumeAM(float v) { musicVolume = v; }
+    float GetSFXVolume() { return SFXVolume; }
+    float GetMusicVolume() { return musicVolume; }
+
+
     inline static float SFXVolume = 0.5f; // Volumen global del sonido
     inline static float musicVolume = 0.5f; // Volumen global de la musica
 };

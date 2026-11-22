@@ -20,6 +20,6 @@ private:
     Clickable _reaunarButton{};
     Clickable _salirButton{};
 
-    Sound clickSound;
-    Font m_font{};
+    Sound _clickSound{};
+    Font _font{};
 };

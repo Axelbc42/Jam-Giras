@@ -126,19 +126,19 @@ void Game::draw()
 	BeginDrawing();
 	ClearBackground(Color{ 40, 44, 52, 255 });
 
+	// Se inicia aqui para poder usar Imgui en las escenas
+	rlImGuiBegin();
+
     // --- Mundo del juego ---
-	SceneManager::Instance()->Draw();
+  	SceneManager::Instance()->Draw();
 	NavigationManager::Instance()->Draw();
 	DialogueManager::Instance()->Draw();
 
     // --- Depuracion con ImGui ---
     if (m_debug)
-    {
-        rlImGuiBegin();
         drawDebugUI();
-        rlImGuiEnd();
-    }
 
+	rlImGuiEnd();
     EndDrawing();
 }
 

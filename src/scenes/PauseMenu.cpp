@@ -9,7 +9,8 @@
 
 void PauseMenu::Init()
 {
-    clickSound = AssetManager::Instance()->GetSound(Sounds::CLICK);
+    _clickSound = AssetManager::Instance()->GetSound(Sounds::CLICK);
+    _font = AssetManager::Instance()->GetFont(Fonts::MAIN);
 
     _pauseBackground.SetActive(true);
     _pauseBackground.SetTexture(AssetManager::Instance()->GetTexture(Textures::BUTON1));
@@ -25,7 +26,7 @@ void PauseMenu::Init()
     _reaunarButton.SetTint(NORMAL_INK);
     _reaunarButton.ResetCallbacks();
     _reaunarButton.AddCallback([this]() {
-        AudioManager::Instance()->PlaySound(clickSound);
+        AudioManager::Instance()->PlaySound(_clickSound);
         SceneManager::Instance()->ChangeToLastScene();
         SceneManager::Instance()->ChangePauseMenu();
         });
@@ -53,6 +54,41 @@ void PauseMenu::Draw()
     _pauseBackground.Draw();
     _reaunarButton.Draw();
     _salirButton.Draw();
+
+    // Ventana de ImGui encima del panel
+    ImGui::SetNextWindowPos(ImVec2(GameConstants::kScreenWidth / 2 - 150, GameConstants::kScreenHeight / 2 - 250));
+    ImGui::SetNextWindowSize(ImVec2(360, 640));
+    ImGui::Begin("##pause_options", nullptr,
+        ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove |
+        ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoSavedSettings);
+
+    ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.15f, 0.15f, 0.15f, 1.0f));         // barra
+    ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, ImVec4(0.25f, 0.25f, 0.25f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_FrameBgActive, ImVec4(0.25f, 0.25f, 0.25f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(0.55f, 0.55f, 0.55f, 1.0f));      // bolita
+    ImGui::PushStyleColor(ImGuiCol_SliderGrabActive, ImVec4(0.75f, 0.75f, 0.75f, 1.0f));
+
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 8.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_GrabRounding, 8.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 20.0f);                              // grosor de la bolita
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 10));                     // altura de la barra
+
+    float music = AudioManager::Instance()->GetMusicVolume() * 100.0f;
+    ImGui::Text("Musica");
+    ImGui::SetNextItemWidth(285);
+    if (ImGui::SliderFloat("##Musica", &music, 0.0f, 100.0f, "%.0f", ImGuiSliderFlags_AlwaysClamp))
+        AudioManager::Instance()->SetMusicVolumeAM(music / 100.0f);
+
+    float sound = AudioManager::Instance()->GetSFXVolume() * 100.0f;
+    ImGui::Text("Sonido");
+    ImGui::SetNextItemWidth(285);
+    if (ImGui::SliderFloat("##Sonido", &sound, 0.0f, 100.0f, "%.0f", ImGuiSliderFlags_AlwaysClamp))
+        AudioManager::Instance()->SetSFXVolumeAM(sound / 100.0f);
+
+    ImGui::PopStyleVar(4);
+    ImGui::PopStyleColor(5);
+
+    ImGui::End();
 }
 
 void PauseMenu::Release()
