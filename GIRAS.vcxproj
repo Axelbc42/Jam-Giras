@@ -143,6 +143,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\core\Inventory.cpp" />
     <ClCompile Include="src\scenes\PlazaClickableScene.cpp" />
     <ClCompile Include="src\core\DoorManager.cpp" />
     <ClCompile Include="src\scenes\PauseMenu.cpp" />
@@ -169,6 +170,7 @@
     <ClCompile Include="src\utilities\CursorState.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\Inventory.h" />
     <ClInclude Include="src\scenes\PlazaClickableScene.h" />
     <ClInclude Include="src\core\DoorManager.h" />
     <ClInclude Include="src\entities\items\door.h" />

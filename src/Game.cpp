@@ -8,6 +8,7 @@
 #include "core/DialogueManager.h"
 #include "core/DoorManager.h"
 #include "core/NavigationManager.h"
+#include "core/Inventory.h"
 #include "utilities/GameConstants.h"
 
 #include "scenes/MainMenu.h"
@@ -58,6 +59,7 @@ Game::~Game()
 		DialogueManager::Release();
 		NavigationManager::Release();
 		DoorManager::Release();
+		Inventory::Release();
         CloseAudioDevice();        // 2) audio
         rlImGuiShutdown();         // 3) ImGui
         CloseWindow();             // 4) ventana
@@ -87,6 +89,7 @@ void Game::initGame()
 	NavigationManager::Instance()->Init();
 	DialogueManager::Instance()->Init(); //Cargan los textos etc
 	DoorManager::Instance()->Init();
+	Inventory::Instance()->Init();
 
     SceneManager::Instance()->AddScene(new MainMenu("Menu"));
 	SceneManager::Instance()->AddScene(new PlazaScene("Plaza"));
@@ -123,6 +126,7 @@ void Game::update(float dt)
 	DialogueManager::Instance()->Update(dt);
     SceneManager::Instance()->Update(dt);
 	NavigationManager::Instance()->Update(dt);
+	Inventory::Instance()->Update(dt);
 
 	CursorState::Apply();                         
 }
@@ -139,6 +143,7 @@ void Game::draw()
   	SceneManager::Instance()->Draw();
 	NavigationManager::Instance()->Draw();
 	DialogueManager::Instance()->Draw();
+	Inventory::Instance()->Draw();
 
     // --- Depuracion con ImGui ---
     if (m_debug)

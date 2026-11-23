@@ -22,6 +22,4 @@ public:
 
 private:
 	Door* door;
-
-
 };
