@@ -6,11 +6,13 @@
 #include "core/AudioManager.h"
 #include "core/SceneManager.h"
 #include "core/DialogueManager.h"
+#include "core/DoorManager.h"
 #include "core/NavigationManager.h"
 #include "utilities/GameConstants.h"
 
 #include "scenes/MainMenu.h"
 #include "scenes/PlazaScene.h"
+#include "scenes/PlazaClickableScene.h"
 #include "scenes/SceneTextTest.h"
 #include "scenes/PauseMenu.h"
 
@@ -55,6 +57,7 @@ Game::~Game()
         SceneManager::Release();
 		DialogueManager::Release();
 		NavigationManager::Release();
+		DoorManager::Release();
         CloseAudioDevice();        // 2) audio
         rlImGuiShutdown();         // 3) ImGui
         CloseWindow();             // 4) ventana
@@ -83,14 +86,17 @@ void Game::initGame()
     SceneManager::Instance();
 	NavigationManager::Instance()->Init();
 	DialogueManager::Instance()->Init(); //Cargan los textos etc
+	DoorManager::Instance()->Init();
 
     SceneManager::Instance()->AddScene(new MainMenu("Menu"));
 	SceneManager::Instance()->AddScene(new PlazaScene("Plaza"));
+	SceneManager::Instance()->AddScene(new PlazaClickableScene("PlazaClickable"));
 	SceneManager::Instance()->AddScene(new SceneTextTest("TextTest"));
 	SceneManager::Instance()->AddScene(new PauseMenu("PauseMenu"));
 
 	NavigationManager::Instance()->AddAdjacents("Menu", { "Plaza", "TextTest", "", "" });
-	NavigationManager::Instance()->AddAdjacents("Plaza", { "Menu", "TextTest", "", "" });
+	NavigationManager::Instance()->AddAdjacents("Plaza", { "Menu", "TextTest", "PlazaClickable", "" });
+	NavigationManager::Instance()->AddAdjacents("PlazaClickable", { "", "TextTest", "", "Plaza" });
 	NavigationManager::Instance()->AddAdjacents("TextTest", { "", "Plaza", "Menu", "" });
 	NavigationManager::Instance()->AddAdjacents("PauseMenu", { "", "", "", "" });
 

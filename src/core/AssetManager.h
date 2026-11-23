@@ -6,10 +6,16 @@
 
 namespace Textures {
 	constexpr const char* BACKGROUND_PLAZA = "backgrounds/Plaza.png";
-	constexpr const char* CURSOR_DEFAULT = "ui/cursor.png";
-	constexpr const char* ITEM_KEY = "objects/key.png";
-	constexpr const char* WHITE_ARROW = "ui/arrow.png";
 	constexpr const char* BACKGROUND_MENU = "backgrounds/FondoMenu.png";
+
+	constexpr const char* ITEM_KEY_1 = "objects/key1.png";
+	constexpr const char* ITEM_KEY_2 = "objects/key2.png";
+	constexpr const char* CLOSED_DOOR = "objects/closedDoor.png";
+	constexpr const char* OPENED_DOOR = "objects/openedDoor.png";
+
+	constexpr const char* WHITE_ARROW = "ui/arrow.png";
+	constexpr const char* CURSOR_DEFAULT = "ui/cursor.png";
+
 	constexpr const char* BUTON1 = "UI/tile_0001.png";
 }
 
