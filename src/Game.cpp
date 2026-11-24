@@ -207,3 +207,7 @@ void Game::updateViewport()
 	SetMouseOffset((int)-m_offX, (int)-m_offY);
 	SetMouseScale(1.f / m_scale, 1.f / m_scale);
 }
+
+Vector2 Game::GameToWindow(float x, float y) const {
+	return Vector2(m_offX + x * m_scale, m_offY + y * m_scale);
+}

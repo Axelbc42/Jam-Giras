@@ -15,6 +15,10 @@ public:
 
     void RequestQuit() { m_quit = true; } //Para que elmenu pueda salir del juego
 
+    //Pa las ventanas de ImGui que interactuen con el juego reposicionarlas (ej. pauseMenu)
+    Vector2 GameToWindow(float x, float y) const; //ImVec2 no me deja aunque incluya el imgui.h aqui
+    inline float  GameScale() const { return m_scale; }
+
     Game(const Game&) = delete;
     Game& operator=(const Game&) = delete;
 

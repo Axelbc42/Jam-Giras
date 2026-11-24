@@ -4,6 +4,7 @@
 #include "../core/AudioManager.h"
 #include "../core/SceneManager.h"
 #include "../utilities/GameConstants.h"
+#include "../Game.h"
 
 #include "imgui.h"
 
@@ -55,9 +56,12 @@ void PauseMenu::Draw()
     _reaunarButton.Draw();
     _salirButton.Draw();
 
+    auto* g = Game::Instance();
     // Ventana de ImGui encima del panel
-    ImGui::SetNextWindowPos(ImVec2(GameConstants::kScreenWidth / 2 - 150, GameConstants::kScreenHeight / 2 - 250));
-    ImGui::SetNextWindowSize(ImVec2(360, 640));
+    const Vector2 p = g->GameToWindow(GameConstants::kScreenWidth / 2.f - 150.f,
+        GameConstants::kScreenHeight / 2.f - 250.f);
+    ImGui::SetNextWindowPos(ImVec2(p.x,p.y));
+    ImGui::SetNextWindowSize(ImVec2(360 * g->GameScale(), 640 * g->GameScale()));
     ImGui::Begin("##pause_options", nullptr,
         ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove |
         ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoSavedSettings);
