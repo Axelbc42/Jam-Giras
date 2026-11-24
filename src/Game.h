@@ -13,6 +13,8 @@ public:
     void initGame();             // Carga/prepara el contenido del juego
     void start();                // Bucle principal
 
+    void RequestQuit() { m_quit = true; } //Para que elmenu pueda salir del juego
+
     Game(const Game&) = delete;
     Game& operator=(const Game&) = delete;
 
@@ -25,9 +27,11 @@ private:
     void draw();
     void drawDebugUI();
 
+
     static Game* s_instance;
 
     bool m_windowReady = false;
+    bool m_quit = false;
 
     // --- Depuracion ---
     bool m_debug = true;         // F1 muestra/oculta el panel de ImGui

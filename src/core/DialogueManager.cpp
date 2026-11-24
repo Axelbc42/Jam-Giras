@@ -176,6 +176,7 @@ void DialogueManager::LoadDialogue(const std::string fileName, Rectangle box, fl
 }
 
 void DialogueManager::Close() {
+	if (_active.empty()) return;
 	_lastActive = _active;
 	_active.clear(); //quitamos la key
 }
@@ -237,8 +238,8 @@ void DialogueManager::Update(float dt) {
 		info._scrollY = Clamp(info._scrollY, 0.f, info._maxScroll);
 	}
 
-	//--- Posibilidad de cerrar el texto al clickar en pantalla
-	if (info._maxScroll == info._scrollY) //estamos en el final del viewport
+	//--- Posibilidad de cerrar el texto al clickar en pantalla (teniendo en cuenta la vent de imgui)
+	if (info._maxScroll == info._scrollY && !ImGui::GetIO().WantCaptureMouse) //estamos en el final del viewport
 		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
 			Close();
 		}
@@ -265,19 +266,12 @@ void DialogueManager::Update(float dt) {
 }
 
 void DialogueManager::DrawDebugUI() {
-	if (ImGui::Button("Cerrar/Abrir Texto")) {
-		if (DialogueManager::Instance()->isActive()) { DialogueManager::Instance()->Close(); }
-		else DialogueManager::Instance()->OpenText(_lastActive);
+	if (ImGui::Button("Cerrar/Abrir Opciones dialogo")) {
+		if (isActive()) Close();
+		else if (!_lastActive.empty()) OpenText(_lastActive);
 	}
-	if (_active.empty()) return;
 
-	DialogueInfo& info = _dialogues.at(_active);
-
-	ImGui::Text("Cajita Texto");
-
-	ImGui::DragFloat2("Posicion", &info._box._rect.x, 1.f);
-	ImGui::DragFloat2("Tamano", &info._box._rect.width, 1.f);
-
+	//siempre visibles
 	for (size_t i = 0; i < _filesAvaibles.size(); i++)
 	{
 		const std::string f = _filesAvaibles[i];
@@ -292,4 +286,14 @@ void DialogueManager::DrawDebugUI() {
 			}
 		ImGui::PopID();
 	}
+
+	if (_active.empty()) return;
+	//editar la cajita
+	DialogueInfo& info = _dialogues.at(_active);
+	ImGui::Text("Cajita Texto");
+
+	ImGui::DragFloat2("Posicion", &info._box._rect.x, 1.f);
+	ImGui::DragFloat2("Tamano", &info._box._rect.width, 1.f);
+
+
 }

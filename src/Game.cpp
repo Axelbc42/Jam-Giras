@@ -103,14 +103,14 @@ void Game::initGame()
 	NavigationManager::Instance()->AddAdjacents("TextTest", { "", "Plaza", "Menu", "" });
 	NavigationManager::Instance()->AddAdjacents("PauseMenu", { "", "", "", "" });
 
-	SceneManager::Instance()->ChangeScene("TextTest");
+	SceneManager::Instance()->ChangeScene("Menu");
 }
 // ---------------------------------------------------------------
 // Bucle principal
 // ---------------------------------------------------------------
 void Game::start()
 {
-	while (!WindowShouldClose())
+	while (!WindowShouldClose() && !m_quit)
 	{
 		update(GetFrameTime());
 		draw();
