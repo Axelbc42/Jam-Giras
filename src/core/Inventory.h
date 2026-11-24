@@ -32,9 +32,13 @@ private:
 
 	static Inventory* s_instance;
 
-	std::vector<Object> _inventory;
-
-	const float OFFSET = 10;
-	const int SEPARATION = 60;
+	const float OFFSET = 20;
+	const int SEPARATION = 100;
 	const float TAM = 60;
+	const int MAX_SIZE = 6;
+
+	std::vector<Object> _inventory;
+	std::vector<GameObject> _casillas;
+
+	Texture _fondoCasilla;
 };
