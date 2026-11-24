@@ -36,6 +36,7 @@ void Inventory::Unload()
 	//	elem.item = nullptr;
 	//}
 	_inventory.clear();
+	_casillas.clear();
 }
 
 void Inventory::Draw()
@@ -52,13 +53,30 @@ void Inventory::Draw()
 
 void Inventory::Update(float dt)
 {
-	for (auto& elem : _inventory)
-		elem.item->Update(dt);
+	for (int i = 0; i < _inventory.size(); i++) {
+		// Si esta inactivo lo elimina del vector
+		if (!_inventory[i].item->IsActive()) {
+			_inventory[i].item = nullptr;
+			// Mueve el resto de elementos hacia delante
+			for (int j = i; j + 1 < _inventory.size(); ++j) {
+				_inventory[j] = _inventory[j + 1];
+				PlaceItem(j);
+			}
+			// Lo elimina
+			_inventory.pop_back();
+		}
+		else
+			_inventory[i].item->Update(dt);
+	}
 }
 
 void Inventory::AddObject(Interactuable* item, std::string info) {
 	_inventory.push_back({ item , info });
 	item = nullptr;
-	float posX = (_inventory.size() - 1) * SEPARATION + OFFSET;
-	_inventory.back().item->SetRect(Rectangle{ posX + OFFSET / 2, OFFSET + OFFSET / 2, TAM, TAM });
+	PlaceItem(_inventory.size() - 1);
+}
+
+void Inventory::PlaceItem(int pos) {
+	float posX = pos * SEPARATION + OFFSET;
+	_inventory[pos].item->SetRect(Rectangle{ posX + OFFSET / 2, OFFSET + OFFSET / 2, TAM, TAM });
 }

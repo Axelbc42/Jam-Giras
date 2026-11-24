@@ -32,6 +32,8 @@ private:
 
 	static Inventory* s_instance;
 
+	void PlaceItem(int pos);
+
 	const float OFFSET = 20;
 	const int SEPARATION = 100;
 	const float TAM = 60;
