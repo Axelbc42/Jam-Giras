@@ -26,12 +26,15 @@ private:
     void update(float dt);
     void draw();
     void drawDebugUI();
-
+    void updateViewport();
 
     static Game* s_instance;
 
     bool m_windowReady = false;
     bool m_quit = false;
+    RenderTexture2D m_target{};
+    float m_scale = 1.f, m_offX = 0.f, m_offY = 0.f;
+
 
     // --- Depuracion ---
     bool m_debug = true;         // F1 muestra/oculta el panel de ImGui

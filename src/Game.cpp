@@ -60,6 +60,7 @@ Game::~Game()
 		NavigationManager::Release();
 		DoorManager::Release();
 		Inventory::Release();
+		UnloadRenderTexture(m_target);
         CloseAudioDevice();        // 2) audio
         rlImGuiShutdown();         // 3) ImGui
         CloseWindow();             // 4) ventana
@@ -71,9 +72,16 @@ Game::~Game()
 // ---------------------------------------------------------------
 bool Game::initWindow()
 {
+	//---ConfigWindow---
+	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(GameConstants::kScreenWidth, GameConstants::kScreenHeight, GameConstants::kTitle);
     if (!IsWindowReady())
         return false;
+	SetWindowMinSize(GameConstants::kScreenWidth, GameConstants::kScreenHeight);
+
+	m_target = LoadRenderTexture(GameConstants::kScreenWidth, GameConstants::kScreenHeight);
+	SetTextureFilter(m_target.texture, TEXTURE_FILTER_BILINEAR); //hay que ver que tal este o el point por el tipo de arte
+	//-----------------
 
 	AudioManager::Instance()->Init();
 	SetTargetFPS(60);
@@ -121,6 +129,10 @@ void Game::update(float dt)
 {
 	if (IsKeyPressed(KEY_F1))
 		m_debug = !m_debug;		
+	if (IsKeyPressed(KEY_F11) || (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_ENTER)))
+		ToggleBorderlessWindowed();
+
+	updateViewport(); //antes de que se lea el raton
 
 	CursorState::BeginFrame();                    
 	DialogueManager::Instance()->Update(dt);
@@ -131,26 +143,35 @@ void Game::update(float dt)
 	CursorState::Apply();                         
 }
 
-void Game::draw()
+void Game::draw() //Imp mantener este orden
 {
+	//ImGui trabaja con coordenadas de ventana, con el reset funciona estando fullscreen o tipo window
+	SetMouseOffset(0, 0);
+	SetMouseScale(1.f, 1.f);
+
+	rlImGuiBegin();  // el frame de ImGui existe ya para las escenas
+
 	BeginDrawing();
+	ClearBackground(BLACK);
+
+	// El juego, a la textura de 1280x720
+	BeginTextureMode(m_target);
 	ClearBackground(Color{ 40, 44, 52, 255 });
-
-	// Se inicia aqui para poder usar Imgui en las escenas
-	rlImGuiBegin();
-
-    // --- Mundo del juego ---
-  	SceneManager::Instance()->Draw();
+	SceneManager::Instance()->Draw();
 	NavigationManager::Instance()->Draw();
 	DialogueManager::Instance()->Draw();
 	Inventory::Instance()->Draw();
+	EndTextureMode();
 
-    // --- Depuracion con ImGui ---
-    if (m_debug)
-        drawDebugUI();
+	// La textura, escalada a la ventana
+	DrawTexturePro(m_target.texture,
+		{ 0, 0, GameConstants::kScreenWidth, -GameConstants::kScreenHeight },  // -H: las render textures vienen invertidas
+		{ m_offX, m_offY, GameConstants::kScreenWidth * m_scale, GameConstants::kScreenHeight * m_scale },
+		{ 0, 0 }, 0.f, WHITE);
 
-	rlImGuiEnd();
-    EndDrawing();
+	if (m_debug) drawDebugUI();
+	rlImGuiEnd(); //Aqui hace lo que tiene que hacer ImGui, encima de la textura
+	EndDrawing();
 }
 
 void Game::drawDebugUI()
@@ -158,14 +179,14 @@ void Game::drawDebugUI()
 	ImGui::Begin("Depuracion");
 	ImGui::Text("FPS: %d", GetFPS());
 
-	const Vector2 mouse = GetMousePosition();
-	ImGui::Text("Raton: %.0f, %.0f", mouse.x, mouse.y);
+	const Vector2 m = GetMousePosition();
+	ImGui::Text("Raton (ventana): %.0f, %.0f", m.x, m.y);
+	ImGui::Text("Raton (juego): %.0f, %.0f", (m.x - m_offX) / m_scale, (m.y - m_offY) / m_scale);
 
     SceneManager::Instance()->DrawDebugUI();
 
 	ImGui::Separator();
 	ImGui::Checkbox("Demo de ImGui", &m_showImGuiDemo);
-
 
 	//DialogueManager
 	ImGui::Separator();
@@ -174,4 +195,15 @@ void Game::drawDebugUI()
 	ImGui::End();
 	if (m_showImGuiDemo)
 		ImGui::ShowDemoWindow(&m_showImGuiDemo);
+}
+
+
+void Game::updateViewport()
+{
+	const float W = GameConstants::kScreenWidth, H = GameConstants::kScreenHeight;
+	m_scale = fminf(GetScreenWidth() / W, GetScreenHeight() / H);
+	m_offX = (GetScreenWidth() - W * m_scale) / 2.f;
+	m_offY = (GetScreenHeight() - H * m_scale) / 2.f;
+	SetMouseOffset((int)-m_offX, (int)-m_offY);
+	SetMouseScale(1.f / m_scale, 1.f / m_scale);
 }
