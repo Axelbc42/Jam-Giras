@@ -4,6 +4,7 @@
 #include "../entities/items/door.h"
 #include "../entities/items/key.h"
 #include "../core/DoorManager.h"
+#include "../core/Inventory.h"
 #include "imgui.h"
 
 void PlazaScene::Init()
@@ -26,11 +27,19 @@ void PlazaScene::Init()
         Key* k = dm->GetKey(0);
         k->SetTexture(assets->GetTexture(Textures::ITEM_KEY_1));
         k->SetRect(Rectangle{ 100.0f, 300.0f, 80.0f, 80.0f });
+        k->AddCallback([k]() {
+            k->ResetCallbacks();
+            Inventory::Instance()->AddObject(k, "KLK 3Gua");
+            });
         Adopt(k);
 
         Key* k2 = dm->GetKey(1);
         k2->SetTexture(assets->GetTexture(Textures::ITEM_KEY_2));
         k2->SetRect(Rectangle{ 100.0f, 400.0f, 80.0f, 80.0f });
+        k2->AddCallback([k2]() {
+            k2->ResetCallbacks();
+            Inventory::Instance()->AddObject(k2, "KLK 3Gua");
+            });
         Adopt(k2);
     }
 

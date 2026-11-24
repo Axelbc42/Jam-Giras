@@ -2,7 +2,7 @@
 
 void Draggable::Update(float dt)
 {
-	Interactuable::Update(dt); 
+	Clickable::Update(dt);
 
 	if (!m_active){
 		m_dragging = false;

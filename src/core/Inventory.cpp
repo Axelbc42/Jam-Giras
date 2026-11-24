@@ -1,6 +1,5 @@
 #include "Inventory.h"
 
-#include "AssetManager.h"
 #include "../utilities/GameConstants.h"
 
 Inventory* Inventory::s_instance = nullptr;
@@ -31,18 +30,18 @@ void Inventory::Release()
 
 void Inventory::Unload()
 {
-	for (auto elem : _inventory) {
-		delete elem.item;
-		elem.item = nullptr;
-	}
+	//for (auto elem : _inventory) {
+	//	delete elem.item;
+	//	elem.item = nullptr;
+	//}
 	_inventory.clear();
-
 }
 
 void Inventory::Draw()
 {
-	for (auto& elem : _inventory)
-		elem.item->Draw();
+	for (int i = 0; i < _inventory.size(); i++) {
+		_inventory[i].item->Draw();
+	}
 }
 
 void Inventory::Update(float dt)
@@ -53,4 +52,7 @@ void Inventory::Update(float dt)
 
 void Inventory::AddObject(Interactuable* item, std::string info) {
 	_inventory.push_back({ item , info });
+	item = nullptr;
+	float posX = (_inventory.size() - 1) * SEPARATION + OFFSET;
+	_inventory.back().item->SetRect(Rectangle{ posX, OFFSET, TAM, TAM });
 }

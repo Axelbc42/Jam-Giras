@@ -1,7 +1,5 @@
 #pragma once
 #include "../scenes/Scene.h"
-#include "../entities/Clickable.h"
-#include "../entities/Draggable.h"
 #include "../entities/Interactuable.h"
 
 #include <vector>
@@ -35,4 +33,8 @@ private:
 	static Inventory* s_instance;
 
 	std::vector<Object> _inventory;
+
+	const float OFFSET = 10;
+	const int SEPARATION = 60;
+	const float TAM = 60;
 };

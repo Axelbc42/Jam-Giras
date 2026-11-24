@@ -2,9 +2,9 @@
 
 #include <functional>
 #include <utility>
-#include "Interactuable.h"
+#include "Clickable.h"
 
-class Draggable : public Interactuable
+class Draggable : public Clickable
 {
 public:
 	~Draggable() = default;
