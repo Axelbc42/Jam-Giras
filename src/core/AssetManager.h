@@ -13,7 +13,7 @@ namespace Textures {
 	constexpr const char* CLOSED_DOOR = "objects/closedDoor.png";
 	constexpr const char* OPENED_DOOR = "objects/openedDoor.png";
 
-	constexpr const char* WHITE_ARROW = "ui/arrow.png";
+	constexpr const char* WHITE_ARROW = "ui/white_arrow.png";
 	constexpr const char* CURSOR_DEFAULT = "ui/cursor.png";
 
 	constexpr const char* BUTON1 = "UI/tile_0001.png";
@@ -21,6 +21,7 @@ namespace Textures {
 
 namespace Sounds {
 	constexpr const char* CLICK = "placeholder.wav";
+	constexpr const char* OPEN_DOOR = "openDoor.wav";
 }
 
 namespace Musics {

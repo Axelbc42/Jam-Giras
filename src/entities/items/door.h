@@ -1,6 +1,7 @@
 #pragma once
 #include "../GameObject.h"
 #include "../../core/AssetManager.h"
+#include "../../core/AudioManager.h"
 
 class Door : public GameObject
 {
@@ -15,6 +16,7 @@ public:
 			openTex = AssetManager::Instance()->GetTexture(Textures::OPENED_DOOR);
 		}
 
+		AudioManager::Instance()->PlaySound(AssetManager::Instance()->GetSound(Sounds::OPEN_DOOR));
 		SetTexture(openTex);
 	}
 
