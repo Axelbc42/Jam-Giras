@@ -81,8 +81,13 @@ bool Game::initWindow()
     if (!IsWindowReady())
         return false;
 	SetWindowMinSize(GameConstants::kScreenWidth, GameConstants::kScreenHeight);
+#ifdef GAME_RELEASE
+	ToggleBorderlessWindowed(); //Empieza en fullscreen sin bordes //ESTO PARA RELEASE
+#endif
+#ifdef GAME_DEBUG
 	MaximizeWindow();
-	SetWindowSize(GetScreenWidth(), GetScreenHeight()); //Empieza en fullscreen pero con bordes
+#endif
+
 
 	m_target = LoadRenderTexture(GameConstants::kScreenWidth, GameConstants::kScreenHeight);
 	SetTextureFilter(m_target.texture, TEXTURE_FILTER_BILINEAR); //hay que ver que tal este o el point por el tipo de arte
@@ -123,7 +128,7 @@ void Game::initGame()
 	NavigationManager::Instance()->AddAdjacents("Bar", { "", "Plaza", "", "" });
 	NavigationManager::Instance()->AddAdjacents("PauseMenu", { "", "", "", "" });
 
-	SceneManager::Instance()->ChangeScene("Menu");
+	SceneManager::Instance()->StartScene("Menu");
 }
 // ---------------------------------------------------------------
 // Bucle principal
@@ -183,7 +188,9 @@ void Game::draw() //Imp mantener este orden
 		{ m_offX, m_offY, GameConstants::kScreenWidth * m_scale, GameConstants::kScreenHeight * m_scale },
 		{ 0, 0 }, 0.f, WHITE);
 
+	#ifdef GAME_DEBUG
 	if (m_debug) drawDebugUI();
+	#endif
 	rlImGuiEnd(); //Aqui hace lo que tiene que hacer ImGui, encima de la textura
 	EndDrawing();
 }

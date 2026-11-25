@@ -67,13 +67,15 @@ void PauseMenu::Draw()
     DrawTextEx(_font, "Salir", pos2, size, spacing, WHITE);
 
     auto* g = Game::Instance();
+    const float s = g->GameScale();
     // Ventana de ImGui encima del panel
     const Vector2 p = g->GameToWindow(GameConstants::kScreenWidth / 2.f - 150.f, GameConstants::kScreenHeight / 2.f - 250.f);
     ImGui::SetNextWindowPos(ImVec2(p.x,p.y));
-    ImGui::SetNextWindowSize(ImVec2(360 * g->GameScale(), 180 * g->GameScale()));
+    ImGui::SetNextWindowSize(ImVec2(360.f * s, 180.f * s));
     ImGui::Begin("##pause_options", nullptr,
         ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove |
         ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoSavedSettings);
+    ImGui::SetWindowFontScale(s);
 
     ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.15f, 0.15f, 0.15f, 1.0f));         // barra
     ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, ImVec4(0.25f, 0.25f, 0.25f, 1.0f));
@@ -81,26 +83,25 @@ void PauseMenu::Draw()
     ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(0.55f, 0.55f, 0.55f, 1.0f));      // bolita
     ImGui::PushStyleColor(ImGuiCol_SliderGrabActive, ImVec4(0.75f, 0.75f, 0.75f, 1.0f));
 
-    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 8.0f);
-    ImGui::PushStyleVar(ImGuiStyleVar_GrabRounding, 8.0f);
-    ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 20.0f);                              // grosor de la bolita
-    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 10));                     // altura de la barra
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 8.0f*s);
+    ImGui::PushStyleVar(ImGuiStyleVar_GrabRounding, 8.0f * s);
+    ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 20.0f * s);                              // grosor de la bolita
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4 * s, 10 * s));                     // altura de la barra
 
     float music = AudioManager::Instance()->GetMusicVolume() * 100.0f;
     ImGui::Text("Musica");
-    ImGui::SetNextItemWidth(285);
+    ImGui::SetNextItemWidth(285 * s);
     if (ImGui::SliderFloat("##Musica", &music, 0.0f, 100.0f, "%.0f", ImGuiSliderFlags_AlwaysClamp))
         AudioManager::Instance()->SetMusicVolumeAM(music / 100.0f);
 
     float sound = AudioManager::Instance()->GetSFXVolume() * 100.0f;
     ImGui::Text("Sonido");
-    ImGui::SetNextItemWidth(285);
+    ImGui::SetNextItemWidth(285 * s);
     if (ImGui::SliderFloat("##Sonido", &sound, 0.0f, 100.0f, "%.0f", ImGuiSliderFlags_AlwaysClamp))
         AudioManager::Instance()->SetSFXVolumeAM(sound / 100.0f);
 
     ImGui::PopStyleVar(4);
     ImGui::PopStyleColor(5);
-
     ImGui::End();
 }
 

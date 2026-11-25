@@ -23,6 +23,7 @@ public:
 	void ChangePauseMenu() { pauseMenu = !pauseMenu; }
 	bool IsFading() const { return fading; }
 
+	void StartScene(const std::string& name); //Para no agregar logica extra sobre el fader y el caso del menu etc
 private:
 	SceneManager() = default;
 	~SceneManager() = default;
@@ -41,8 +42,8 @@ private:
 	bool pauseMenu = false;
 
 	bool fading = false;
-	float timer = 0;
-	const float FADING_TIME = 2;
+	float timer = 0.f;
+	const float FADING_TIME = 1.5f;
 
 	static SceneManager* s_instance;
 };

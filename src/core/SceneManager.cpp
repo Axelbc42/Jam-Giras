@@ -145,3 +145,20 @@ Scene* SceneManager::GetScene(std::string name) {
 
     return scenes[it->second];
 }
+
+void SceneManager::StartScene(const std::string& name)
+{
+    auto it = ids.find(name);
+    if (it == ids.end()) {
+        TraceLog(LOG_WARNING, "ESCENA %s NO ENCONTRADA", name.c_str());
+        return;
+    }
+
+    currentScene = lastScene = it->second;   // no hay escena anterior
+    NavigationManager::Instance()->UpdateArrows(scenes[currentScene]);
+    scenes[currentScene]->OnEnter();        
+    // no hace falta OnExit de nadie
+
+    fading = true;
+    timer = FADING_TIME / 2.f;               // solo la mitad: negro -> escena
+}
