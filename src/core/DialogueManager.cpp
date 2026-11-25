@@ -18,15 +18,25 @@ void DialogueManager::Init() {
 	const float mboxHeight = 140.f;
 	const Rectangle mainbox = createDialogueBox(mboxWidth, mboxHeight, 40.f, GameConstants::kScreenHeight - 180.f);
 
-	const float cboxWidth = 230.f;
-	const float cboxHeight = 150.f;
-	const Rectangle centerbox = createDialogueBox(cboxWidth, cboxHeight, centerX - cboxWidth / 2.f, centerY - cboxHeight / 2.f);
+	const float smcboxWidth = 450.f;
+	const float smcboxHeight = 150.f;
+	const Rectangle smallCenterbox = createDialogueBox(smcboxWidth, smcboxHeight, centerX - smcboxWidth / 2.f, centerY - smcboxHeight / 2.f);
+
+	const float cboxWidth = 450.f;
+	const float cboxHeight = 300.f;
+	const Rectangle nCenterbox = createDialogueBox(cboxWidth, cboxHeight, centerX - cboxWidth / 2.f, centerY - cboxHeight / 2.f);
 
 	//--DIALOGOS--
 	//---Cargar todos los dialogos antes de usar---
+	//---Ejemplos---
 	DialogueManager::Instance()->LoadDialogue(FileName::TUTORIAL, mainbox, 14.f, BLUE, RED, BEIGE, mainFont);
-	DialogueManager::Instance()->LoadDialogue(FileName::LOREMIPSUM, centerbox, 18.f, GREEN, RED, BLACK, mainFont);
+	DialogueManager::Instance()->LoadDialogue(FileName::LOREMIPSUM, smallCenterbox, 18.f, GREEN, RED, BLACK, mainFont);
 	DialogueManager::Instance()->LoadDialogue(FileName::TUTEJEMPLO, mainbox);
+
+	//---Los del juego---
+	DialogueManager::Instance()->LoadDialogue(FileName::DIALOGUE_BOX_1, nCenterbox, 14.f, WHITE, PURPLE, BLACK);
+	DialogueManager::Instance()->LoadDialogue(FileName::DIALOGUE_BOX_2, smallCenterbox, 14.f, WHITE, PURPLE, BLACK);
+	DialogueManager::Instance()->LoadDialogue(FileName::PLAZA, nCenterbox);
 
 	//--- Nombre de los archivos para el debug
 	const int n = sizeof(FileName::COLECCION_FILES) / sizeof(FileName::COLECCION_FILES[0]);
@@ -80,7 +90,7 @@ void DialogueManager::LoadDialogue(const std::string fileName, Rectangle box, fl
 	info._color = textColor;
 	info._font = font;
 
-	const float padding = 12.f; //horizontal y vertical
+	const float padding = 14.f; //horizontal y vertical
 
 	//--- Calculo dinamico del titulo y su zona
 	Vector2 titleSize = MeasureTextEx(font, info._title.c_str(), info._fontSize, info._lineSpacing);
@@ -152,7 +162,7 @@ void DialogueManager::LoadDialogue(const std::string fileName, Rectangle box, fl
 
 	//--- Calculo de lo que ocupa todo el texto verticalmente y el tope del scroll
 	info._lineHeight = MeasureTextEx(font, "texto centinela pa k tenga ref", info._fontSize, info._lineSpacing).y + info._linePadding;
-	info._textHeight = info._lineHeight * info._lines.size();
+	info._textHeight = info._lineHeight * info._lines.size() + kTextOffsetY + kTextBottomPad;
 	info._maxScroll = fmaxf(0.f, info._textHeight - info._viewport.height);
 
 	//--- Scrollbar
@@ -203,7 +213,7 @@ void DialogueManager::Draw() {
 
 	for (const std::string& line : diagInf._lines)
 	{
-		DrawTextEx(diagInf._font, line.c_str(), Vector2(diagInf._viewport.x, y + 8.f), diagInf._fontSize, diagInf._lineSpacing, diagInf._color);
+		DrawTextEx(diagInf._font, line.c_str(), Vector2(diagInf._viewport.x, y + kTextOffsetY), diagInf._fontSize, diagInf._lineSpacing, diagInf._color);
 
 		y += diagInf._lineHeight;
 	}
@@ -219,12 +229,14 @@ void DialogueManager::Draw() {
 }
 
 void DialogueManager::OpenText(const std::string& assetName) {
+	if (_active == assetName) return; //Para evitar sobreescribir en draws o updates
 	auto it = _dialogues.find(assetName);
 	if (it == _dialogues.end()) {
 		TraceLog(LOG_ERROR, "DialogueManager: No existe el archivo %s", assetName.c_str());
 		return;
 	}
 	_active = it->first;
+	it->second._scrollY = 0.f; //Siempre arriba
 }
 
 void DialogueManager::Update(float dt) {

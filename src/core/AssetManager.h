@@ -37,8 +37,13 @@ namespace FileName {
 	constexpr const char* TUTEJEMPLO = "Tutorial2.txt";
 	constexpr const char* LOREMIPSUM = "Lorem.txt";
 
+	//Ya para uso en el videojuego
+	constexpr const char* DIALOGUE_BOX_1 = "Cuadros de Texto 1.txt";
+	constexpr const char* DIALOGUE_BOX_2 = "Cuadros de Texto 2.txt";
+	constexpr const char* PLAZA = "La Plaza.txt";
+
 	//Replicar lo de arriba aqui
-	const std::string COLECCION_FILES[] = { TUTORIAL ,TUTEJEMPLO ,LOREMIPSUM };
+	const std::string COLECCION_FILES[] = { TUTORIAL ,TUTEJEMPLO ,LOREMIPSUM,DIALOGUE_BOX_1,DIALOGUE_BOX_2,PLAZA };
 }
 
 

@@ -1,0 +1,2 @@
+[INFORMACIÓN ÚTIL] 
+En el juego encontrarás 2 tipos de cuadros de texto. En este primer tipo, toda la información es visible y al clickar en cualquier parte de la pantalla cierra el diálogo.

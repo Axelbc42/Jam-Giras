@@ -63,6 +63,9 @@ private:
 		Color _color = WHITE;
 	};
 
+	static constexpr float kTextOffsetY = 8.f;
+	static constexpr float kTextBottomPad = 6.f;
+
 	std::string _active = ""; //asumo que solo un texto por pantalla
 	std::string _lastActive;
 	float _elapsed = 0.f;
