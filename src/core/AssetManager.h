@@ -20,7 +20,7 @@ namespace Textures {
 }
 
 namespace Sounds {
-	constexpr const char* CLICK = "placeholder.wav";
+	constexpr const char* CLICK = "click1.ogg";
 	constexpr const char* OPEN_DOOR = "openDoor.wav";
 }
 
