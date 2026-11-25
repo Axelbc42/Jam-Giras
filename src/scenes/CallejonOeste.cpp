@@ -16,7 +16,7 @@ void CallejonOeste::Init()
     AssetManager* assets = AssetManager::Instance();
 
     if (m_plaza == nullptr)
-        m_plaza = new DialogueInteractuable(FileName::NPC_1, true, true);
+        m_plaza = Create<DialogueInteractuable>(FileName::NPC_1, true, true);
 
     clickSound = assets->GetSound(Sounds::CLICK);
     m_font = assets->GetFont(Fonts::MAIN);
@@ -51,7 +51,6 @@ void CallejonOeste::Draw()
 
 void CallejonOeste::Release()
 {
-    delete m_plaza;
 }
 
 void CallejonOeste::DrawDebugUI()

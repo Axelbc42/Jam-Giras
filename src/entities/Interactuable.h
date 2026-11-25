@@ -9,7 +9,7 @@
 class Interactuable : public GameObject
 {
 public:
-	virtual ~Interactuable() = default;
+	 ~Interactuable() override = default;
 
 	bool Contains(const Vector2& point) const {
 		return m_active && CheckCollisionPointRec(point, m_rect);
