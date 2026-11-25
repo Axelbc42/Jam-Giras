@@ -284,12 +284,12 @@ void DialogueManager::Update(float dt) {
 	_elapsed += dt;
 	if (_elapsed >= 1000.f)_elapsed -= 1000.f; //hago esto por que no hay un getTIME desde que empezo el juego
 	float osc = (std::sin(_elapsed * _VEL_OSC) + 1) * 0.5f; //[0,1]
-	float alpha = Lerp(0.85, 0.6, osc);
+	float alpha = Lerp(0.95, 0.90, osc);
 	if (info._maxScroll == info._scrollY) {
 		info._box._bodyColor.a = (unsigned char)(alpha * 255.f);
 	}
 	else {
-		info._box._bodyColor.a = (int)(255.f * 0.85f); //Ya empiezan con transparencia
+		info._box._bodyColor.a = (int)(255.f * 0.90f); //Ya empiezan con transparencia
 	}
 }
 

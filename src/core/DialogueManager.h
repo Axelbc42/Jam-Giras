@@ -72,7 +72,7 @@ private:
 	std::string _active = ""; //asumo que solo un texto por pantalla
 	std::string _lastActive;
 	float _elapsed = 0.f;
-	static constexpr float _VEL_OSC = 5.f;
+	static constexpr float _VEL_OSC = 4.f;
 	std::unordered_map<std::string, DialogueInfo> _dialogues;
 	std::vector< std::string> _filesAvaibles;
 };
