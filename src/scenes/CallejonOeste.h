@@ -21,6 +21,4 @@ private:
     Sound clickSound{};
     Font m_font{};
 
-    std::string m_message;
-    float m_messageTimer = 0.0f;
 };

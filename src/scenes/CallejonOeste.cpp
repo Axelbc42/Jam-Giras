@@ -1,7 +1,9 @@
 #include "CallejonOeste.h"
 #include "../core/AssetManager.h"
 #include "../core/AudioManager.h"
+#include "../core/DialogueManager.h"
 #include "../utilities/GameConstants.h"
+#include "../entities/items/dialogueInteractuable.h"
 #include "imgui.h"
 
 namespace
@@ -14,7 +16,7 @@ void CallejonOeste::Init()
     AssetManager* assets = AssetManager::Instance();
 
     if (m_plaza == nullptr)
-        m_plaza = Create<Clickable>();
+        m_plaza = new DialogueInteractuable(FileName::NPC_1, true, true);
 
     clickSound = assets->GetSound(Sounds::CLICK);
     m_font = assets->GetFont(Fonts::MAIN);
@@ -23,22 +25,15 @@ void CallejonOeste::Init()
     m_plaza->SetRect(Rectangle{ 400.0f, 200.0f, 500.0f, 350.0f });
     m_plaza->SetTint(kTintNormal);
 
-    m_plaza->ResetCallbacks();
     m_plaza->AddCallback([this]() {
         AudioManager::Instance()->PlaySound(clickSound);
-        m_message = "Has hecho clic en la plaza";
-        m_messageTimer = 2.0f;
         });
 
-    m_message = "Haz clic en la plaza";
-    m_messageTimer = 0.0f;
+    Adopt(m_plaza);
 }
 
 void CallejonOeste::Update(float dt)
 {
-    if (m_messageTimer > 0.0f)
-        m_messageTimer -= dt;
-
     Scene::Update(dt);
 
     m_plaza->SetTint(m_plaza->IsHovered() ? WHITE : kTintNormal);
@@ -51,12 +46,12 @@ void CallejonOeste::Draw()
     const Rectangle& r = m_plaza->GetRect();
     DrawTextEx(m_font, "PLAZA", Vector2{ r.x, r.y - 50 }, 50.0f, 2.0f, RAYWHITE);
 
-    DrawText(m_message.c_str(), 20, GameConstants::kScreenHeight - 50, 24, RAYWHITE);
     DrawText("F1: panel de depuracion", 20, 20, 20, LIGHTGRAY);
 }
 
 void CallejonOeste::Release()
 {
+    delete m_plaza;
 }
 
 void CallejonOeste::DrawDebugUI()

@@ -42,6 +42,9 @@ namespace FileName {
 	constexpr const char* DIALOGUE_BOX_2 = "Cuadros de Texto 2.txt";
 	constexpr const char* PLAZA = "La Plaza.txt";
 
+	constexpr const char* NPC_1 = "NPC_1.txt";
+
+
 	//Replicar lo de arriba aqui
 	const std::string COLECCION_FILES[] = { TUTORIAL ,TUTEJEMPLO ,LOREMIPSUM,DIALOGUE_BOX_1,DIALOGUE_BOX_2,PLAZA };
 }

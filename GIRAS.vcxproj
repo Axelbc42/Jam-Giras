@@ -173,6 +173,7 @@
     <ClCompile Include="src\utilities\CursorState.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\entities\items\dialogueInteractuable.h" />
     <ClInclude Include="src\scenes\Bar.h" />
     <ClInclude Include="src\scenes\PuertaBar.h" />
     <ClInclude Include="src\scenes\CallejonNorte.h" />

@@ -38,6 +38,8 @@ void DialogueManager::Init() {
 	DialogueManager::Instance()->LoadDialogue(FileName::DIALOGUE_BOX_2, smallCenterbox, 14.f, WHITE, PURPLE, BLACK);
 	DialogueManager::Instance()->LoadDialogue(FileName::PLAZA, nCenterbox);
 
+	DialogueManager::Instance()->LoadDialogue(FileName::NPC_1, mainbox, 20.f, WHITE, PINK, BLACK);
+
 	//--- Nombre de los archivos para el debug
 	const int n = sizeof(FileName::COLECCION_FILES) / sizeof(FileName::COLECCION_FILES[0]);
 	for (size_t i = 0; i < n; i++)
