@@ -12,8 +12,14 @@ public:
     void Draw() override;
     void Release() override;
     void DrawDebugUI() override;
+    void OnEnter() override;
+    void Update(float dt) override;
+    void OnExit() override; //Provisional de momento para cerrar los textos
 
 private:
     GameObject* m_plaza = nullptr;
     Font m_font{};
+
+    bool tutorialShown = false;
+    bool pendingTutorial = false;
 };

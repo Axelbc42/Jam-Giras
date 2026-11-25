@@ -21,7 +21,7 @@ public:
 	void Update(float dt);
 
 	void ChangePauseMenu() { pauseMenu = !pauseMenu; }
-	bool IsFading() { return fading; }
+	bool IsFading() const { return fading; }
 
 private:
 	SceneManager() = default;

@@ -109,10 +109,13 @@ void SceneManager::ChangeScene(int id)
         return;
     }
 
+    scenes[currentScene]->OnExit(); //pa cuando haga falta, modificar su ubi si es que no va aqui
+
     lastScene = currentScene;
     currentScene = id;
 
     NavigationManager::Instance()->UpdateArrows(scenes[currentScene]);
+    scenes[currentScene]->OnEnter();
 }
 
 void SceneManager::ChangeScene(std::string name)

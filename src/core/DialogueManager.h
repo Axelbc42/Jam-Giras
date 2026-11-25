@@ -18,6 +18,7 @@ public:
 	void SetNext(const std::string& from, const std::string& to);
 	bool isActive() const { return !_active.empty(); }
 	void Close();
+	void CloseAll(); //PROVISIONAL
 	void Draw(); //La key
 	void Update(float dt);
 	void DrawDebugUI();

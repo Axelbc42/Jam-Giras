@@ -6,6 +6,7 @@
 #include "../core/DoorManager.h"
 #include "../core/Inventory.h"
 #include "../core/DialogueManager.h"
+#include "../core/SceneManager.h"
 #include "imgui.h"
 
 void PlazaScene::Init()
@@ -47,10 +48,32 @@ void PlazaScene::Init()
 
 	m_font = assets->GetFont(Fonts::MAIN);
 
-	//Dialogos del tutorial. (Me falta que llame a los otros y solo aparezca cuando este la escena dibujada)
-	DialogueManager::Instance()->OpenText(FileName::DIALOGUE_BOX_1);
+	//Dialogos del tutorial.
 	DialogueManager::Instance()->SetNext(FileName::DIALOGUE_BOX_1, FileName::DIALOGUE_BOX_2);
 	DialogueManager::Instance()->SetNext(FileName::DIALOGUE_BOX_2, FileName::PLAZA);
+}
+
+void PlazaScene::OnEnter()
+{
+	if (!tutorialShown)
+		pendingTutorial = true;
+}
+
+void PlazaScene::Update(float dt)
+{
+	Scene::Update(dt);
+
+	if (pendingTutorial && !SceneManager::Instance()->IsFading())
+	{
+		pendingTutorial = false;
+		tutorialShown = true;
+		DialogueManager::Instance()->OpenText(FileName::DIALOGUE_BOX_1);
+	}
+}
+
+void PlazaScene::OnExit()
+{
+	DialogueManager::Instance()->CloseAll();
 }
 
 void PlazaScene::Draw()
@@ -66,6 +89,7 @@ void PlazaScene::Draw()
 
 void PlazaScene::Release()
 {
+	//el m_plaza ya lo registra y se encarga el create
 }
 
 void PlazaScene::DrawDebugUI()

@@ -76,11 +76,13 @@ Game::~Game()
 bool Game::initWindow()
 {
 	//---ConfigWindow---
-	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+	SetConfigFlags(FLAG_WINDOW_RESIZABLE); 
     InitWindow(GameConstants::kScreenWidth, GameConstants::kScreenHeight, GameConstants::kTitle);
     if (!IsWindowReady())
         return false;
 	SetWindowMinSize(GameConstants::kScreenWidth, GameConstants::kScreenHeight);
+	MaximizeWindow();
+	SetWindowSize(GetScreenWidth(), GetScreenHeight()); //Empieza en fullscreen pero con bordes
 
 	m_target = LoadRenderTexture(GameConstants::kScreenWidth, GameConstants::kScreenHeight);
 	SetTextureFilter(m_target.texture, TEXTURE_FILTER_BILINEAR); //hay que ver que tal este o el point por el tipo de arte

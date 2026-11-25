@@ -196,6 +196,13 @@ void DialogueManager::Close() {
 	if (!next.empty()) OpenText(next);
 }
 
+void DialogueManager::CloseAll() {
+	if (_active.empty()) return;
+	//Para que no muestre nada
+	_dialogues.at(_active)._next.clear();
+	_active.clear();
+}
+
 void DialogueManager::Draw() {
 	if (_active.empty()) return;
 
