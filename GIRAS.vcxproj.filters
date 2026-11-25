@@ -57,7 +57,7 @@
     <ClCompile Include="src\core\AudioManager.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="src\scenes\SceneTextTest.cpp">
+    <ClCompile Include="src\scenes\CallejonEste.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="src\core\DialogueManager.cpp">
@@ -84,10 +84,19 @@
     <ClCompile Include="src\core\DoorManager.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="src\scenes\PlazaClickableScene.cpp">
+    <ClCompile Include="src\scenes\CallejonOeste.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="src\core\Inventory.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scenes\CallejonNorte.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scenes\PuertaBar.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scenes\Bar.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
@@ -149,7 +158,7 @@
     <ClInclude Include="src\utilities\GameConstants.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="src\scenes\SceneTextTest.h">
+    <ClInclude Include="src\scenes\CallejonEste.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="src\core\DialogueManager.h">
@@ -185,10 +194,19 @@
     <ClInclude Include="src\core\DoorManager.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="src\scenes\PlazaClickableScene.h">
+    <ClInclude Include="src\scenes\CallejonOeste.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="src\core\Inventory.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scenes\CallejonNorte.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scenes\PuertaBar.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scenes\Bar.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

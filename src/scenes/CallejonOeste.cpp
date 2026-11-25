@@ -1,4 +1,4 @@
-#include "PlazaClickableScene.h"
+#include "CallejonOeste.h"
 #include "../core/AssetManager.h"
 #include "../core/AudioManager.h"
 #include "../utilities/GameConstants.h"
@@ -9,7 +9,7 @@ namespace
     const Color kTintNormal = { 200, 200, 200, 255 };
 }
 
-void PlazaClickableScene::Init()
+void CallejonOeste::Init()
 {
     AssetManager* assets = AssetManager::Instance();
 
@@ -34,7 +34,7 @@ void PlazaClickableScene::Init()
     m_messageTimer = 0.0f;
 }
 
-void PlazaClickableScene::Update(float dt)
+void CallejonOeste::Update(float dt)
 {
     if (m_messageTimer > 0.0f)
         m_messageTimer -= dt;
@@ -44,7 +44,7 @@ void PlazaClickableScene::Update(float dt)
     m_plaza->SetTint(m_plaza->IsHovered() ? WHITE : kTintNormal);
 }
 
-void PlazaClickableScene::Draw()
+void CallejonOeste::Draw()
 {
     Scene::Draw();
 
@@ -55,11 +55,11 @@ void PlazaClickableScene::Draw()
     DrawText("F1: panel de depuracion", 20, 20, 20, LIGHTGRAY);
 }
 
-void PlazaClickableScene::Release()
+void CallejonOeste::Release()
 {
 }
 
-void PlazaClickableScene::DrawDebugUI()
+void CallejonOeste::DrawDebugUI()
 {
     ImGui::Separator();
     ImGui::Text("Plaza (clicable)");

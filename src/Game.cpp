@@ -13,8 +13,11 @@
 
 #include "scenes/MainMenu.h"
 #include "scenes/PlazaScene.h"
-#include "scenes/PlazaClickableScene.h"
-#include "scenes/SceneTextTest.h"
+#include "scenes/CallejonOeste.h"
+#include "scenes/CallejonEste.h"
+#include "scenes/CallejonNorte.h"
+#include "scenes/PuertaBar.h"
+#include "scenes/Bar.h"
 #include "scenes/PauseMenu.h"
 
 #include "utilities/CursorState.h"
@@ -101,14 +104,21 @@ void Game::initGame()
 
     SceneManager::Instance()->AddScene(new MainMenu("Menu"));
 	SceneManager::Instance()->AddScene(new PlazaScene("Plaza"));
-	SceneManager::Instance()->AddScene(new PlazaClickableScene("PlazaClickable"));
-	SceneManager::Instance()->AddScene(new SceneTextTest("TextTest"));
+	SceneManager::Instance()->AddScene(new CallejonOeste("CallejonOeste"));
+	SceneManager::Instance()->AddScene(new CallejonEste("CallejonEste"));
+	SceneManager::Instance()->AddScene(new CallejonNorte("CallejonNorte"));
+	SceneManager::Instance()->AddScene(new PuertaBar("PuertaBar"));
+	SceneManager::Instance()->AddScene(new Bar("Bar"));
 	SceneManager::Instance()->AddScene(new PauseMenu("PauseMenu"));
 
-	NavigationManager::Instance()->AddAdjacents("Menu", { "Plaza", "TextTest", "", "" });
-	NavigationManager::Instance()->AddAdjacents("Plaza", { "Menu", "TextTest", "PlazaClickable", "" });
-	NavigationManager::Instance()->AddAdjacents("PlazaClickable", { "", "TextTest", "", "Plaza" });
-	NavigationManager::Instance()->AddAdjacents("TextTest", { "", "Plaza", "Menu", "" });
+	NavigationManager::Instance()->AddAdjacents("Menu", { "", "", "", "" });
+
+	NavigationManager::Instance()->AddAdjacents("Plaza", { "CallejonNorte", "PuertaBar", "CallejonOeste", "CallejonEste" });
+	NavigationManager::Instance()->AddAdjacents("CallejonOeste", { "", "Plaza", "", "" });
+	NavigationManager::Instance()->AddAdjacents("CallejonEste", { "", "Plaza", "", "" });
+	NavigationManager::Instance()->AddAdjacents("CallejonNorte", { "", "Plaza", "", "" });
+	NavigationManager::Instance()->AddAdjacents("PuertaBar", { "", "Plaza", "", "" });
+	NavigationManager::Instance()->AddAdjacents("Bar", { "", "Plaza", "", "" });
 	NavigationManager::Instance()->AddAdjacents("PauseMenu", { "", "", "", "" });
 
 	SceneManager::Instance()->ChangeScene("Menu");

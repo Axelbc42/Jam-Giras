@@ -3,11 +3,11 @@
 #include "raylib.h"
 #include "Scene.h"
 
-class PlazaClickableScene
+class CallejonOeste
     : public Scene
 {
 public:
-    PlazaClickableScene(const std::string& name) : Scene(name) {}
+    CallejonOeste(const std::string& name) : Scene(name) {}
 
     void Init() override;
     void Update(float dt) override;

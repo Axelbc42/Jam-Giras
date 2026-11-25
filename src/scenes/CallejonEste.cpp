@@ -1,4 +1,4 @@
-#include "SceneTextTest.h"
+#include "CallejonEste.h"
 #include "../core/AssetManager.h"
 #include "../core/AudioManager.h"
 #include "../core/DialogueManager.h"
@@ -6,7 +6,7 @@
 
 #include "imgui.h"
 
-void SceneTextTest::Init()
+void CallejonEste::Init()
 {
 	Scene::Init();
 
@@ -19,22 +19,22 @@ void SceneTextTest::Init()
 	//Ya lo dibujara Game
 }
 
-void SceneTextTest::Update(float dt)
+void CallejonEste::Update(float dt)
 {
 
 }
 
-void SceneTextTest::Draw()
+void CallejonEste::Draw()
 {
 }
 
-void SceneTextTest::Release()
+void CallejonEste::Release()
 {
 	// Liberar recursos propios de esta escena
 
 }
 
-void SceneTextTest::DrawDebugUI()
+void CallejonEste::DrawDebugUI()
 {
 
 }

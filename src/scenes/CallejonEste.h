@@ -1,10 +1,10 @@
 #pragma once
 #include "Scene.h"
 #include "raylib.h"
-class SceneTextTest : public Scene
+class CallejonEste : public Scene
 {
 public:
-    SceneTextTest(std::string name) : Scene(name) {}
+    CallejonEste(std::string name) : Scene(name) {}
     void Init() override;
     void Update(float dt) override;
     void Draw() override;
