@@ -31,7 +31,7 @@ void PlazaScene::Init()
 		k->SetRect(Rectangle{ 100.0f, 300.0f, 80.0f, 80.0f });
 		k->AddCallback([k]() {
 			k->ResetCallbacks();
-			Inventory::Instance()->AddObject(k, "KLK 3Gua");
+			Inventory::Instance()->AddObject(k, "KLK 1Gua");
 			});
 		Adopt(k);
 
@@ -40,11 +40,29 @@ void PlazaScene::Init()
 		k2->SetRect(Rectangle{ 100.0f, 400.0f, 80.0f, 80.0f });
 		k2->AddCallback([k2]() {
 			k2->ResetCallbacks();
-			Inventory::Instance()->AddObject(k2, "KLK 3Gua");
+			Inventory::Instance()->AddObject(k2, "KLK 2Gua");
 			});
 		Adopt(k2);
-
 	}
+
+	Clickable* diary = Create<Clickable>();
+	diary->SetTexture(assets->GetTexture(Textures::CLOSED_DIARY));
+	diary->SetRect(Rectangle{ 1000.0f, 50, 100.0f, 50.0f });
+
+	auto abrirDiario = []() {
+		if (SceneManager::Instance()->GetCurrenSceneName() != "Diary" && SceneManager::Instance()->GetCurrenSceneName() != "PauseMenu") {
+			SceneManager::Instance()->ChangeUIActive();
+			SceneManager::Instance()->ChangeScene("Diary");
+		} 
+	};
+
+	diary->AddCallback([diary, abrirDiario]() {
+		Inventory::Instance()->AddObject(diary, "KLK 3Gua");
+		diary->ResetCallbacks();
+		diary->AddCallback(abrirDiario);
+	});
+
+	Adopt(diary);
 
 	m_font = assets->GetFont(Fonts::MAIN);
 

@@ -20,8 +20,10 @@ public:
 	void DrawDebugUI();
 	void Update(float dt);
 
-	void ChangePauseMenu() { pauseMenu = !pauseMenu; }
+	void ChangeUIActive() { UIActive = !UIActive; }
 	bool IsFading() const { return fading; }
+	std::string GetCurrenSceneName();
+	std::string GetLastSceneName();
 
 	void StartScene(const std::string& name); //Para no agregar logica extra sobre el fader y el caso del menu etc
 private:
@@ -39,7 +41,7 @@ private:
 	int currentScene = 0;
 	int lastScene = 0;
 
-	bool pauseMenu = false;
+	bool UIActive = false;
 
 	bool fading = false;
 	float timer = 0.f;

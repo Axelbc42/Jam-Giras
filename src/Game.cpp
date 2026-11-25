@@ -19,6 +19,7 @@
 #include "scenes/PuertaBar.h"
 #include "scenes/Bar.h"
 #include "scenes/PauseMenu.h"
+#include "scenes/Diary.h"
 
 #include "utilities/CursorState.h"
 
@@ -117,6 +118,7 @@ void Game::initGame()
 	SceneManager::Instance()->AddScene(new PuertaBar("PuertaBar"));
 	SceneManager::Instance()->AddScene(new Bar("Bar"));
 	SceneManager::Instance()->AddScene(new PauseMenu("PauseMenu"));
+	SceneManager::Instance()->AddScene(new Diary("Diary"));
 
 	NavigationManager::Instance()->AddAdjacents("Menu", { "", "", "", "" });
 
@@ -127,6 +129,7 @@ void Game::initGame()
 	NavigationManager::Instance()->AddAdjacents("PuertaBar", { "", "Plaza", "", "" });
 	NavigationManager::Instance()->AddAdjacents("Bar", { "", "Plaza", "", "" });
 	NavigationManager::Instance()->AddAdjacents("PauseMenu", { "", "", "", "" });
+	NavigationManager::Instance()->AddAdjacents("Diary", { "", "", "", "" });
 
 	SceneManager::Instance()->StartScene("Menu");
 }
@@ -154,9 +157,10 @@ void Game::update(float dt)
 	CursorState::BeginFrame();                    
 	DialogueManager::Instance()->Update(dt);
     SceneManager::Instance()->Update(dt);
-	if (!SceneManager::Instance()->IsFading())
+	if (!SceneManager::Instance()->IsFading()) {
 		NavigationManager::Instance()->Update(dt);
-	Inventory::Instance()->Update(dt);
+		Inventory::Instance()->Update(dt);
+	}
 
 	CursorState::Apply();                         
 }
@@ -176,10 +180,11 @@ void Game::draw() //Imp mantener este orden
 	BeginTextureMode(m_target);
 	ClearBackground(Color{ 40, 44, 52, 255 });
 	SceneManager::Instance()->Draw();
-	if (!SceneManager::Instance()->IsFading())
+	if (!SceneManager::Instance()->IsFading()) {
 		NavigationManager::Instance()->Draw();
-	DialogueManager::Instance()->Draw();
+	}
 	Inventory::Instance()->Draw();
+	DialogueManager::Instance()->Draw();
 	EndTextureMode();
 
 	// La textura, escalada a la ventana

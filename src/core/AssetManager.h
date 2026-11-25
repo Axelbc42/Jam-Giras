@@ -13,8 +13,11 @@ namespace Textures {
 	constexpr const char* CLOSED_DOOR = "objects/closedDoor.png";
 	constexpr const char* OPENED_DOOR = "objects/openedDoor.png";
 
-	constexpr const char* WHITE_ARROW = "ui/white_arrow.png";
-	constexpr const char* CURSOR_DEFAULT = "ui/cursor.png";
+	constexpr const char* DIARY_FRAMES = "UI/diary.png";
+	constexpr const char* CLOSED_DIARY = "UI/libritoCerrado.png";
+
+	constexpr const char* WHITE_ARROW = "UI/white_arrow.png";
+	constexpr const char* CURSOR_DEFAULT = "UI/cursor.png";
 
 	constexpr const char* BUTON1 = "UI/tile_0001.png";
 }

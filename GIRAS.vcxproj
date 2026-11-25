@@ -147,6 +147,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\scenes\Bar.cpp" />
+    <ClCompile Include="src\scenes\Diary.cpp" />
     <ClCompile Include="src\scenes\PuertaBar.cpp" />
     <ClCompile Include="src\scenes\CallejonNorte.cpp" />
     <ClCompile Include="src\core\Inventory.cpp" />
@@ -178,6 +179,7 @@
   <ItemGroup>
     <ClInclude Include="src\entities\items\dialogueInteractuable.h" />
     <ClInclude Include="src\scenes\Bar.h" />
+    <ClInclude Include="src\scenes\Diary.h" />
     <ClInclude Include="src\scenes\PuertaBar.h" />
     <ClInclude Include="src\scenes\CallejonNorte.h" />
     <ClInclude Include="src\core\Inventory.h" />

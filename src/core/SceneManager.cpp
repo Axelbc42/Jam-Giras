@@ -35,7 +35,7 @@ void SceneManager::Unload()
 void SceneManager::Draw()
 {
     if (!fading) {
-        if (pauseMenu)
+        if (UIActive)
             scenes[lastScene]->Draw();
         scenes[currentScene]->Draw();
     }
@@ -60,11 +60,11 @@ void SceneManager::Update(float dt)
 {
     if (!fading) {
         if (IsKeyPressed(KEY_SPACE)) {
-            if (!pauseMenu)
+             if (!UIActive)
                 ChangeScene("PauseMenu");
             else
                 ChangeToLastScene();
-            ChangePauseMenu();
+            ChangeUIActive();
         }
     }
     else {
@@ -97,11 +97,15 @@ void SceneManager::ChangeToLastScene() {
     int id = lastScene;
     lastScene = currentScene;
     currentScene = id;
+
     NavigationManager::Instance()->UpdateArrows(scenes[currentScene]);
 }
 
 void SceneManager::ChangeScene(int id)
 {
+    if (currentScene == id)
+        return;
+
     auto it = scenes.find(id);
 
     if (it == scenes.end()) {
@@ -129,9 +133,12 @@ void SceneManager::ChangeScene(std::string name)
 
     ChangeScene(it->second);
 
-    if (name != "PauseMenu") {
+    if (name != "PauseMenu" && name != "Diary") {
         fading = true;
         timer = FADING_TIME;
+    }
+    else if (name == "Diary") {
+        scenes[currentScene]->Init();
     }
 }
 
@@ -161,4 +168,20 @@ void SceneManager::StartScene(const std::string& name)
 
     fading = true;
     timer = FADING_TIME / 2.f;               // solo la mitad: negro -> escena
+}
+
+std::string SceneManager::GetCurrenSceneName()
+{
+    for (const auto& [name, id] : ids)
+        if (id == currentScene)
+            return name;
+    return "";
+}
+
+std::string SceneManager::GetLastSceneName()
+{
+    for (const auto& [name, id] : ids)
+        if (id == lastScene)
+            return name;
+    return "";
 }

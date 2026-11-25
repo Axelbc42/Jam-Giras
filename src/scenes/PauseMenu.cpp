@@ -26,7 +26,7 @@ void PauseMenu::Init()
     _reaunarButton.AddCallback([this]() {
         AudioManager::Instance()->PlaySound(_clickSound);
         SceneManager::Instance()->ChangeToLastScene();
-        SceneManager::Instance()->ChangePauseMenu();
+        SceneManager::Instance()->ChangeUIActive();
         });
 
     _salirButton.SetActive(true);
