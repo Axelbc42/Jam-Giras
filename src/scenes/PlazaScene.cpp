@@ -48,7 +48,9 @@ void PlazaScene::Init()
 	m_font = assets->GetFont(Fonts::MAIN);
 
 	//Dialogos del tutorial. (Me falta que llame a los otros y solo aparezca cuando este la escena dibujada)
-	DialogueManager::Instance()->OpenText(FileName::DIALOGUE_BOX_2);
+	DialogueManager::Instance()->OpenText(FileName::DIALOGUE_BOX_1);
+	DialogueManager::Instance()->SetNext(FileName::DIALOGUE_BOX_1, FileName::DIALOGUE_BOX_2);
+	DialogueManager::Instance()->SetNext(FileName::DIALOGUE_BOX_2, FileName::PLAZA);
 }
 
 void PlazaScene::Draw()

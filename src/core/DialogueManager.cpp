@@ -188,7 +188,10 @@ void DialogueManager::LoadDialogue(const std::string fileName, Rectangle box, fl
 void DialogueManager::Close() {
 	if (_active.empty()) return;
 	_lastActive = _active;
+	const std::string next = _dialogues.at(_active)._next;
 	_active.clear(); //quitamos la key
+
+	if (!next.empty()) OpenText(next);
 }
 
 void DialogueManager::Draw() {
@@ -237,6 +240,10 @@ void DialogueManager::OpenText(const std::string& assetName) {
 	}
 	_active = it->first;
 	it->second._scrollY = 0.f; //Siempre arriba
+}
+
+void DialogueManager::SetNext(const std::string& from, const std::string& to) {
+	_dialogues.at(from)._next = to;
 }
 
 void DialogueManager::Update(float dt) {

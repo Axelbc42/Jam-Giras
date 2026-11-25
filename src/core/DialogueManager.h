@@ -15,6 +15,7 @@ public:
 	void LoadDialogue(std::string fileName, Rectangle box, float fontSize = 12,
 		Color textColor = RED, Color headerColor = BEIGE, Color bodyColor = BLACK, Font = GetFontDefault());
 	void OpenText(const std::string& fileName);
+	void SetNext(const std::string& from, const std::string& to);
 	bool isActive() const { return !_active.empty(); }
 	void Close();
 	void Draw(); //La key
@@ -42,6 +43,7 @@ private:
 		std::string _fileName;
 		std::string _title = ""; //podria interpretarse como titulo del objeto que se inspecciona
 		std::string _content = "";
+		std::string _next = "";  // vacio = no hay siguiente
 		std::vector<std::string> _lines; //pa sustituir char** _lines = nullptr; ya no hace falta
 
 		float _fontSize = 12.f;
