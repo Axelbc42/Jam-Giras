@@ -15,16 +15,13 @@ void PauseMenu::Init()
 
     _pauseBackground.SetActive(true);
     _pauseBackground.SetTexture(AssetManager::Instance()->GetTexture(Textures::BUTON1));
-    _pauseBackground.SetRect(Rectangle{ (GameConstants::kScreenWidth / 2) - 180,
-                                    (GameConstants::kScreenHeight / 2) - 320,
-                                    360, 640 });
+    _pauseBackground.SetRect(Rectangle{ (GameConstants::kScreenWidth / 2) - 180, (GameConstants::kScreenHeight / 2) - 320, 360, 640 });
     _pauseBackground.SetTint(NORMAL_INK);
-
 
     _reaunarButton.SetActive(true);
     _reaunarButton.SetTexture(AssetManager::Instance()->GetTexture(Textures::BUTON1));
     _reaunarButton.SetRect(Rectangle{ (GameConstants::kScreenWidth / 2) - 150, (GameConstants::kScreenHeight / 2), 300, 100 });
-    _reaunarButton.SetTint(NORMAL_INK);
+    //_reaunarButton.SetTint(NORMAL_INK);
     _reaunarButton.ResetCallbacks();
     _reaunarButton.AddCallback([this]() {
         AudioManager::Instance()->PlaySound(_clickSound);
@@ -35,10 +32,10 @@ void PauseMenu::Init()
     _salirButton.SetActive(true);
     _salirButton.SetTexture(AssetManager::Instance()->GetTexture(Textures::BUTON1));
     _salirButton.SetRect(Rectangle{ (GameConstants::kScreenWidth / 2) - 150, (GameConstants::kScreenHeight / 2) + 150, 300, 100 });
-    _salirButton.SetTint(NORMAL_INK);
+    //_salirButton.SetTint(NORMAL_INK);
     _salirButton.ResetCallbacks();
     _salirButton.AddCallback([this]() {
-        TraceLog(LOG_INFO, "Aqui tendrias q salir");
+        Game::Instance()->RequestQuit();
         });
 }
 
@@ -56,12 +53,24 @@ void PauseMenu::Draw()
     _reaunarButton.Draw();
     _salirButton.Draw();
 
+    // texto centrado en el rect
+    const float size = 24;
+    const float spacing = 2;
+    Vector2 ts1 = MeasureTextEx(_font, "Reanudar", size, spacing);
+    Vector2 pos1 = { _reaunarButton.GetRect().x + (_reaunarButton.GetRect().width - ts1.x) / 2,
+                    _reaunarButton.GetRect().y + (_reaunarButton.GetRect().height - ts1.y) / 2 };
+    DrawTextEx(_font, "Reanudar", pos1, size, spacing, WHITE);
+
+    Vector2 ts2 = MeasureTextEx(_font, "Salir", size, spacing);
+    Vector2 pos2 = { _salirButton.GetRect().x + (_salirButton.GetRect().width - ts2.x) / 2,
+                    _salirButton.GetRect().y + (_salirButton.GetRect().height - ts2.y) / 2 };
+    DrawTextEx(_font, "Salir", pos2, size, spacing, WHITE);
+
     auto* g = Game::Instance();
     // Ventana de ImGui encima del panel
-    const Vector2 p = g->GameToWindow(GameConstants::kScreenWidth / 2.f - 150.f,
-        GameConstants::kScreenHeight / 2.f - 250.f);
+    const Vector2 p = g->GameToWindow(GameConstants::kScreenWidth / 2.f - 150.f, GameConstants::kScreenHeight / 2.f - 250.f);
     ImGui::SetNextWindowPos(ImVec2(p.x,p.y));
-    ImGui::SetNextWindowSize(ImVec2(360 * g->GameScale(), 640 * g->GameScale()));
+    ImGui::SetNextWindowSize(ImVec2(360 * g->GameScale(), 180 * g->GameScale()));
     ImGui::Begin("##pause_options", nullptr,
         ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove |
         ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoSavedSettings);
