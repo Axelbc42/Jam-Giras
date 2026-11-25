@@ -1,6 +1,8 @@
 #include "SceneManager.h"
 #include "NavigationManager.h"
+#include "../utilities/GameConstants.h"
 #include "raylib.h"
+#include "raymath.h"
 
 SceneManager* SceneManager::s_instance = nullptr;
 
@@ -32,9 +34,21 @@ void SceneManager::Unload()
 
 void SceneManager::Draw()
 {
-    if (pauseMenu)
-        scenes[lastScene]->Draw();
-    scenes[currentScene]->Draw();
+    if (!fading) {
+        if (pauseMenu)
+            scenes[lastScene]->Draw();
+        scenes[currentScene]->Draw();
+    }
+    else {
+        if (timer > FADING_TIME / 2.f)
+            scenes[lastScene]->Draw();
+        else
+            scenes[currentScene]->Draw();
+
+        float a = 1.f - fabsf(2.f * timer / FADING_TIME - 1.f);
+        unsigned char alpha = a * 255.f;
+        DrawRectangle(0, 0, GameConstants::kScreenWidth, GameConstants::kScreenHeight, Color{ 0, 0, 0, alpha });
+    }
 }
 
 void SceneManager::DrawDebugUI()
@@ -44,12 +58,19 @@ void SceneManager::DrawDebugUI()
 
 void SceneManager::Update(float dt)
 {
-    if (IsKeyPressed(KEY_SPACE)) {
-        if (!pauseMenu)
-            ChangeScene("PauseMenu");
-        else
-            ChangeToLastScene();
-        ChangePauseMenu();
+    if (!fading) {
+        if (IsKeyPressed(KEY_SPACE)) {
+            if (!pauseMenu)
+                ChangeScene("PauseMenu");
+            else
+                ChangeToLastScene();
+            ChangePauseMenu();
+        }
+    }
+    else {
+        timer -= dt;
+        if (timer <= 0)
+            fading = false;
     }
 
     scenes[currentScene]->Update(dt);
@@ -104,6 +125,11 @@ void SceneManager::ChangeScene(std::string name)
     }
 
     ChangeScene(it->second);
+
+    if (name != "PauseMenu") {
+        fading = true;
+        timer = FADING_TIME;
+    }
 }
 
 Scene* SceneManager::GetScene(std::string name) {

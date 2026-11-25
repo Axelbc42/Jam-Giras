@@ -21,6 +21,7 @@ public:
 	void Update(float dt);
 
 	void ChangePauseMenu() { pauseMenu = !pauseMenu; }
+	bool IsFading() { return fading; }
 
 private:
 	SceneManager() = default;
@@ -38,6 +39,10 @@ private:
 	int lastScene = 0;
 
 	bool pauseMenu = false;
+
+	bool fading = false;
+	float timer = 0;
+	const float FADING_TIME = 2;
 
 	static SceneManager* s_instance;
 };

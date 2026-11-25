@@ -147,7 +147,8 @@ void Game::update(float dt)
 	CursorState::BeginFrame();                    
 	DialogueManager::Instance()->Update(dt);
     SceneManager::Instance()->Update(dt);
-	NavigationManager::Instance()->Update(dt);
+	if (!SceneManager::Instance()->IsFading())
+		NavigationManager::Instance()->Update(dt);
 	Inventory::Instance()->Update(dt);
 
 	CursorState::Apply();                         
@@ -168,7 +169,8 @@ void Game::draw() //Imp mantener este orden
 	BeginTextureMode(m_target);
 	ClearBackground(Color{ 40, 44, 52, 255 });
 	SceneManager::Instance()->Draw();
-	NavigationManager::Instance()->Draw();
+	if (!SceneManager::Instance()->IsFading())
+		NavigationManager::Instance()->Draw();
 	DialogueManager::Instance()->Draw();
 	Inventory::Instance()->Draw();
 	EndTextureMode();
