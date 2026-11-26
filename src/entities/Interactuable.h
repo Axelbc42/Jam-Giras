@@ -2,9 +2,11 @@
 
 #include <functional>
 #include <utility>
+#include <string>
 #include "GameObject.h"
 #include "imgui.h"
 #include "../utilities/CursorState.h"
+#include "../core/DialogueManager.h"
 
 class Interactuable : public GameObject
 {
@@ -17,6 +19,16 @@ public:
 
 	void SetOnHover(std::function<void()> f) { m_onHover = std::move(f); }
 	void SetOnUnhover(std::function<void()> f) { m_onUnhover = std::move(f); }
+
+	void AddHoverDialogue(const std::string& assetName){
+		SetOnHover([this, assetName]() {
+			DialogueManager::Instance()->OpenText(assetName);
+			});
+
+		SetOnUnhover([this, assetName]() {
+			DialogueManager::Instance()->Close();
+			});
+	}
 
 	void SetHoveredColor(Color c) { m_hoveredColor = c; if (m_hovered) SetTint(c); }
 	void SetNormalColor(Color c) { m_normalColor = c;  if (!m_hovered) SetTint(c); }

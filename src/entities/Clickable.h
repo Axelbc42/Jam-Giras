@@ -5,6 +5,8 @@
 #include <vector>
 #include "Interactuable.h"
 #include "GameObject.h"
+#include <string>
+#include "../core/DialogueManager.h"
 
 class Clickable : public Interactuable
 {
@@ -25,6 +27,13 @@ public:
 	void ResetCallbacks(){
 		m_callbacks.clear();
 	}
+
+	void AddClickDialogue(const std::string& assetName) {
+		AddCallback([this, assetName]() {
+			DialogueManager::Instance()->OpenText(assetName);
+			});
+	}
+
 
 	virtual void OnClick(){
 		if (!m_active)

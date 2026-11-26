@@ -3,7 +3,7 @@
 #include "../core/AudioManager.h"
 #include "../core/DialogueManager.h"
 #include "../utilities/GameConstants.h"
-#include "../entities/items/dialogueInteractuable.h"
+#include "../entities/clickable.h"
 #include "imgui.h"
 
 namespace
@@ -16,7 +16,7 @@ void CallejonOeste::Init()
     AssetManager* assets = AssetManager::Instance();
 
     if (m_plaza == nullptr)
-        m_plaza = Create<DialogueInteractuable>(FileName::NPC_1, true, true);
+        m_plaza = Create<Clickable>();
 
     clickSound = assets->GetSound(Sounds::CLICK);
     m_font = assets->GetFont(Fonts::MAIN);
@@ -28,6 +28,8 @@ void CallejonOeste::Init()
     m_plaza->AddCallback([this]() {
         AudioManager::Instance()->PlaySound(clickSound);
         });
+
+    m_plaza->AddHoverDialogue(FileName::NPC_1);
 
     Adopt(m_plaza);
 }
