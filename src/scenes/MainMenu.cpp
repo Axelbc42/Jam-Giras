@@ -21,8 +21,8 @@ void MainMenu::Init()
 
 	const float btnWidth = 360.f;
 	const float btnHeight = 160.f;
-	const float centerX = (GameConstants::kScreenWidth - btnWidth) / 2;
-	const float centerY = (GameConstants::kScreenHeight - btnHeight) / 2;
+	const float centerX = (GameConstants::kScreenWidth - btnWidth) / 2.f;
+	const float centerY = (GameConstants::kScreenHeight - btnHeight) / 2.f;
 
 	//Copio el sonido por que no se si va a romper la referencia del lamba al cambiar de escena
 	//Si esto es seguro lo suyo seria replicar la logica en los botones con logica parecida
@@ -32,12 +32,17 @@ void MainMenu::Init()
 		SceneManager::Instance()->ChangeScene("Plaza");
 		}, btnTex);
 
-	// solo texto
-	createBtn("SALIR", { centerX, centerY + centerY / 2.f, btnWidth, btnHeight },
+	// solo texto (el boton es del tamaño del texto para que sea mas representativo)
+	const char* txtSalir = "SALIR";
+	const float size = 24;
+	Vector2 dimText = MeasureTextEx(m_font, txtSalir, size, 2.f);
+	const float tCenterX = (GameConstants::kScreenWidth - dimText.x) / 2.f;
+	const float tCenterY = (GameConstants::kScreenHeight - dimText.y) / 2.f;
+	createBtn("SALIR", { tCenterX, tCenterY + tCenterY / 2.f, dimText.x, dimText.y },
 		[] { Game::Instance()->RequestQuit();; }, {}, RED);
 }
 
-void MainMenu::createBtn(const std::string& text, Rectangle rect, std::function<void()> onClick, Texture2D bg,Color textC)
+void MainMenu::createBtn(const std::string& text, Rectangle rect, std::function<void()> onClick, Texture2D bg, Color textC)
 {
 	_btns.push_back({ text, rect, bg, std::move(onClick), false ,textC });
 }
