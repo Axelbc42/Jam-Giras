@@ -4,6 +4,19 @@
 #include "imgui.h"
 #include "../entities/Clickable.h"
 
+struct Node
+{
+    bool active = true;
+    Vector2 pos{};
+    Clickable button{};
+};
+
+struct Edge
+{
+    int a, b;
+    bool active = true;
+};
+
 class Diary : public Scene
 {
 public:
@@ -13,21 +26,37 @@ public:
     void Draw() override;
     void DrawDebugUI() override;
     void Release() override;
+    void OnEnter() override;
 
 private:
+    enum NodeId {
+        CONTEXTO = 0,
+        LUCES_DE_BOHEMIA,
+        ESPEJOS,
+        ESPERPENTO,
+        CANOURO,
+        NUM_NODES
+    };
+
     void DrawFrame(const Texture& tex, int frame, int frames, ImVec2 size);
+    Vector2 Center(int id) const { return { nodes[id].pos.x + 25, nodes[id].pos.y + 25 }; }
+    void place(NodeId id, float x, float y);
 
     GameObject _pauseBackground{};
-    Texture2D _diaryTexture{};
+    Texture _diaryTexture{};
+    Texture _diaryTextureImgui;
 
-    const int WIDTH = 5108;
-    const int HEIGHT = 767;
     const int FRAMES = 5;
     static constexpr float FRAME_DURATION = 0.12f;
 
-    float scale = 1.4f;
+    float scale = 1.0f;
     int   _animationFrame = 0;
     float _frameTimer = 0.0f;
     bool  _opening = true;
     bool  _closing = false;
+    float w, h, frameW, frameH;
+
+    std::vector<Node> nodes;
+    std::vector<Edge> edges;
+    Texture _nodeTexture;
 };

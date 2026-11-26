@@ -1,9 +1,41 @@
 #include "Diary.h"
 #include "../core/AssetManager.h"
+#include "../utilities/GameConstants.h"
 
 void Diary::Init()
 {
     _diaryTexture = AssetManager::Instance()->GetTexture(Textures::DIARY_FRAMES);
+    frameW = _diaryTexture.width / FRAMES;
+    frameH = _diaryTexture.height;
+    w = frameW * scale;
+    h = frameH * scale;
+
+    _nodeTexture = AssetManager::Instance()->GetTexture(Textures::BUTON1);
+    nodes.resize(NUM_NODES);
+    for (Node& n : nodes) {
+        n.button.SetTexture(_nodeTexture);
+        n.button.SetSize(50, 50);
+    }
+
+    //200, 125 punto 0,0
+    //550, 575 punto 1,1
+    place(LUCES_DE_BOHEMIA, 325, 175);
+    place(CONTEXTO,         225, 375);
+    place(ESPERPENTO,       375, 350);
+    place(ESPEJOS,          500, 325);
+    place(CANOURO,          375, 500);
+
+    edges = {
+        { CONTEXTO,         LUCES_DE_BOHEMIA },
+        { LUCES_DE_BOHEMIA, ESPERPENTO },
+        { ESPERPENTO,       ESPEJOS },
+        { LUCES_DE_BOHEMIA, ESPEJOS },
+        { CANOURO,          CONTEXTO },
+        { CANOURO,          ESPERPENTO },
+    };
+}
+
+void Diary::OnEnter() {
     _animationFrame = 0;
     _frameTimer = 0.0f;
     _opening = true;
@@ -23,41 +55,24 @@ void Diary::Update(float dt)
             }
         }
     }
-    //else if (_closing) {
-    //    _frameTimer += dt;
-    //    if (_frameTimer >= FRAME_DURATION) {
-    //        _frameTimer = 0.0f;
-    //        _animationFrame--;
-    //        if (_animationFrame <= 0) {
-    //            _animationFrame = 0;
-    //            _closing = false;
-    //        }
-    //    }
-    //}
 }
 
 void Diary::Draw()
 {
-    float frameW = _diaryTexture.width / (float)FRAMES;
-    float frameH = (float)_diaryTexture.height;
-    ImVec2 size(frameW * scale, frameH * scale);
+    Rectangle src = { _animationFrame * frameW, 0.0f, frameW, frameH };
+    Rectangle dst = { GameConstants::kScreenWidth * 0.5f - w * 0.5f, GameConstants::kScreenHeight * 0.5f - h * 0.55f, w, h };
+    DrawTexturePro(_diaryTexture, src, dst, { 0, 0 }, 0.0f, WHITE);
 
-    ImVec2 screen = ImGui::GetIO().DisplaySize;
-    ImVec2 center(screen.x * 0.5f, screen.y * 0.45f);
+    if (!_opening) {
+        for (const Edge& e : edges) {
+            if (e.active && (nodes[e.a].active || nodes[e.b].active))
+                DrawLineEx(Center(e.a), Center(e.b), 3.0f, DARKBROWN);
+        }
 
-    ImGui::SetNextWindowPos(center, ImGuiCond_Always, ImVec2(0.5f, 0.5f));
-    ImGui::SetNextWindowSize(size);
-
-    ImGuiWindowFlags flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
-        ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBackground |
-        ImGuiWindowFlags_NoScrollbar;
-
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
-    if (ImGui::Begin("DiaryWindow", nullptr, flags)) {
-        DrawFrame(_diaryTexture, _animationFrame, FRAMES, size);
+        for (Node& n : nodes) {
+            n.button.Draw();
+        }
     }
-    ImGui::End();
-    ImGui::PopStyleVar();
 }
 
 void Diary::Release()
@@ -78,4 +93,9 @@ void Diary::DrawFrame(const Texture& tex, int frame, int frames, ImVec2 size)
     ImVec2 uv1((frame + 1) * fw, 1.0f);
 
     ImGui::Image((ImTextureID)(intptr_t)tex.id, size, uv0, uv1);
+}
+
+void Diary::place(NodeId id, float x, float y) {
+    nodes[id].pos = { x, y };
+    nodes[id].button.SetPosition(x, y);
 }

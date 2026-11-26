@@ -54,7 +54,11 @@ void PlazaScene::Init()
 			SceneManager::Instance()->ChangeUIActive();
 			SceneManager::Instance()->ChangeScene("Diary");
 		}
-		};
+		else if (SceneManager::Instance()->GetCurrenSceneName() == "Diary") {
+			SceneManager::Instance()->ChangeUIActive();
+			SceneManager::Instance()->ChangeToLastScene();
+		}
+	};
 
 	_diary->AddCallback([this, abrirDiario]() {
 		Inventory::Instance()->AddObject(_diary, "KLK 3Gua");

@@ -137,9 +137,6 @@ void SceneManager::ChangeScene(std::string name)
         fading = true;
         timer = FADING_TIME;
     }
-    else if (name == "Diary") {
-        scenes[currentScene]->Init();
-    }
 }
 
 Scene* SceneManager::GetScene(std::string name) {

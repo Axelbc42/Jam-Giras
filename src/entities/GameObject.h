@@ -30,6 +30,7 @@ public:
     const Rectangle& GetRect() const { return m_rect; }
     void SetRect(const Rectangle& rect) { m_rect = rect; }
     void SetPosition(float x, float y) { m_rect.x = x; m_rect.y = y; }
+    void SetSize(float w, float h) { m_rect.width = w; m_rect.height = h; }
     void SetRotation(float degrees) { m_rotation = degrees; } 
 
     void SetTexture(const Texture& texture) { m_texture = texture; }
