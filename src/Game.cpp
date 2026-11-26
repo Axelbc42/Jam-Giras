@@ -183,7 +183,8 @@ void Game::draw() //Imp mantener este orden
 	if (!SceneManager::Instance()->IsFading()) {
 		NavigationManager::Instance()->Draw();
 	}
-	Inventory::Instance()->Draw();
+	if (SceneManager::Instance()->GetCurrenSceneName() != "Menu")
+		Inventory::Instance()->Draw();
 	DialogueManager::Instance()->Draw();
 	EndTextureMode();
 

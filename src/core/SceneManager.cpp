@@ -59,7 +59,7 @@ void SceneManager::DrawDebugUI()
 void SceneManager::Update(float dt)
 {
     if (!fading) {
-        if (IsKeyPressed(KEY_SPACE)) {
+        if (IsKeyPressed(KEY_SPACE) && GetCurrenSceneName() != "Menu") {
              if (!UIActive)
                 ChangeScene("PauseMenu");
             else

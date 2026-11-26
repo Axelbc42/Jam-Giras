@@ -35,7 +35,8 @@ void PauseMenu::Init()
     //_salirButton.SetTint(NORMAL_INK);
     _salirButton.ResetCallbacks();
     _salirButton.AddCallback([this]() {
-        Game::Instance()->RequestQuit();
+        SceneManager::Instance()->ChangeScene("Menu");
+        SceneManager::Instance()->ChangeUIActive();
         });
 }
 
