@@ -23,6 +23,11 @@ public:
 
 	void AddObject(Interactuable* item, std::string info);
 
+	bool isItemAtInventory(Interactuable* item) {
+		auto it = std::find_if(_inventory.begin(), _inventory.end(),
+			[item](const Object& o) { return o.item == item; });
+		return it != _inventory.end();
+	}
 private:
 	Inventory() = default;
 	~Inventory() = default;

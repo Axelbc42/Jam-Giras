@@ -5,7 +5,11 @@
 
 class SceneManager
 {
-
+public:
+	enum class ScheduleState {
+		DAY = 0,
+		NIGHT
+	};
 public:
 	static SceneManager* Instance();
 	static void Release();
@@ -26,6 +30,11 @@ public:
 	std::string GetLastSceneName();
 
 	void StartScene(const std::string& name); //Para no agregar logica extra sobre el fader y el caso del menu etc
+
+	bool onDayState()const { return _scheduleState == ScheduleState::DAY; }
+	bool onNightState()const { return _scheduleState != ScheduleState::DAY; }
+
+	void changeSchedule(const ScheduleState& s) { _scheduleState = s;; }
 private:
 	SceneManager() = default;
 	~SceneManager() = default;
@@ -48,5 +57,6 @@ private:
 	const float FADING_TIME = 1.5f;
 
 	static SceneManager* s_instance;
+	ScheduleState _scheduleState;
 };
 

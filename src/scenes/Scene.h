@@ -12,55 +12,55 @@
 class Scene
 {
 public:
-    Scene(const std::string& name) : m_name(name) {}
-    virtual ~Scene() = default;
+	Scene(const std::string& name) : m_name(name) {}
+	virtual ~Scene() = default;
 
-    virtual void Init() {}
+	virtual void Init() {}
 
-    virtual void Update(float dt);
+	virtual void Update(float dt);
 
-    virtual void Draw();
-    virtual void DrawDebugUI() {}
+	virtual void Draw();
+	virtual void DrawDebugUI() {}
 
-    virtual void OnEnter() {}
-    virtual void OnExit() {}
+	virtual void OnEnter() {}
+	virtual void OnExit() {}
 
-    virtual void Release() {}
+	virtual void Release() {}
 
-    const std::string& GetName() const { return m_name; }
+	const std::string& GetName() const { return m_name; }
 
 protected:
-    template <typename T, typename... Args>
-    T* Create(Args&&... args)
-    {
-        static_assert(std::is_base_of<GameObject, T>::value, "T debe heredar de GameObject");
+	template <typename T, typename... Args>
+	T* Create(Args&&... args)
+	{
+		static_assert(std::is_base_of<GameObject, T>::value, "T debe heredar de GameObject");
 
-        std::unique_ptr<T> obj(new T(std::forward<Args>(args)...));
-        T* raw = obj.get();
+		std::unique_ptr<T> obj(new T(std::forward<Args>(args)...));
+		T* raw = obj.get();
 
-        Register(raw);
-        m_owned.push_back(std::move(obj));  
-        return raw;
-    }
+		Register(raw);
+		m_owned.push_back(std::move(obj));
+		return raw;
+	}
 
-    void Adopt(GameObject* go){
-        if (go != nullptr)
-            Register(go);
-    }
+	void Adopt(GameObject* go) {
+		if (go != nullptr)
+			Register(go);
+	}
 
 private:
-    void Register(GameObject* go)
-    {
-        if (Draggable* d = dynamic_cast<Draggable*>(go))      m_draggables.push_back(d);
-        else if (Clickable* c = dynamic_cast<Clickable*>(go)) m_clickables.push_back(c);
-        else                                                  m_gameObjects.push_back(go);
-    }
+	void Register(GameObject* go)
+	{
+		if (Draggable* d = dynamic_cast<Draggable*>(go))      m_draggables.push_back(d);
+		else if (Clickable* c = dynamic_cast<Clickable*>(go)) m_clickables.push_back(c);
+		else                                                  m_gameObjects.push_back(go);
+	}
 
-    std::string m_name;
+	std::string m_name;
 
-    std::vector<std::unique_ptr<GameObject>> m_owned;
+	std::vector<std::unique_ptr<GameObject>> m_owned;
 
-    std::vector<GameObject*> m_gameObjects;
-    std::vector<Clickable*> m_clickables;
-    std::vector<Draggable*> m_draggables;
+	std::vector<GameObject*> m_gameObjects;
+	std::vector<Clickable*> m_clickables;
+	std::vector<Draggable*> m_draggables;
 };

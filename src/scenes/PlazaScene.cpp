@@ -45,24 +45,25 @@ void PlazaScene::Init()
 		Adopt(k2);
 	}
 
-	Clickable* diary = Create<Clickable>();
-	diary->SetTexture(assets->GetTexture(Textures::CLOSED_DIARY));
-	diary->SetRect(Rectangle{ 1000.0f, 50, 100.0f, 50.0f });
+	_diary = Create<Clickable>();
+	_diary->SetTexture(AssetManager::Instance()->GetTexture(Textures::CLOSED_DIARY));
+	_diary->SetRect(Rectangle{ 1000.0f, 50, 100.0f, 50.0f });
 
 	auto abrirDiario = []() {
 		if (SceneManager::Instance()->GetCurrenSceneName() != "Diary" && SceneManager::Instance()->GetCurrenSceneName() != "PauseMenu") {
 			SceneManager::Instance()->ChangeUIActive();
 			SceneManager::Instance()->ChangeScene("Diary");
-		} 
-	};
+		}
+		};
 
-	diary->AddCallback([diary, abrirDiario]() {
-		Inventory::Instance()->AddObject(diary, "KLK 3Gua");
-		diary->ResetCallbacks();
-		diary->AddCallback(abrirDiario);
-	});
+	_diary->AddCallback([this, abrirDiario]() {
+		Inventory::Instance()->AddObject(_diary, "KLK 3Gua");
+		_diary->ResetCallbacks();
+		_diary->AddCallback(abrirDiario);
+		});
 
-	Adopt(diary);
+	Adopt(_diary);
+
 
 	m_font = assets->GetFont(Fonts::MAIN);
 
@@ -73,8 +74,24 @@ void PlazaScene::Init()
 
 void PlazaScene::OnEnter()
 {
+	//Generico--NONE
 	if (!tutorialShown)
 		pendingTutorial = true;
+
+	//Esto es solo un ejemeplo, en donde el diario solo esta por el dia.
+	//Si ya se cogio previamente y es de noche sigue estando en el inventario, se puede mejorar la logica..
+	if (SceneManager::Instance()->onDayState()) {
+
+		if (Inventory::Instance()->isItemAtInventory(_diary)) return;
+
+		_diary->SetActive(true);
+	}
+	else {
+
+		if (Inventory::Instance()->isItemAtInventory(_diary)) return;
+		
+		_diary->SetActive(false);
+	}
 }
 
 void PlazaScene::Update(float dt)
@@ -92,6 +109,13 @@ void PlazaScene::Update(float dt)
 void PlazaScene::OnExit()
 {
 	DialogueManager::Instance()->CloseAll();
+
+	if (SceneManager::Instance()->onDayState()) {
+
+	}
+	else {
+
+	}
 }
 
 void PlazaScene::Draw()

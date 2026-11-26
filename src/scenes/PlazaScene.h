@@ -18,6 +18,7 @@ public:
 
 private:
     GameObject* m_plaza = nullptr;
+    Clickable* _diary = nullptr;
     Font m_font{};
 
     bool tutorialShown = false;

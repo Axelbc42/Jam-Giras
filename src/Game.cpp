@@ -214,6 +214,14 @@ void Game::drawDebugUI()
 	ImGui::Separator();
 	ImGui::Checkbox("Demo de ImGui", &m_showImGuiDemo);
 
+	ImGui::Separator();
+	if (ImGui::Button("Cambiar a dia")) {
+		SceneManager::Instance()->changeSchedule(SceneManager::ScheduleState::DAY);
+	}
+	if (ImGui::Button("Cambiar a noche")) {
+		SceneManager::Instance()->changeSchedule(SceneManager::ScheduleState::NIGHT);
+	}
+
 	//DialogueManager
 	ImGui::Separator();
 	DialogueManager::Instance()->DrawDebugUI();
