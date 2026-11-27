@@ -2,7 +2,6 @@
 #include "Scene.h"
 #include "raylib.h"
 #include <functional>
-#include "../entities/Button.h"
 
 class MainMenu : public Scene
 {
@@ -17,7 +16,7 @@ public:
 private:
     Texture2D _background{};
     Rectangle _backgroundHS{};
-    Sound clickSound{};
+    Sound _clickSound{};
     Font m_font{};
 };
 

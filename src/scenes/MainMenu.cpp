@@ -4,14 +4,15 @@
 #include "../core/AudioManager.h"
 #include "../core/SceneManager.h"
 #include "../utilities/GameConstants.h"
+#include "../entities/Button.h"
 #include "../Game.h"
 
 #include "imgui.h"
 
 void MainMenu::Init()
 {
-	clickSound = AssetManager::Instance()->GetSound(Sounds::CLICK);
-	TraceLog(LOG_INFO, "Sound loaded: %d", clickSound.frameCount);
+	_clickSound = AssetManager::Instance()->GetSound(Sounds::CLICK);
+	TraceLog(LOG_INFO, "Sound loaded: %d", _clickSound.frameCount);
 
 	_background = AssetManager::Instance()->GetTexture(Textures::BACKGROUND_MENU);
 	m_font = AssetManager::Instance()->GetFont(Fonts::MAIN);
@@ -26,7 +27,7 @@ void MainMenu::Init()
 
 	//Copio el sonido por que no se si va a romper la referencia del lamba al cambiar de escena
 	//Si esto es seguro lo suyo seria replicar la logica en los botones con logica parecida
-	Sound sonidoClick = this->clickSound;
+	Sound sonidoClick = this->_clickSound;
 	Button* bJugar = Create<Button>("JUGAR", Rectangle{ centerX, centerY, btnWidth, btnHeight }, [sonidoClick] {
 		AudioManager::Instance()->PlaySound(sonidoClick);
 		SceneManager::Instance()->ChangeScene("Plaza");
