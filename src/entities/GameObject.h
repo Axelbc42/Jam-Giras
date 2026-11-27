@@ -31,6 +31,7 @@ public:
 	void SetActive(bool active) { m_active = active; }
 
 	const Rectangle& GetRect() const { return m_rect; }
+	float getRotation() const { return m_rotation; }
 	void SetRect(const Rectangle& rect) { m_rect = rect; }
 	void SetPosition(float x, float y) { m_rect.x = x; m_rect.y = y; }
 	void SetSize(float w, float h) { m_rect.width = w; m_rect.height = h; }

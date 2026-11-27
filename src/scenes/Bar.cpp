@@ -1,6 +1,7 @@
 #include "Bar.h"
 #include "../core/AssetManager.h"
 #include "../core/AudioManager.h"
+#include "../core/SceneManager.h"
 #include "../entities/Button.h"
 
 void Bar::Init()
@@ -57,11 +58,34 @@ void Bar::Init()
 		_smallHand->SetRotationOverload(30.f);
 		}, btnTex);
 
+
+}
+
+void Bar::OnEnter() {
+
+	auto* s = SceneManager::Instance();
+	//---*Ejemplo de lo que podemos hacer con items o pjs respecto al reloj*---
+	if (s->onDayState()) {
+		_smallHand->SetActive(false);
+	}else {}
+	//------
 }
 
 void Bar::Update(float dt)
 {
 	Scene::Update(dt);
+
+	//---*Ejemplo de lo que podemos hacer con items o pjs respecto al reloj*---
+	const float r = _bigHand->getRotation();
+	if (r == 90.f) { //3 de la tarde;
+		if (!_smallHand->IsActive())
+			_smallHand->SetActive(true);
+	}
+	//------
+}
+
+void Bar::OnExit() {
+
 }
 
 void Bar::Draw()

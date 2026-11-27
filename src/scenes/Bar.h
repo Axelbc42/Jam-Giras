@@ -11,6 +11,9 @@ public:
 	void DrawDebugUI() override;
 	void Release() override;
 
+	void OnEnter() override;
+	void OnExit() override;
+
 private:
 	GameObject* _clock;
 	GameObject* _bigHand;
