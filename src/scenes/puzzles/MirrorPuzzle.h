@@ -36,9 +36,10 @@ private:
     void LoadDefaults();
     void Layout();
     void CheckCorrect();
+    void OnResolve();
 
     int Neighbor(int slot, int dc, int dr) const;
-    void SwapSlots(int slotA, int slotB);
+    void SwapSlots(int slotA, int slotB, bool scramble = false);
 
     int cols = 2, fils = 3;
     std::vector<PiezaPuzle*> piezas;
@@ -47,6 +48,7 @@ private:
     Vector2 m_origin = PUZZLE_ORIGIN;
     Vector2 m_separation = PUZZLE_SEPARATION;
     Vector2 m_offsets[N_PIECES] = {};
+    Shader m_outlineShader{};
 
     int m_board[N_PIECES] = {};
     bool selectionMode = true;

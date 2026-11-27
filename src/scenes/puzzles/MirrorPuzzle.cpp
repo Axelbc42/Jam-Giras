@@ -33,7 +33,6 @@ void MirrorPuzzle::Init()
         m_board[i] = i;
 
     selectedSlot = 0;
-
     LoadDefaults();
     Layout();
 }
@@ -94,6 +93,11 @@ void MirrorPuzzle::Layout()
 {
     for (int slot = 0; slot < N_PIECES && slot < (int)piezas.size(); slot++)
         SetPiecePos(m_board[slot], slot);
+
+    SwapSlots(0, 3, true);
+    SwapSlots(2, 4, true);
+    SwapSlots(4, 3, true);
+    SwapSlots(5, 1, true);
 }
 
 
@@ -109,12 +113,14 @@ int MirrorPuzzle::Neighbor(int slot, int dc, int dr) const
 }
 
 
-void MirrorPuzzle::SwapSlots(int slotA, int slotB)
+void MirrorPuzzle::SwapSlots(int slotA, int slotB, bool scramble)
 {
     std::swap(m_board[slotA], m_board[slotB]);
 
     SetPiecePos(m_board[slotA], slotA);
     SetPiecePos(m_board[slotB], slotB);
+
+    if(!scramble)
     CheckCorrect();
 }
 
@@ -135,8 +141,23 @@ void MirrorPuzzle::CheckCorrect()
     }
     correct = c;
     if (c) {
-       //CORRECT
+        OnResolve();
     }
+}
+
+void MirrorPuzzle::OnResolve()
+{
+    DoorManager* dm = DoorManager::Instance();
+    AssetManager* assets = AssetManager::Instance();
+
+    Key* k2 = dm->GetKey(1);
+    k2->SetTexture(assets->GetTexture(Textures::ITEM_KEY_2));
+    k2->SetRect(Rectangle{ GameConstants::kScreenWidth/2, GameConstants::kScreenHeight / 2, 80.0f, 80.0f });
+    k2->AddCallback([k2]() {
+        k2->ResetCallbacks();
+        Inventory::Instance()->AddObject(k2, FileName::KEY_INFO);
+        });
+    Adopt(k2);
 }
 
 
@@ -144,7 +165,7 @@ void MirrorPuzzle::Update(float dt)
 {
     Scene::Update(dt);
 
-    //if (correct) return;
+    if (correct) return;
 
     if (IsKeyPressed(KEY_T))
         selectionMode = !selectionMode;
@@ -186,7 +207,7 @@ void MirrorPuzzle::Draw()
 {
     Scene::Draw();
 
-    if (piezas.empty() /* || correct*/)
+    if (piezas.empty() || correct)
         return;
 
     // Marco alrededor de la pieza seleccionada
