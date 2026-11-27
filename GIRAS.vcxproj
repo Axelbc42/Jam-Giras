@@ -179,6 +179,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\DiaryManager.h" />
+    <ClInclude Include="src\entities\Button.h" />
     <ClInclude Include="src\scenes\Bar.h" />
     <ClInclude Include="src\scenes\Diary.h" />
     <ClInclude Include="src\scenes\PuertaBar.h" />

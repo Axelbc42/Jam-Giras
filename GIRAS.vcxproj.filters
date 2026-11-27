@@ -224,6 +224,9 @@
     <ClInclude Include="src\scenes\puzzles\PiezaPuzle.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="src\entities\Button.h">
+             <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\images\Backgrounds\Plaza.jpg">

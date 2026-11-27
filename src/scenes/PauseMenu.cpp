@@ -62,10 +62,10 @@ void PauseMenu::Draw()
                     _reaunarButton.GetRect().y + (_reaunarButton.GetRect().height - ts1.y) / 2 };
     DrawTextEx(_font, "Reanudar", pos1, size, spacing, WHITE);
 
-    Vector2 ts2 = MeasureTextEx(_font, "Salir", size, spacing);
+    Vector2 ts2 = MeasureTextEx(_font, "Menu", size, spacing);
     Vector2 pos2 = { _salirButton.GetRect().x + (_salirButton.GetRect().width - ts2.x) / 2,
                     _salirButton.GetRect().y + (_salirButton.GetRect().height - ts2.y) / 2 };
-    DrawTextEx(_font, "Salir", pos2, size, spacing, WHITE);
+    DrawTextEx(_font, "Menu", pos2, size, spacing, WHITE);
 
     auto* g = Game::Instance();
     const float s = g->GameScale();

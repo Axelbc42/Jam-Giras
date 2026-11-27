@@ -44,14 +44,14 @@ public:
 	void SetPivot(float x, float y) { m_pivot.x = x; m_pivot.y = y; has_pivot = true; }
 
 	// Textura + posición + tamaño de golpe
-	void Configure(const Texture& texture, float x, float y, float w, float h)
+	void Configure(const Texture2D& texture, float x, float y, float w, float h)
 	{
 		m_texture = texture;
 		m_rect = Rectangle{ x, y, w, h };
 	}
 
 	// Para las cosas que rotan
-	void Configure(const Texture& texture, float x, float y, float w, float h,
+	void Configure(const Texture2D& texture, float x, float y, float w, float h,
 		float pivotX, float pivotY)
 	{
 		Configure(texture, x, y, w, h);
@@ -65,7 +65,7 @@ public:
 protected:
 	Rectangle m_rect{};
 	float m_rotation = 0.0f;
-	Texture m_texture{};
+	Texture2D m_texture{};
 	Color m_tint = WHITE;
 	bool m_active = true;
 	Vector2 m_pivot{};
