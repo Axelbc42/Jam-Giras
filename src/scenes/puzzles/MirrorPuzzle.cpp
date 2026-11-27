@@ -33,7 +33,6 @@ void MirrorPuzzle::Init()
         m_board[i] = i;
 
     selectedSlot = 0;
-
     LoadDefaults();
     Layout();
 }
@@ -68,23 +67,37 @@ void MirrorPuzzle::SetPiecePos(int pieceIndex, int slotIndex)
 
     const Vector2& celda = puzzlePos[slotIndex];
 
-    // Obtener las dimensiones originales de la textura
     Texture2D textura = piezas[pieceIndex]->GetTexture();
+
     piezas[pieceIndex]->SetCurrentPos(celda);
 
+    const float width = textura.width / 5.0f;
+    const float height = textura.height / 5.0f;
+
+    // El centro pertenece a la casilla, no a la pieza
+    const float centerX =
+        m_origin.x + m_separation.x * celda.x + m_offsets[slotIndex].x;
+
+    const float centerY =
+        m_origin.y + m_separation.y * celda.y + m_offsets[slotIndex].y;
+
     piezas[pieceIndex]->SetRect(Rectangle{
-        m_origin.x + m_separation.x * celda.x + m_offsets[pieceIndex].x,
-        m_origin.y + m_separation.y * celda.y + m_offsets[pieceIndex].y,
-        (float)textura.width/5,
-        (float)textura.height/5
+        centerX - width / 2.0f,
+        centerY - height / 2.0f,
+        width,
+        height
         });
 }
-
 
 void MirrorPuzzle::Layout()
 {
     for (int slot = 0; slot < N_PIECES && slot < (int)piezas.size(); slot++)
         SetPiecePos(m_board[slot], slot);
+
+    SwapSlots(0, 3, true);
+    SwapSlots(2, 4, true);
+    SwapSlots(4, 3, true);
+    SwapSlots(5, 1, true);
 }
 
 
@@ -100,12 +113,14 @@ int MirrorPuzzle::Neighbor(int slot, int dc, int dr) const
 }
 
 
-void MirrorPuzzle::SwapSlots(int slotA, int slotB)
+void MirrorPuzzle::SwapSlots(int slotA, int slotB, bool scramble)
 {
     std::swap(m_board[slotA], m_board[slotB]);
 
     SetPiecePos(m_board[slotA], slotA);
     SetPiecePos(m_board[slotB], slotB);
+
+    if(!scramble)
     CheckCorrect();
 }
 
@@ -126,9 +141,23 @@ void MirrorPuzzle::CheckCorrect()
     }
     correct = c;
     if (c) {
-        for (auto p : piezas)
-            p->SetActive(false);
+        OnResolve();
     }
+}
+
+void MirrorPuzzle::OnResolve()
+{
+    DoorManager* dm = DoorManager::Instance();
+    AssetManager* assets = AssetManager::Instance();
+
+    Key* k2 = dm->GetKey(1);
+    k2->SetTexture(assets->GetTexture(Textures::ITEM_KEY_2));
+    k2->SetRect(Rectangle{ GameConstants::kScreenWidth/2, GameConstants::kScreenHeight / 2, 80.0f, 80.0f });
+    k2->AddCallback([k2]() {
+        k2->ResetCallbacks();
+        Inventory::Instance()->AddObject(k2, FileName::KEY_INFO);
+        });
+    Adopt(k2);
 }
 
 

@@ -34,15 +34,6 @@ void PlazaScene::Init()
 			Inventory::Instance()->AddObject(k, FileName::KEY_INFO);
 			});
 		Adopt(k);
-
-		Key* k2 = dm->GetKey(1);
-		k2->SetTexture(assets->GetTexture(Textures::ITEM_KEY_2));
-		k2->SetRect(Rectangle{ 100.0f, 400.0f, 80.0f, 80.0f });
-		k2->AddCallback([k2]() {
-			k2->ResetCallbacks();
-			Inventory::Instance()->AddObject(k2, FileName::KEY_INFO);
-			});
-		Adopt(k2);
 	}
 
 	_diary = Create<Clickable>();

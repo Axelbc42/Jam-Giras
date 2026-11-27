@@ -62,6 +62,7 @@ public:
 	Texture2D GetTexture() const { return m_texture; }
 	void SetTint(const Color& tint) { m_tint = tint; }
 
+
 protected:
 	Rectangle m_rect{};
 	float m_rotation = 0.0f;
