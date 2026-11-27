@@ -29,6 +29,11 @@ void DialogueManager::Init() {
 	const float infoBoxWidth = GameConstants::kScreenWidth / 4;
 	const float infoBoxHeight = 140.f;
 	const Rectangle inventoryInfoBox = createDialogueBox(infoBoxWidth, infoBoxHeight, 20.f, GameConstants::kScreenHeight / 6);
+
+
+	const float diaryBoxWidth = GameConstants::kScreenWidth / 3.1;
+	const float diaryBoxHeight = GameConstants::kScreenHeight / 1.5f;
+	const Rectangle diaryInfoBox = createDialogueBox(diaryBoxWidth, diaryBoxHeight, GameConstants::kScreenWidth / 1.9f, GameConstants::kScreenHeight / 5);
 	
 	//--DIALOGOS--
 	//---Cargar todos los dialogos antes de usar---
@@ -48,6 +53,14 @@ void DialogueManager::Init() {
 	//Pop-ups Inventario
 	DialogueManager::Instance()->LoadDialogue(FileName::KEY_INFO, inventoryInfoBox, 18.f, WHITE, GOLD, BLACK);
 	DialogueManager::Instance()->LoadDialogue(FileName::DIARY_INFO, inventoryInfoBox, 18.f, WHITE, DARKBROWN, BLACK);
+
+	//Pop-ups Diario
+	DialogueManager::Instance()->LoadDialogue(FileName::LUCES_DE_BOHEMIA_INFO, diaryInfoBox, 18.f, WHITE, GOLD, BLACK);
+	DialogueManager::Instance()->LoadDialogue(FileName::CONTEXTO_INFO, diaryInfoBox, 18.f, WHITE, DARKBROWN, BLACK);
+	DialogueManager::Instance()->LoadDialogue(FileName::ESPERPENTO_INFO, diaryInfoBox, 18.f, WHITE, RED, BLACK);
+	DialogueManager::Instance()->LoadDialogue(FileName::ESPEJOS_INFO, diaryInfoBox, 18.f, WHITE, GRAY, BLACK);
+	DialogueManager::Instance()->LoadDialogue(FileName::CANOURO_INFO, diaryInfoBox, 18.f, WHITE, GREEN, BLACK);
+
 
 	//--- Nombre de los archivos para el debug
 	const int n = sizeof(FileName::COLECCION_FILES) / sizeof(FileName::COLECCION_FILES[0]);

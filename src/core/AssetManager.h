@@ -52,6 +52,13 @@ namespace FileName {
 	constexpr const char* KEY_INFO = "KEY_ITEM_INFO.txt";
 	constexpr const char* DIARY_INFO = "DIARY_ITEM_INFO.txt";
 
+	//Descripcioens nodos diario
+	constexpr const char* LUCES_DE_BOHEMIA_INFO = "LUCES_DE_BOHEMIA_INFO.txt";
+	constexpr const char* CONTEXTO_INFO = "CONTEXTO_INFO.txt";
+	constexpr const char* ESPERPENTO_INFO = "ESPERPENTO_INFO.txt";
+	constexpr const char* ESPEJOS_INFO = "ESPEJOS_INFO.txt";
+	constexpr const char* CANOURO_INFO = "CANOURO_INFO.txt";
+
 
 	//Replicar lo de arriba aqui
 	const std::string COLECCION_FILES[] = { TUTORIAL ,TUTEJEMPLO ,LOREMIPSUM,DIALOGUE_BOX_1,DIALOGUE_BOX_2,PLAZA };

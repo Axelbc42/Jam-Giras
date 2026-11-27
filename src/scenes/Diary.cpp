@@ -15,11 +15,7 @@ void Diary::Init()
     for (Node& n : nodes) {
         n.button.SetTexture(_nodeTexture);
         n.button.SetSize(50, 50);
-        n.button.AddCallback([]() {
-            // Aqui va lo de enseñar texto
-        });
     }
-
 
     //200, 125 punto 0,0
     //550, 575 punto 1,1
@@ -28,6 +24,12 @@ void Diary::Init()
     place(ESPERPENTO,       375, 350);
     place(ESPEJOS,          500, 325);
     place(CANOURO,          375, 500);
+
+    nodes[LUCES_DE_BOHEMIA].button.AddClickDialogue(FileName::LUCES_DE_BOHEMIA_INFO);
+    nodes[CONTEXTO].button.AddClickDialogue(FileName::CONTEXTO_INFO);
+    nodes[ESPERPENTO].button.AddClickDialogue(FileName::ESPERPENTO_INFO);
+    nodes[ESPEJOS].button.AddClickDialogue(FileName::ESPEJOS_INFO);
+    nodes[CANOURO].button.AddClickDialogue(FileName::CANOURO_INFO);
 
     edges = {
         { CONTEXTO,         LUCES_DE_BOHEMIA },

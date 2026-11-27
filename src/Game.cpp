@@ -111,7 +111,6 @@ void Game::initGame()
 	DialogueManager::Instance()->Init(); //Cargan los textos etc
 	DoorManager::Instance()->Init();
 	Inventory::Instance()->Init();
-	DiaryManager::Instance()->Init();
 
     SceneManager::Instance()->AddScene(new MainMenu("Menu"));
 	SceneManager::Instance()->AddScene(new PlazaScene("Plaza"));
@@ -122,6 +121,8 @@ void Game::initGame()
 	SceneManager::Instance()->AddScene(new Bar("Bar"));
 	SceneManager::Instance()->AddScene(new PauseMenu("PauseMenu"));
 	SceneManager::Instance()->AddScene(new Diary("Diary"));
+
+	DiaryManager::Instance()->Init();
 
 	NavigationManager::Instance()->AddAdjacents("Menu", { "", "", "", "" });
 
