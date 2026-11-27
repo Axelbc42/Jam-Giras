@@ -24,6 +24,7 @@ void MirrorPuzzle::Init()
     for (int i = 0; i < N_PIECES; i++)
     {
         PiezaPuzle* p = Create<PiezaPuzle>(puzzlePos[i]);
+        p->SetCurrentPos(puzzlePos[i]);
         p->SetTexture(assets->GetTexture(Textures::MIRRORS[i]));
         piezas.push_back(p);
     }
@@ -69,6 +70,7 @@ void MirrorPuzzle::SetPiecePos(int pieceIndex, int slotIndex)
 
     // Obtener las dimensiones originales de la textura
     Texture2D textura = piezas[pieceIndex]->GetTexture();
+    piezas[pieceIndex]->SetCurrentPos(celda);
 
     piezas[pieceIndex]->SetRect(Rectangle{
         m_origin.x + m_separation.x * celda.x + m_offsets[pieceIndex].x,
@@ -104,6 +106,7 @@ void MirrorPuzzle::SwapSlots(int slotA, int slotB)
 
     SetPiecePos(m_board[slotA], slotA);
     SetPiecePos(m_board[slotB], slotB);
+    CheckCorrect();
 }
 
 
@@ -112,10 +115,28 @@ void MirrorPuzzle::OnEnter()
 
 }
 
+void MirrorPuzzle::CheckCorrect()
+{
+    bool c = true;
+    for (auto p : piezas) {
+        if (!p->IsCorrect()) {
+            c = false;
+            break;
+        }
+    }
+    correct = c;
+    if (c) {
+        for (auto p : piezas)
+            p->SetActive(false);
+    }
+}
+
 
 void MirrorPuzzle::Update(float dt)
 {
     Scene::Update(dt);
+
+    if (correct) return;
 
     if (IsKeyPressed(KEY_T))
         selectionMode = !selectionMode;
@@ -157,7 +178,7 @@ void MirrorPuzzle::Draw()
 {
     Scene::Draw();
 
-    if (piezas.empty())
+    if (piezas.empty() || correct)
         return;
 
     // Marco alrededor de la pieza seleccionada

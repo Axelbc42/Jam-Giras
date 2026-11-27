@@ -11,7 +11,7 @@ constexpr Vector2 puzzlePos[] = {
     {0,2}, {1,2}
 }; 
 
-constexpr Vector2 PUZZLE_ORIGIN = { 482.0f, 61.0f };
+constexpr Vector2 PUZZLE_ORIGIN = { 460.0f, 61.0f };
 constexpr Vector2 PUZZLE_SEPARATION = { 86.0f, 181.0f };
 constexpr Vector2 PIECES_OFFSET[N_PIECES] = {
     {0.0f, 0.0f}, {-19.0f, -13.0f}, {-9.0f, 64.0f}, {108.0f, -69.0f}, {14.0f, 46.0f}, {94.0f, -72.0f}
@@ -36,6 +36,7 @@ public:
 private:
     void LoadDefaults();
     void Layout();
+    void CheckCorrect();
 
     int Neighbor(int slot, int dc, int dr) const;
     void SwapSlots(int slotA, int slotB);
@@ -51,4 +52,6 @@ private:
     int m_board[N_PIECES] = {};
     bool selectionMode = true;
     int selectedSlot = 0;
+
+    bool correct = false;
 };
