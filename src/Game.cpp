@@ -125,7 +125,6 @@ void Game::initGame()
 	DiaryManager::Instance()->Init();
 
 	NavigationManager::Instance()->AddAdjacents("Menu", { "", "", "", "" });
-
 	NavigationManager::Instance()->AddAdjacents("Plaza", { "CallejonNorte", "PuertaBar", "CallejonOeste", "CallejonEste" });
 	NavigationManager::Instance()->AddAdjacents("CallejonOeste", { "", "Plaza", "", "" });
 	NavigationManager::Instance()->AddAdjacents("CallejonEste", { "", "Plaza", "", "" });
@@ -142,7 +141,7 @@ void Game::initGame()
 // ---------------------------------------------------------------
 void Game::start()
 {
-	while (!WindowShouldClose() && !m_quit)
+	while (!m_quit)
 	{
 		update(GetFrameTime());
 		draw();

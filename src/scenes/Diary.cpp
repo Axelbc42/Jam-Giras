@@ -78,7 +78,8 @@ void Diary::Draw()
         }
 
         for (Node& n : nodes) {
-            n.button.Draw();
+            if (n.active)
+                n.button.Draw();
         }
     }
 }
