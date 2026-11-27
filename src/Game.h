@@ -18,6 +18,7 @@ public:
     //Pa las ventanas de ImGui que interactuen con el juego reposicionarlas (ej. pauseMenu)
     Vector2 GameToWindow(float x, float y) const; //ImVec2 no me deja aunque incluya el imgui.h aqui
     inline float  GameScale() const { return m_scale; }
+    float GetRenderScale() const { return m_renderScale; }
 
     Game(const Game&) = delete;
     Game& operator=(const Game&) = delete;
@@ -31,6 +32,7 @@ private:
     void draw();
     void drawDebugUI();
     void updateViewport();
+    void resizeTarget(float s);
 
     static Game* s_instance;
 
@@ -39,6 +41,7 @@ private:
     RenderTexture2D m_target{};
     float m_scale = 1.f, m_offX = 0.f, m_offY = 0.f;
 
+    float m_renderScale = 1.f;//para reescalar el texto
 
     // --- Depuracion ---
     bool m_debug = true;         // F1 muestra/oculta el panel de ImGui

@@ -86,10 +86,23 @@ Font AssetManager::GetFont(const std::string& name)
 	auto it = m_fonts.find(name);
 	if (it == m_fonts.end())
 	{
-		Font font = LoadFont((m_root + "fonts/" + name).c_str());
-		// Si falla, raylib devuelve la fuente por defecto
+		// Rango de glifos: ASCII (32-126) + Latin-1 Supplement (160-255) -> tildes, ñ, ¿, ¡
+		static int codepoints[95 + 96];
+		static bool init = false;
+		if (!init) {
+			int n = 0;
+			for (int c = 32; c <= 126; ++c)  codepoints[n++] = c;
+			for (int c = 160; c <= 255; ++c) codepoints[n++] = c;
+			init = true;
+		}
+
+		Font font = LoadFontEx((m_root + "fonts/" + name).c_str(), 64, codepoints, 95 + 96);
 		if (font.texture.id == GetFontDefault().texture.id)
 			TraceLog(LOG_ERROR, "AssetManager: no se pudo cargar la fuente %s", name.c_str());
+		else {
+			GenTextureMipmaps(&font.texture);
+			SetTextureFilter(font.texture, TEXTURE_FILTER_TRILINEAR);
+		}
 		it = m_fonts.insert({ name, font }).first;
 	}
 	return it->second;

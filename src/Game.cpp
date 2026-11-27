@@ -57,21 +57,21 @@ void Game::Release()
 
 Game::~Game()
 {
-    if (m_windowReady)
-    {
-        AssetManager::Release();   // 1) recursos (necesitan la ventana y el audio abiertos)
-        AudioManager::Release();
-        SceneManager::Release();
+	if (m_windowReady)
+	{
+		AssetManager::Release();   // 1) recursos (necesitan la ventana y el audio abiertos)
+		AudioManager::Release();
+		SceneManager::Release();
 		DialogueManager::Release();
 		NavigationManager::Release();
 		DoorManager::Release();
 		Inventory::Release();
 		DiaryManager::Release();
 		UnloadRenderTexture(m_target);
-        CloseAudioDevice();        // 2) audio
-        rlImGuiShutdown();         // 3) ImGui
-        CloseWindow();             // 4) ventana
-    }
+		CloseAudioDevice();        // 2) audio
+		rlImGuiShutdown();         // 3) ImGui
+		CloseWindow();             // 4) ventana
+	}
 }
 
 // ---------------------------------------------------------------
@@ -80,10 +80,10 @@ Game::~Game()
 bool Game::initWindow()
 {
 	//---ConfigWindow---
-	SetConfigFlags(FLAG_WINDOW_RESIZABLE); 
-    InitWindow(GameConstants::kScreenWidth, GameConstants::kScreenHeight, GameConstants::kTitle);
-    if (!IsWindowReady())
-        return false;
+	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+	InitWindow(GameConstants::kScreenWidth, GameConstants::kScreenHeight, GameConstants::kTitle);
+	if (!IsWindowReady())
+		return false;
 	SetWindowMinSize(GameConstants::kScreenWidth, GameConstants::kScreenHeight);
 #ifdef GAME_RELEASE
 	ToggleBorderlessWindowed(); //Empieza en fullscreen sin bordes //ESTO PARA RELEASE
@@ -107,13 +107,13 @@ bool Game::initWindow()
 
 void Game::initGame()
 {
-    SceneManager::Instance();
+	SceneManager::Instance();
 	NavigationManager::Instance()->Init();
 	DialogueManager::Instance()->Init(); //Cargan los textos etc
 	DoorManager::Instance()->Init();
 	Inventory::Instance()->Init();
 
-    SceneManager::Instance()->AddScene(new MainMenu("Menu"));
+	SceneManager::Instance()->AddScene(new MainMenu("Menu"));
 	SceneManager::Instance()->AddScene(new PlazaScene("Plaza"));
 	SceneManager::Instance()->AddScene(new CallejonOeste("CallejonOeste"));
 	SceneManager::Instance()->AddScene(new CallejonEste("CallejonEste"));
@@ -154,21 +154,21 @@ void Game::start()
 void Game::update(float dt)
 {
 	if (IsKeyPressed(KEY_F1))
-		m_debug = !m_debug;		
+		m_debug = !m_debug;
 	if (IsKeyPressed(KEY_F11) || (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_ENTER)))
 		ToggleBorderlessWindowed();
 
 	updateViewport(); //antes de que se lea el raton
 
-	CursorState::BeginFrame();                    
+	CursorState::BeginFrame();
 	DialogueManager::Instance()->Update(dt);
-    SceneManager::Instance()->Update(dt);
+	SceneManager::Instance()->Update(dt);
 	if (!SceneManager::Instance()->IsFading()) {
 		NavigationManager::Instance()->Update(dt);
 		Inventory::Instance()->Update(dt);
 	}
 
-	CursorState::Apply();                         
+	CursorState::Apply();
 }
 
 void Game::draw() //Imp mantener este orden
@@ -185,24 +185,28 @@ void Game::draw() //Imp mantener este orden
 	// El juego, a la textura de 1280x720
 	BeginTextureMode(m_target);
 	ClearBackground(Color{ 40, 44, 52, 255 });
+	BeginMode2D(Camera2D{ {0, 0}, {0, 0}, 0.f, m_renderScale });
+
 	SceneManager::Instance()->Draw();
 	if (!SceneManager::Instance()->IsFading()) {
 		NavigationManager::Instance()->Draw();
 	}
 	if (SceneManager::Instance()->GetCurrenSceneName() != "Menu")
 		Inventory::Instance()->Draw();
+
 	DialogueManager::Instance()->Draw();
+	EndMode2D();
 	EndTextureMode();
 
 	// La textura, escalada a la ventana
 	DrawTexturePro(m_target.texture,
-		{ 0, 0, GameConstants::kScreenWidth, -GameConstants::kScreenHeight },  // -H: las render textures vienen invertidas
+		{ 0, 0, (float)m_target.texture.width, -(float)m_target.texture.height },
 		{ m_offX, m_offY, GameConstants::kScreenWidth * m_scale, GameConstants::kScreenHeight * m_scale },
 		{ 0, 0 }, 0.f, WHITE);
 
-	#ifdef GAME_DEBUG
+#ifdef GAME_DEBUG
 	if (m_debug) drawDebugUI();
-	#endif
+#endif
 	rlImGuiEnd(); //Aqui hace lo que tiene que hacer ImGui, encima de la textura
 	EndDrawing();
 }
@@ -210,13 +214,16 @@ void Game::draw() //Imp mantener este orden
 void Game::drawDebugUI()
 {
 	ImGui::Begin("Depuracion");
+	if (ImGui::Button("Cerrar app")) {
+		m_quit = true;
+	}
 	ImGui::Text("FPS: %d", GetFPS());
 
 	const Vector2 m = GetMousePosition();
 	ImGui::Text("Raton (ventana): %.0f, %.0f", m.x, m.y);
 	ImGui::Text("Raton (juego): %.0f, %.0f", (m.x - m_offX) / m_scale, (m.y - m_offY) / m_scale);
 
-    SceneManager::Instance()->DrawDebugUI();
+	SceneManager::Instance()->DrawDebugUI();
 
 	ImGui::Separator();
 	ImGui::Checkbox("Demo de ImGui", &m_showImGuiDemo);
@@ -243,10 +250,23 @@ void Game::updateViewport()
 {
 	const float W = GameConstants::kScreenWidth, H = GameConstants::kScreenHeight;
 	m_scale = fminf(GetScreenWidth() / W, GetScreenHeight() / H);
+
+	float wanted = fminf(3.f, fmaxf(1.f, ceilf(m_scale * 2.f) / 2.f));
+	if (wanted != m_renderScale) resizeTarget(wanted);
+
 	m_offX = (GetScreenWidth() - W * m_scale) / 2.f;
 	m_offY = (GetScreenHeight() - H * m_scale) / 2.f;
 	SetMouseOffset((int)-m_offX, (int)-m_offY);
 	SetMouseScale(1.f / m_scale, 1.f / m_scale);
+}
+
+void Game::resizeTarget(float s)
+{
+	UnloadRenderTexture(m_target);
+	m_target = LoadRenderTexture((int)(GameConstants::kScreenWidth * s),
+		(int)(GameConstants::kScreenHeight * s));
+	SetTextureFilter(m_target.texture, TEXTURE_FILTER_BILINEAR);
+	m_renderScale = s;
 }
 
 Vector2 Game::GameToWindow(float x, float y) const {

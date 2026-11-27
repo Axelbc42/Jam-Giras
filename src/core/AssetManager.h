@@ -42,7 +42,9 @@ namespace Musics {
 }
 
 namespace Fonts {
-	constexpr const char* MAIN = "MatchaStyle.ttf";
+	//constexpr const char* MAIN = "MatchaStyle.ttf";
+	//constexpr const char* MAIN = "Handwriting-Regular.otf";
+	constexpr const char* MAIN = "Abbasy Calligraphy Typeface.ttf"; //Este de momento el mejor
 }
 
 namespace FileName {

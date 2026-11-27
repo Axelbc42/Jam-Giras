@@ -12,10 +12,10 @@ public:
 	void Release() override;
 
 private:
-	float _rot = 0.f;
 	GameObject* _clock;
 	GameObject* _bigHand;
 	GameObject* _smallHand;
+	Sound _handsTickSFX{};
 };
 
 
