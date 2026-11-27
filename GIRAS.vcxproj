@@ -197,6 +197,7 @@
     <ClInclude Include="src\entities\Interactuable.h" />
     <ClInclude Include="src\scenes\PlazaScene.h" />
     <ClInclude Include="src\scenes\puzzles\MirrorPuzzle.h" />
+    <ClInclude Include="src\scenes\puzzles\PiezaPuzle.h" />
     <ClInclude Include="src\scenes\Scene.h" />
     <ClInclude Include="src\core\AssetManager.h" />
     <ClInclude Include="src\scenes\CallejonEste.h" />

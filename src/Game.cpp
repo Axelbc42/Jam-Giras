@@ -21,6 +21,7 @@
 #include "scenes/Bar.h"
 #include "scenes/PauseMenu.h"
 #include "scenes/Diary.h"
+#include "scenes/puzzles/MirrorPuzzle.h"
 
 #include "utilities/CursorState.h"
 
@@ -121,6 +122,7 @@ void Game::initGame()
 	SceneManager::Instance()->AddScene(new Bar("Bar"));
 	SceneManager::Instance()->AddScene(new PauseMenu("PauseMenu"));
 	SceneManager::Instance()->AddScene(new Diary("Diary"));
+	SceneManager::Instance()->AddScene(new MirrorPuzzle("MirrorPuzzle"));
 
 	DiaryManager::Instance()->Init();
 
@@ -130,11 +132,12 @@ void Game::initGame()
 	NavigationManager::Instance()->AddAdjacents("CallejonEste", { "", "Plaza", "", "" });
 	NavigationManager::Instance()->AddAdjacents("CallejonNorte", { "", "Plaza", "", "" });
 	NavigationManager::Instance()->AddAdjacents("PuertaBar", { "", "Plaza", "", "" });
-	NavigationManager::Instance()->AddAdjacents("Bar", { "", "Plaza", "", "" });
+	NavigationManager::Instance()->AddAdjacents("Bar", { "", "Plaza", "MirrorPuzzle", "" });
+	NavigationManager::Instance()->AddAdjacents("MirrorPuzzle", { "", "", "", "Bar" });
 	NavigationManager::Instance()->AddAdjacents("PauseMenu", { "", "", "", "" });
 	NavigationManager::Instance()->AddAdjacents("Diary", { "", "", "", "" });
 
-	SceneManager::Instance()->StartScene("Menu");
+	SceneManager::Instance()->StartScene("MirrorPuzzle");
 }
 // ---------------------------------------------------------------
 // Bucle principal

@@ -15,6 +15,14 @@ namespace Textures {
 	constexpr const char* CLOCK = "objects/clock.png";
 	constexpr const char* HAND = "objects/hand.png";
 
+	constexpr const char* MIRROR_1 = "sprites/mirror1.png";
+	constexpr const char* MIRROR_2 = "sprites/mirror2.png";
+	constexpr const char* MIRROR_3 = "sprites/mirror3.png";
+	constexpr const char* MIRROR_4 = "sprites/mirror4.png";
+	constexpr const char* MIRROR_5 = "sprites/mirror5.png";
+	constexpr const char* MIRROR_6 = "sprites/mirror6.png";
+	constexpr const char* MIRRORS[] = { MIRROR_1, MIRROR_2, MIRROR_3, MIRROR_4, MIRROR_5, MIRROR_6 };
+
 	constexpr const char* DIARY_FRAMES = "UI/diary.png";
 	constexpr const char* CLOSED_DIARY = "UI/libritoCerrado.png";
 
