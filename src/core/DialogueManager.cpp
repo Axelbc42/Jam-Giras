@@ -2,6 +2,7 @@
 #include "raymath.h" 
 #include <cassert>
 #include "AssetManager.h"
+#include "../Game.h"
 #include "imgui.h"
 
 DialogueManager* DialogueManager::_instance = nullptr;
@@ -242,7 +243,8 @@ void DialogueManager::Draw() {
 		diagInf._lineSpacing, diagInf._color);
 
 	//-- Mostrar el texto en el vw
-	BeginScissorMode(diagInf._viewport.x, diagInf._viewport.y, diagInf._viewport.width, diagInf._viewport.height);
+	const float s = Game::Instance()->GetRenderScale();
+	BeginScissorMode((int)(diagInf._viewport.x * s), (int)(diagInf._viewport.y * s),(int)(diagInf._viewport.width * s), (int)(diagInf._viewport.height * s));
 
 	float y = diagInf._viewport.y - diagInf._scrollY;
 

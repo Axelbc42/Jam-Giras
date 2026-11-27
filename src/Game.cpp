@@ -185,18 +185,22 @@ void Game::draw() //Imp mantener este orden
 	// El juego, a la textura de 1280x720
 	BeginTextureMode(m_target);
 	ClearBackground(Color{ 40, 44, 52, 255 });
+	BeginMode2D(Camera2D{ {0, 0}, {0, 0}, 0.f, m_renderScale });
+
 	SceneManager::Instance()->Draw();
 	if (!SceneManager::Instance()->IsFading()) {
 		NavigationManager::Instance()->Draw();
 	}
 	if (SceneManager::Instance()->GetCurrenSceneName() != "Menu")
 		Inventory::Instance()->Draw();
+
 	DialogueManager::Instance()->Draw();
+	EndMode2D();
 	EndTextureMode();
 
 	// La textura, escalada a la ventana
 	DrawTexturePro(m_target.texture,
-		{ 0, 0, GameConstants::kScreenWidth, -GameConstants::kScreenHeight },  // -H: las render textures vienen invertidas
+		{ 0, 0, (float)m_target.texture.width, -(float)m_target.texture.height },
 		{ m_offX, m_offY, GameConstants::kScreenWidth * m_scale, GameConstants::kScreenHeight * m_scale },
 		{ 0, 0 }, 0.f, WHITE);
 
@@ -246,10 +250,23 @@ void Game::updateViewport()
 {
 	const float W = GameConstants::kScreenWidth, H = GameConstants::kScreenHeight;
 	m_scale = fminf(GetScreenWidth() / W, GetScreenHeight() / H);
+
+	float wanted = fminf(3.f, fmaxf(1.f, ceilf(m_scale * 2.f) / 2.f));
+	if (wanted != m_renderScale) resizeTarget(wanted);
+
 	m_offX = (GetScreenWidth() - W * m_scale) / 2.f;
 	m_offY = (GetScreenHeight() - H * m_scale) / 2.f;
 	SetMouseOffset((int)-m_offX, (int)-m_offY);
 	SetMouseScale(1.f / m_scale, 1.f / m_scale);
+}
+
+void Game::resizeTarget(float s)
+{
+	UnloadRenderTexture(m_target);
+	m_target = LoadRenderTexture((int)(GameConstants::kScreenWidth * s),
+		(int)(GameConstants::kScreenHeight * s));
+	SetTextureFilter(m_target.texture, TEXTURE_FILTER_BILINEAR);
+	m_renderScale = s;
 }
 
 Vector2 Game::GameToWindow(float x, float y) const {
