@@ -45,7 +45,12 @@ namespace FileName {
 	constexpr const char* DIALOGUE_BOX_2 = "Cuadros de Texto 2.txt";
 	constexpr const char* PLAZA = "La Plaza.txt";
 
+	//Diálogos
 	constexpr const char* NPC_1 = "NPC_1.txt";
+
+	//Descrpciones inventario
+	constexpr const char* KEY_INFO = "KEY_ITEM_INFO.txt";
+	constexpr const char* DIARY_INFO = "DIARY_ITEM_INFO.txt";
 
 
 	//Replicar lo de arriba aqui

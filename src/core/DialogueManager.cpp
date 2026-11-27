@@ -25,7 +25,11 @@ void DialogueManager::Init() {
 	const float cboxWidth = 450.f;
 	const float cboxHeight = 300.f;
 	const Rectangle nCenterbox = createDialogueBox(cboxWidth, cboxHeight, centerX - cboxWidth / 2.f, centerY - cboxHeight / 2.f);
-
+	
+	const float infoBoxWidth = GameConstants::kScreenWidth / 4;
+	const float infoBoxHeight = 140.f;
+	const Rectangle inventoryInfoBox = createDialogueBox(infoBoxWidth, infoBoxHeight, 20.f, GameConstants::kScreenHeight / 6);
+	
 	//--DIALOGOS--
 	//---Cargar todos los dialogos antes de usar---
 	//---Ejemplos---
@@ -38,7 +42,12 @@ void DialogueManager::Init() {
 	DialogueManager::Instance()->LoadDialogue(FileName::DIALOGUE_BOX_2, smallCenterbox, 14.f, WHITE, PURPLE, BLACK);
 	DialogueManager::Instance()->LoadDialogue(FileName::PLAZA, nCenterbox);
 
+	//Dialogos
 	DialogueManager::Instance()->LoadDialogue(FileName::NPC_1, mainbox, 20.f, WHITE, PINK, BLACK);
+
+	//Pop-ups Inventario
+	DialogueManager::Instance()->LoadDialogue(FileName::KEY_INFO, inventoryInfoBox, 18.f, WHITE, GOLD, BLACK);
+	DialogueManager::Instance()->LoadDialogue(FileName::DIARY_INFO, inventoryInfoBox, 18.f, WHITE, DARKBROWN, BLACK);
 
 	//--- Nombre de los archivos para el debug
 	const int n = sizeof(FileName::COLECCION_FILES) / sizeof(FileName::COLECCION_FILES[0]);

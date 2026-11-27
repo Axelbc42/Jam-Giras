@@ -72,6 +72,7 @@ void Inventory::Update(float dt)
 
 void Inventory::AddObject(Interactuable* item, std::string info) {
 	_inventory.push_back({ item , info });
+	item->AddHoverDialogue(info);
 	item = nullptr;
 	PlaceItem(_inventory.size() - 1);
 }

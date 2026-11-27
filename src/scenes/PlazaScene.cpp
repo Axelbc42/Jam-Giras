@@ -31,7 +31,7 @@ void PlazaScene::Init()
 		k->SetRect(Rectangle{ 100.0f, 300.0f, 80.0f, 80.0f });
 		k->AddCallback([k]() {
 			k->ResetCallbacks();
-			Inventory::Instance()->AddObject(k, "KLK 1Gua");
+			Inventory::Instance()->AddObject(k, FileName::KEY_INFO);
 			});
 		Adopt(k);
 
@@ -40,7 +40,7 @@ void PlazaScene::Init()
 		k2->SetRect(Rectangle{ 100.0f, 400.0f, 80.0f, 80.0f });
 		k2->AddCallback([k2]() {
 			k2->ResetCallbacks();
-			Inventory::Instance()->AddObject(k2, "KLK 2Gua");
+			Inventory::Instance()->AddObject(k2, FileName::KEY_INFO);
 			});
 		Adopt(k2);
 	}
@@ -61,7 +61,7 @@ void PlazaScene::Init()
 	};
 
 	_diary->AddCallback([this, abrirDiario]() {
-		Inventory::Instance()->AddObject(_diary, "KLK 3Gua");
+		Inventory::Instance()->AddObject(_diary, FileName::DIARY_INFO);
 		_diary->ResetCallbacks();
 		_diary->AddCallback(abrirDiario);
 		});
