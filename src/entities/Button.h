@@ -14,7 +14,7 @@ public:
 	Button& operator=(const Button&) = delete;
 
 	Button(const std::string& text, Rectangle rect,
-		std::function<void()> onClick, Texture2D bg = {}, Color textC = BLACK, Font f = GetFontDefault()) : GameObject(),
+		std::function<void()> onClick, Texture2D bg = {}, Color textC = BLACK, Font f = AssetManager::Instance()->GetFont(Fonts::MAIN)) : GameObject(),
 		_text(text), _onClick(move(onClick)), _font(f) {
 
 		m_rect = rect;

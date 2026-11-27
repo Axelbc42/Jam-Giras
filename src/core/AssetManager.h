@@ -6,7 +6,7 @@
 
 namespace Textures {
 	constexpr const char* BACKGROUND_PLAZA = "backgrounds/Plaza.png";
-	constexpr const char* BACKGROUND_MENU = "backgrounds/FondoMenu.png";
+	constexpr const char* BACKGROUND_MENU = "backgrounds/MenuBG.png";
 
 	constexpr const char* ITEM_KEY_1 = "objects/key1.png";
 	constexpr const char* ITEM_KEY_2 = "objects/key2.png";

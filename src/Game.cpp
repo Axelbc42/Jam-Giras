@@ -137,7 +137,7 @@ void Game::initGame()
 	NavigationManager::Instance()->AddAdjacents("PauseMenu", { "", "", "", "" });
 	NavigationManager::Instance()->AddAdjacents("Diary", { "", "", "", "" });
 
-	SceneManager::Instance()->StartScene("MirrorPuzzle");
+	SceneManager::Instance()->StartScene("Menu");
 }
 // ---------------------------------------------------------------
 // Bucle principal

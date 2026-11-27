@@ -12,40 +12,41 @@
 void MainMenu::Init()
 {
 	_clickSound = AssetManager::Instance()->GetSound(Sounds::CLICK);
-	TraceLog(LOG_INFO, "Sound loaded: %d", _clickSound.frameCount);
-
 	_background = AssetManager::Instance()->GetTexture(Textures::BACKGROUND_MENU);
 	m_font = AssetManager::Instance()->GetFont(Fonts::MAIN);
 	_backgroundHS = { 0, 0, GameConstants::kScreenWidth, GameConstants::kScreenHeight };
 
-	Texture2D btnTex = AssetManager::Instance()->GetTexture(Textures::BUTON1);
+	const float fontSize = 36.f;
+	const float spacing = 2.f;
+	const float marginRight = 60.f;
+	const float marginBottom = 60.f;
+	const float lineGap = 18.f;
 
-	const float btnWidth = 360.f;
-	const float btnHeight = 160.f;
-	const float centerX = (GameConstants::kScreenWidth - btnWidth) / 2.f;
-	const float centerY = (GameConstants::kScreenHeight - btnHeight) / 2.f;
+	struct Entry { const char* text; BtnCallback onClick; };
+	Sound click = _clickSound;
 
-	//Copio el sonido por que no se si va a romper la referencia del lamba al cambiar de escena
-	//Si esto es seguro lo suyo seria replicar la logica en los botones con logica parecida
-	Sound sonidoClick = this->_clickSound;
-	Button* bJugar = Create<Button>("JUGAR", Rectangle{ centerX, centerY, btnWidth, btnHeight }, [sonidoClick] {
-		AudioManager::Instance()->PlaySound(sonidoClick);
-		SceneManager::Instance()->ChangeScene("Plaza");
-		}, btnTex);
+	Entry entries[] = {
+		{ "   JUGAR",    [click] { AudioManager::Instance()->PlaySound(click);
+								SceneManager::Instance()->ChangeScene("Plaza"); } },
+		{ "OPCIONES", [click] { AudioManager::Instance()->PlaySound(click);
+								SceneManager::Instance()->ChangeScene("PauseMenu");  } },
+		{ "CRÉDITOS", [click] { AudioManager::Instance()->PlaySound(click);
+	/* TODO: SceneManager::Instance()->ChangeScene("Creditos"); */ } },
+		{ "   SALIR",    [] { Game::Instance()->RequestQuit(); } },
+	};
+	const int n = sizeof(entries) / sizeof(entries[0]);
 
-	// solo texto (el boton es del tamaño del texto para que sea mas representativo)
-	const char* txtSalir = "SALIR";
-	const float size = 24;
-	Vector2 dimText = MeasureTextEx(m_font, txtSalir, size, 2.f);
-	const float tCenterX = (GameConstants::kScreenWidth - dimText.x) / 2.f;
-	const float tCenterY = (GameConstants::kScreenHeight - dimText.y) / 2.f;
-	Create<Button>(
-		"SALIR",
-		Rectangle{ tCenterX, tCenterY + tCenterY / 2.f, dimText.x, dimText.y },
-		[] { Game::Instance()->RequestQuit(); },
-		Texture2D{},   // sin textura
-		RED,
-		m_font);
+	// Se colocan de abajo hacia arriba: el ultimo (SALIR) queda al fondo
+	float y = GameConstants::kScreenHeight - marginBottom;
+	for (int i = n - 1; i >= 0; --i)
+	{
+		Vector2 dim = MeasureTextEx(m_font, entries[i].text, fontSize, spacing);
+		y -= dim.y;
+		float x = GameConstants::kScreenWidth - marginRight - dim.x; // alineado a la derecha
+		Create<Button>(entries[i].text, Rectangle{ x, y, dim.x, dim.y },
+			entries[i].onClick, Texture2D{}, Color{ 40, 30, 60, 255 }, m_font);
+		y -= lineGap;
+	}
 }
 
 void MainMenu::Update(float dt)
