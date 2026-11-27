@@ -146,6 +146,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\utilities\OptionsPanel.cpp" />
     <ClCompile Include="src\core\DiaryManager.cpp" />
     <ClCompile Include="src\scenes\Bar.cpp" />
     <ClCompile Include="src\scenes\Diary.cpp" />
@@ -218,6 +219,7 @@
     <ClInclude Include="src\core\SceneManager.h" />
     <ClInclude Include="src\utilities\CursorState.h" />
     <ClInclude Include="src\utilities\GameConstants.h" />
+    <ClInclude Include="src\utilities\OptionsPanel.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\images\Backgrounds\Plaza.jpg" />

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <functional>
 #include <imgui.h>
+#include "../core/AssetManager.h"
 
 using namespace std;
 using BtnCallback = std::function<void()>;
@@ -14,8 +15,9 @@ public:
 	Button& operator=(const Button&) = delete;
 
 	Button(const std::string& text, Rectangle rect,
-		std::function<void()> onClick, Texture2D bg = {}, Color textC = BLACK, Font f = AssetManager::Instance()->GetFont(Fonts::MAIN)) : GameObject(),
-		_text(text), _onClick(move(onClick)), _font(f) {
+		std::function<void()> onClick, Texture2D bg = {}, Color textC = BLACK,
+		Font f = AssetManager::Instance()->GetFont(Fonts::MAIN), Color hoverC = YELLOW) : GameObject(),
+		_text(text), _onClick(move(onClick)), _font(f), _hoverC(hoverC) {
 
 		m_rect = rect;
 		m_texture = bg;
@@ -23,7 +25,7 @@ public:
 	}
 
 	void Update(float dt) override {
-
+		if (!m_active) return;
 		bool imguiCapturaRaton = ImGui::GetIO().WantCaptureMouse;
 		Vector2 mouse = GetMousePosition();
 
@@ -35,6 +37,8 @@ public:
 	}
 
 	void Draw() override {
+		if (!m_active) return;
+
 		if (m_texture.id != 0) { //Si tiene textura, el hover se refleja en la tex
 			Color tinte = _hover ? WHITE : Color{ 200, 200, 200, 255 };
 			DrawTexturePro(m_texture, { 0, 0, (float)m_texture.width, (float)m_texture.height },
@@ -46,7 +50,7 @@ public:
 		Vector2 ts = MeasureTextEx(_font, _text.c_str(), size, spacing);
 		Vector2 pos = { m_rect.x + (m_rect.width - ts.x) / 2,
 						m_rect.y + (m_rect.height - ts.y) / 2 };
-		Color c = _hover ? YELLOW : m_tint; // hover del texto si no tiene fondo con textura
+		Color c = _hover ? _hoverC : m_tint; // hover del texto si no tiene fondo con textura
 		DrawTextEx(_font, _text.c_str(), pos, size, spacing, c);
 	}
 
@@ -55,4 +59,5 @@ private:
 	BtnCallback _onClick;
 	bool _hover = false;
 	Font _font{}; //Que se lo pase la escena
+	Color _hoverC{};
 };

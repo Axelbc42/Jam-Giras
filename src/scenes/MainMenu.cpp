@@ -6,6 +6,7 @@
 #include "../utilities/GameConstants.h"
 #include "../entities/Button.h"
 #include "../Game.h"
+#include "../utilities/OptionsPanel.h"
 
 #include "imgui.h"
 
@@ -16,41 +17,65 @@ void MainMenu::Init()
 	m_font = AssetManager::Instance()->GetFont(Fonts::MAIN);
 	_backgroundHS = { 0, 0, GameConstants::kScreenWidth, GameConstants::kScreenHeight };
 
-	const float fontSize = 36.f;
-	const float spacing = 2.f;
-	const float marginRight = 60.f;
-	const float marginBottom = 60.f;
-	const float lineGap = 18.f;
-
-	struct Entry { const char* text; BtnCallback onClick; };
+	_inkP = { 40, 30, 60, 255 };
+	float size = 34.f;
 	Sound click = _clickSound;
 
-	Entry entries[] = {
-		{ "   JUGAR",    [click] { AudioManager::Instance()->PlaySound(click);
-								SceneManager::Instance()->ChangeScene("Plaza"); } },
-		{ "OPCIONES", [click] { AudioManager::Instance()->PlaySound(click);
-								SceneManager::Instance()->ChangeScene("PauseMenu");  } },
-		{ "CRÉDITOS", [click] { AudioManager::Instance()->PlaySound(click);
-	/* TODO: SceneManager::Instance()->ChangeScene("Creditos"); */ } },
-		{ "   SALIR",    [] { Game::Instance()->RequestQuit(); } },
-	};
-	const int n = sizeof(entries) / sizeof(entries[0]);
+	// Botones del menu
+	Vector2 d;
+	d = MeasureTextEx(m_font, "JUGAR", size, 2.f);
+	_bJugar = Create<Button>("JUGAR", Rectangle{ 1190 - d.x, 440, d.x, d.y },
+		[click] {
+			AudioManager::Instance()->PlaySound(click);
+			SceneManager::Instance()->ChangeScene("Plaza");
+		}, Texture2D{}, _inkP, m_font);
 
-	// Se colocan de abajo hacia arriba: el ultimo (SALIR) queda al fondo
-	float y = GameConstants::kScreenHeight - marginBottom;
-	for (int i = n - 1; i >= 0; --i)
-	{
-		Vector2 dim = MeasureTextEx(m_font, entries[i].text, fontSize, spacing);
-		y -= dim.y;
-		float x = GameConstants::kScreenWidth - marginRight - dim.x; // alineado a la derecha
-		Create<Button>(entries[i].text, Rectangle{ x, y, dim.x, dim.y },
-			entries[i].onClick, Texture2D{}, Color{ 40, 30, 60, 255 }, m_font);
-		y -= lineGap;
-	}
+	d = MeasureTextEx(m_font, "OPCIONES", size, 2.f);
+	_bOpciones = Create<Button>("OPCIONES", Rectangle{ 1190 - d.x, 495, d.x, d.y },
+		[this, click] {
+			AudioManager::Instance()->PlaySound(click);
+			_enOpciones = true;
+			SetBotones();
+		}, Texture2D{}, _inkP, m_font);
+
+	d = MeasureTextEx(m_font, "CRÉDITOS", size, 2.f);
+	_bCreditos = Create<Button>("CRÉDITOS", Rectangle{ 1190 - d.x, 550, d.x, d.y },
+		[click] {
+			AudioManager::Instance()->PlaySound(click);
+			// TODO: creditos
+		}, Texture2D{}, _inkP, m_font);
+
+	d = MeasureTextEx(m_font, "SALIR", size, 2.f);
+	_bSalir = Create<Button>("SALIR", Rectangle{ 1190 - d.x, 605, d.x, d.y },
+		[] { Game::Instance()->RequestQuit(); }, Texture2D{}, _inkP, m_font);
+
+	// Boton de las opciones, centrado bajo el panel
+	d = MeasureTextEx(m_font, "VOLVER", size, 2.f);
+	_bVolver = Create<Button>("VOLVER", Rectangle{ (1280 - d.x) / 2.f, 190 + 280, d.x, d.y },
+		[this, click] {
+			AudioManager::Instance()->PlaySound(click);
+			_enOpciones = false;
+			SetBotones();
+		}, Texture2D{}, _inkP, m_font);
+
+	SetBotones();
+}
+
+void MainMenu::SetBotones()
+{
+	_bJugar->SetActive(!_enOpciones);
+	_bOpciones->SetActive(!_enOpciones);
+	_bCreditos->SetActive(!_enOpciones);
+	_bSalir->SetActive(!_enOpciones);
+	_bVolver->SetActive(_enOpciones);
 }
 
 void MainMenu::Update(float dt)
 {
+	if (_enOpciones && IsKeyPressed(KEY_ESCAPE)) { //pa que pueda cerrar tambien por ESC
+		_enOpciones = false;
+		SetBotones();
+	}
 	Scene::Update(dt);
 }
 
@@ -58,11 +83,22 @@ void MainMenu::Draw()
 {
 	DrawTexturePro(_background, { 0, 0, (float)_background.width, (float)_background.height },
 		_backgroundHS, { 0, 0 }, 0.0f, WHITE);
+
+	if (_enOpciones) {
+		// velo + panel (340x340 centrado: x=470, y=190)
+		DrawRectangle(0, 0, 1280, 720, Color{ 250, 248, 242, 200 });
+		DrawRectangle(470, 190, 340, 340, Color{ 245, 241, 232, 255 });
+		DrawRectangleLinesEx(Rectangle{ 470, 190, 340, 340 }, 2.f, _inkP);
+
+		Vector2 t = MeasureTextEx(m_font, "OPCIONES", 44.f, 2.f);
+		float tx = 470 + (340 - t.x) / 2.f;
+		DrawTextEx(m_font, "OPCIONES", Vector2{ tx, 214 }, 44.f, 2.f, _inkP);
+	}
+
 	Scene::Draw();
 
-	// --- Interfaz del juego ---
-	//DrawText(m_message.c_str(), _buttonHS.x + 60, _buttonHS.y + 30, 24, BLACK);
-	//DrawText("F1: panel de depuracion", 20, GameConstants::kScreenHeight - 50, 24, BLACK);
+	if (_enOpciones)
+		OptionsPanel::Draw(500, 290, 280, 170);
 }
 
 void MainMenu::Release()
