@@ -55,11 +55,11 @@ void DialogueManager::Init() {
 	DialogueManager::Instance()->LoadDialogue(FileName::DIARY_INFO, inventoryInfoBox, 18.f, WHITE, DARKBROWN, BLACK);
 
 	//Pop-ups Diario
-	DialogueManager::Instance()->LoadDialogue(FileName::LUCES_DE_BOHEMIA_INFO, diaryInfoBox, 18.f, WHITE, GOLD, BLACK);
-	DialogueManager::Instance()->LoadDialogue(FileName::CONTEXTO_INFO, diaryInfoBox, 18.f, WHITE, DARKBROWN, BLACK);
-	DialogueManager::Instance()->LoadDialogue(FileName::ESPERPENTO_INFO, diaryInfoBox, 18.f, WHITE, RED, BLACK);
-	DialogueManager::Instance()->LoadDialogue(FileName::ESPEJOS_INFO, diaryInfoBox, 18.f, WHITE, GRAY, BLACK);
-	DialogueManager::Instance()->LoadDialogue(FileName::CANOURO_INFO, diaryInfoBox, 18.f, WHITE, GREEN, BLACK);
+	DialogueManager::Instance()->LoadDialogue(FileName::LUCES_DE_BOHEMIA_INFO, diaryInfoBox, 18.f, BLACK, BLANK, BLANK);
+	DialogueManager::Instance()->LoadDialogue(FileName::CONTEXTO_INFO, diaryInfoBox, 18.f, BLACK, BLANK, BLANK);
+	DialogueManager::Instance()->LoadDialogue(FileName::ESPERPENTO_INFO, diaryInfoBox, 18.f, BLACK, BLANK, BLANK);
+	DialogueManager::Instance()->LoadDialogue(FileName::ESPEJOS_INFO, diaryInfoBox, 18.f, BLACK, BLANK, BLANK);
+	DialogueManager::Instance()->LoadDialogue(FileName::CANOURO_INFO, diaryInfoBox, 18.f, BLACK, BLANK, BLANK);
 
 
 	//--- Nombre de los archivos para el debug
@@ -233,7 +233,8 @@ void DialogueManager::Draw() {
 
 	//-- Mostrar Fondo y bordes
 	DrawRectangleRec(box, diagInf._box._bodyColor);
-	DrawRectangleLinesEx(box, 2.f, diagInf._color);
+	if (diagInf._box._bodyColor.a != 0)
+		DrawRectangleLinesEx(box, 2.f, diagInf._color);
 
 	//-- Mostrar header
 	DrawRectangle(box.x, box.y, box.width, diagInf._viewport.y - box.y, diagInf._box._headerColor);
@@ -304,14 +305,18 @@ void DialogueManager::Update(float dt) {
 
 	// --- PROVISIONALLLLLLL feedback para saber que puede quitar el texto al clickar
 	_elapsed += dt;
-	if (_elapsed >= 1000.f)_elapsed -= 1000.f; //hago esto por que no hay un getTIME desde que empezo el juego
+	if (_elapsed >= 1000.f) _elapsed -= 1000.f;
 	float osc = (std::sin(_elapsed * _VEL_OSC) + 1) * 0.5f; //[0,1]
-	float alpha = Lerp(0.95, 0.90, osc);
-	if (info._maxScroll == info._scrollY) {
-		info._box._bodyColor.a = (unsigned char)(alpha * 255.f);
-	}
-	else {
-		info._box._bodyColor.a = (int)(255.f * 0.90f); //Ya empiezan con transparencia
+	float alpha = Lerp(0.95f, 0.90f, osc);
+
+	// Solo modulamos el alfa si el fondo no es transparente (los del diario usan BLANK)
+	if (info._box._bodyColor.a != 0) {
+		if (info._maxScroll == info._scrollY) {
+			info._box._bodyColor.a = (unsigned char)(alpha * 255.f);
+		}
+		else {
+			info._box._bodyColor.a = (unsigned char)(255.f * 0.90f);
+		}
 	}
 }
 
