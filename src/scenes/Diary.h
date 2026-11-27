@@ -4,17 +4,25 @@
 #include "imgui.h"
 #include "../entities/Clickable.h"
 
+enum NodeId {
+    CONTEXTO = 0,
+    LUCES_DE_BOHEMIA,
+    ESPEJOS,
+    ESPERPENTO,
+    CANOURO,
+    NUM_NODES
+};
+
 struct Node
 {
-    bool active = true;
+    bool active = false;
     Vector2 pos{};
     Clickable button{};
 };
 
 struct Edge
 {
-    int a, b;
-    bool active = true;
+    int nodeA, nodeB;
 };
 
 class Diary : public Scene
@@ -28,16 +36,10 @@ public:
     void Release() override;
     void OnEnter() override;
 
-private:
-    enum NodeId {
-        CONTEXTO = 0,
-        LUCES_DE_BOHEMIA,
-        ESPEJOS,
-        ESPERPENTO,
-        CANOURO,
-        NUM_NODES
-    };
+    void SetActiveNode(int id, bool b) { nodes[id].active = b; }
+    int GetNodesSize() { return nodes.size(); }
 
+private:
     void DrawFrame(const Texture& tex, int frame, int frames, ImVec2 size);
     Vector2 Center(int id) const { return { nodes[id].pos.x + 25, nodes[id].pos.y + 25 }; }
     void place(NodeId id, float x, float y);

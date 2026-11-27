@@ -15,7 +15,11 @@ void Diary::Init()
     for (Node& n : nodes) {
         n.button.SetTexture(_nodeTexture);
         n.button.SetSize(50, 50);
+        n.button.AddCallback([]() {
+            // Aqui va lo de enseñar texto
+        });
     }
+
 
     //200, 125 punto 0,0
     //550, 575 punto 1,1
@@ -55,6 +59,8 @@ void Diary::Update(float dt)
             }
         }
     }
+    for (Node& n : nodes)
+        n.button.Update(dt);
 }
 
 void Diary::Draw()
@@ -65,8 +71,8 @@ void Diary::Draw()
 
     if (!_opening) {
         for (const Edge& e : edges) {
-            if (e.active && (nodes[e.a].active || nodes[e.b].active))
-                DrawLineEx(Center(e.a), Center(e.b), 3.0f, DARKBROWN);
+            if (nodes[e.nodeA].active || nodes[e.nodeB].active)
+                DrawLineEx(Center(e.nodeA), Center(e.nodeB), 3.0f, DARKBROWN);
         }
 
         for (Node& n : nodes) {

@@ -146,6 +146,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\core\DiaryManager.cpp" />
     <ClCompile Include="src\scenes\Bar.cpp" />
     <ClCompile Include="src\scenes\Diary.cpp" />
     <ClCompile Include="src\scenes\PuertaBar.cpp" />
@@ -177,6 +178,7 @@
     <ClCompile Include="src\utilities\CursorState.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\DiaryManager.h" />
     <ClInclude Include="src\scenes\Bar.h" />
     <ClInclude Include="src\scenes\Diary.h" />
     <ClInclude Include="src\scenes\PuertaBar.h" />

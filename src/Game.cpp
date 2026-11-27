@@ -9,6 +9,7 @@
 #include "core/DoorManager.h"
 #include "core/NavigationManager.h"
 #include "core/Inventory.h"
+#include "core/DiaryManager.h"
 #include "utilities/GameConstants.h"
 
 #include "scenes/MainMenu.h"
@@ -64,6 +65,7 @@ Game::~Game()
 		NavigationManager::Release();
 		DoorManager::Release();
 		Inventory::Release();
+		DiaryManager::Release();
 		UnloadRenderTexture(m_target);
         CloseAudioDevice();        // 2) audio
         rlImGuiShutdown();         // 3) ImGui
@@ -109,6 +111,7 @@ void Game::initGame()
 	DialogueManager::Instance()->Init(); //Cargan los textos etc
 	DoorManager::Instance()->Init();
 	Inventory::Instance()->Init();
+	DiaryManager::Instance()->Init();
 
     SceneManager::Instance()->AddScene(new MainMenu("Menu"));
 	SceneManager::Instance()->AddScene(new PlazaScene("Plaza"));
