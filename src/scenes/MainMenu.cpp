@@ -20,6 +20,7 @@ void MainMenu::Init()
 	_inkP = { 40, 30, 60, 255 };
 	float size = 34.f;
 	Sound click = _clickSound;
+	float miniOffsetX = 30.0f;
 
 	// Botones del menu
 	Vector2 d;
@@ -28,26 +29,26 @@ void MainMenu::Init()
 		[click] {
 			AudioManager::Instance()->PlaySound(click);
 			SceneManager::Instance()->ChangeScene("Plaza");
-		}, Texture2D{}, _inkP, m_font);
+		}, Texture2D{}, _inkP, m_font, DARKGREEN);
 
 	d = MeasureTextEx(m_font, "OPCIONES", size, 2.f);
-	_bOpciones = Create<Button>("OPCIONES", Rectangle{ 1190 - d.x, 495, d.x, d.y },
+	_bOpciones = Create<Button>("OPCIONES", Rectangle{ miniOffsetX + 1190 - d.x, 495, d.x, d.y },
 		[this, click] {
 			AudioManager::Instance()->PlaySound(click);
 			_enOpciones = true;
 			SetBotones();
-		}, Texture2D{}, _inkP, m_font);
+		}, Texture2D{}, _inkP, m_font, DARKPURPLE);
 
 	d = MeasureTextEx(m_font, "CRÉDITOS", size, 2.f);
-	_bCreditos = Create<Button>("CRÉDITOS", Rectangle{ 1190 - d.x, 550, d.x, d.y },
+	_bCreditos = Create<Button>("CRÉDITOS", Rectangle{ miniOffsetX + 1190 - d.x, 550, d.x, d.y },
 		[click] {
 			AudioManager::Instance()->PlaySound(click);
 			// TODO: creditos
-		}, Texture2D{}, _inkP, m_font);
+		}, Texture2D{}, _inkP, m_font, YELLOW);
 
 	d = MeasureTextEx(m_font, "SALIR", size, 2.f);
 	_bSalir = Create<Button>("SALIR", Rectangle{ 1190 - d.x, 605, d.x, d.y },
-		[] { Game::Instance()->RequestQuit(); }, Texture2D{}, _inkP, m_font);
+		[] { Game::Instance()->RequestQuit(); }, Texture2D{}, _inkP, m_font, RED);
 
 	// Boton de las opciones, centrado bajo el panel
 	d = MeasureTextEx(m_font, "VOLVER", size, 2.f);
