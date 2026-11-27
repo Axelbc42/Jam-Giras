@@ -12,6 +12,8 @@ namespace Textures {
 	constexpr const char* ITEM_KEY_2 = "objects/key2.png";
 	constexpr const char* CLOSED_DOOR = "objects/closedDoor.png";
 	constexpr const char* OPENED_DOOR = "objects/openedDoor.png";
+	constexpr const char* CLOCK = "objects/clock.png";
+	constexpr const char* HAND = "objects/hand.png";
 
 	constexpr const char* DIARY_FRAMES = "UI/diary.png";
 	constexpr const char* CLOSED_DIARY = "UI/libritoCerrado.png";
