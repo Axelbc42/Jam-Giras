@@ -20,7 +20,7 @@ void MirrorPuzzle::Init()
         return;
 
     AssetManager* assets = AssetManager::Instance();
-
+    selectedPieceHover = Create<GameObject>();
     for (int i = 0; i < N_PIECES; i++)
     {
         PiezaPuzle* p = Create<PiezaPuzle>(puzzlePos[i]);
@@ -147,6 +147,8 @@ void MirrorPuzzle::CheckCorrect()
 
 void MirrorPuzzle::OnResolve()
 {
+    selectedPieceHover->SetActive(false);
+
     DoorManager* dm = DoorManager::Instance();
     AssetManager* assets = AssetManager::Instance();
 
@@ -205,19 +207,30 @@ void MirrorPuzzle::OnExit()
 
 void MirrorPuzzle::Draw()
 {
+    if (!piezas.empty() && !correct)
+    {
+        const PiezaPuzle* p = piezas[m_board[selectedSlot]];
+        const Rectangle& r = p->GetRect();
+
+        constexpr float scale = 1.05f;
+
+        const float newWidth = r.width * scale;
+        const float newHeight = r.height * scale;
+
+        selectedPieceHover->Configure( p->GetTexture(),
+            r.x - (newWidth - r.width) / 2.0f,
+            r.y - (newHeight - r.height) / 2.0f,
+            newWidth,newHeight );
+
+        selectedPieceHover->SetTint(selectionMode ? YELLOW : RED);
+    }
+
     Scene::Draw();
 
     if (piezas.empty() || correct)
         return;
 
-    // Marco alrededor de la pieza seleccionada
-    const PiezaPuzle* seleccionada = piezas[m_board[selectedSlot]];
-
-    DrawRectangleLinesEx(
-        seleccionada->GetRect(),
-        4.0f,
-        selectionMode ? YELLOW : ORANGE
-    );
+    selectedPieceHover->Draw();
 
     DrawText(
         selectionMode ? "Modo: seleccion (T: cambiar)" : "Modo: intercambio (T: cambiar)",
@@ -226,8 +239,6 @@ void MirrorPuzzle::Draw()
 
     DrawText("WASD: mover", 20, 90, 20, LIGHTGRAY);
 }
-
-
 void MirrorPuzzle::Release()
 {
     // Los objetos los registra y los destruye Scene (Create)

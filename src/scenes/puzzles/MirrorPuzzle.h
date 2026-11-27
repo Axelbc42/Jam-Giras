@@ -53,6 +53,6 @@ private:
     int m_board[N_PIECES] = {};
     bool selectionMode = true;
     int selectedSlot = 0;
-
+    GameObject* selectedPieceHover;
     bool correct = false;
 };
