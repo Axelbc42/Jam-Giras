@@ -10,11 +10,10 @@ constexpr Vector2 puzzlePos[] = {
     {0,1}, {1,1},
     {0,2}, {1,2}
 }; 
-
-constexpr Vector2 PUZZLE_ORIGIN = { 460.0f, 61.0f };
+constexpr Vector2 PUZZLE_ORIGIN = { 582.0f, 193.0f };
 constexpr Vector2 PUZZLE_SEPARATION = { 86.0f, 181.0f };
 constexpr Vector2 PIECES_OFFSET[N_PIECES] = {
-    {0.0f, 0.0f}, {-19.0f, -13.0f}, {-9.0f, 64.0f}, {108.0f, -69.0f}, {14.0f, 46.0f}, {94.0f, -72.0f}
+    {0.0f, 0.0f}, {16.0f, 0.0f}, {-17.0f, 40.0f}, {108.0f, -69.0f}, {51.0f, -5.0f}, {85.0f, -95.0f}
 };
 
 class MirrorPuzzle : public Scene

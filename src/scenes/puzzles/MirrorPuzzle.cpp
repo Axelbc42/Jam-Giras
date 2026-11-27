@@ -68,18 +68,27 @@ void MirrorPuzzle::SetPiecePos(int pieceIndex, int slotIndex)
 
     const Vector2& celda = puzzlePos[slotIndex];
 
-    // Obtener las dimensiones originales de la textura
     Texture2D textura = piezas[pieceIndex]->GetTexture();
+
     piezas[pieceIndex]->SetCurrentPos(celda);
 
+    const float width = textura.width / 5.0f;
+    const float height = textura.height / 5.0f;
+
+    // El centro pertenece a la casilla, no a la pieza
+    const float centerX =
+        m_origin.x + m_separation.x * celda.x + m_offsets[slotIndex].x;
+
+    const float centerY =
+        m_origin.y + m_separation.y * celda.y + m_offsets[slotIndex].y;
+
     piezas[pieceIndex]->SetRect(Rectangle{
-        m_origin.x + m_separation.x * celda.x + m_offsets[pieceIndex].x,
-        m_origin.y + m_separation.y * celda.y + m_offsets[pieceIndex].y,
-        (float)textura.width/5,
-        (float)textura.height/5
+        centerX - width / 2.0f,
+        centerY - height / 2.0f,
+        width,
+        height
         });
 }
-
 
 void MirrorPuzzle::Layout()
 {
@@ -126,8 +135,7 @@ void MirrorPuzzle::CheckCorrect()
     }
     correct = c;
     if (c) {
-        for (auto p : piezas)
-            p->SetActive(false);
+       //CORRECT
     }
 }
 
@@ -136,7 +144,7 @@ void MirrorPuzzle::Update(float dt)
 {
     Scene::Update(dt);
 
-    if (correct) return;
+    //if (correct) return;
 
     if (IsKeyPressed(KEY_T))
         selectionMode = !selectionMode;
@@ -178,7 +186,7 @@ void MirrorPuzzle::Draw()
 {
     Scene::Draw();
 
-    if (piezas.empty() || correct)
+    if (piezas.empty() /* || correct*/)
         return;
 
     // Marco alrededor de la pieza seleccionada
