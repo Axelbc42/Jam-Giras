@@ -22,12 +22,13 @@ public:
 	void Draw(); //La key
 	void Update(float dt);
 	void DrawDebugUI();
-private: //privados para que no accedais por error sin el wrapper
+
 	DialogueManager() = default;
 	~DialogueManager() = default;
 	DialogueManager(DialogueManager&) = delete;
 	DialogueManager& operator=(const DialogueManager&) = delete;
 
+private: //privados para que no accedais por error sin el wrapper
 	void unloadAll();
 	Rectangle createDialogueBox(float w, float h, float x, float y);
 private:
