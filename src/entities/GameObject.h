@@ -1,6 +1,7 @@
 #pragma once
 
 #include "raylib.h"
+#include <math.h>
 
 class GameObject
 {
@@ -34,6 +35,12 @@ public:
 	void SetPosition(float x, float y) { m_rect.x = x; m_rect.y = y; }
 	void SetSize(float w, float h) { m_rect.width = w; m_rect.height = h; }
 	void SetRotation(float degrees) { m_rotation = degrees; }
+
+	void SetRotationOverload(float degrees) {
+		m_rotation = fmodf(m_rotation + degrees, 360.0f);
+		if (m_rotation < 0.0f) m_rotation += 360.0f;
+	}
+
 	void SetPivot(float x, float y) { m_pivot.x = x; m_pivot.y = y; has_pivot = true; }
 
 	// Textura + posición + tamaño de golpe
