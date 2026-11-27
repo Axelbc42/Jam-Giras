@@ -59,6 +59,7 @@ public:
 	}
 
 	void SetTexture(const Texture& texture) { m_texture = texture; }
+	Texture2D GetTexture() const { return m_texture; }
 	void SetTint(const Color& tint) { m_tint = tint; }
 
 protected:
