@@ -43,7 +43,7 @@ void MainMenu::Init()
 	_bCreditos = Create<Button>("CRÉDITOS", Rectangle{ miniOffsetX + 1190 - d.x, 550, d.x, d.y },
 		[click] {
 			AudioManager::Instance()->PlaySound(click);
-			// TODO: creditos
+			SceneManager::Instance()->ChangeScene("Creditos");
 		}, Texture2D{}, _inkP, m_font, YELLOW);
 
 	d = MeasureTextEx(m_font, "SALIR", size, 2.f);

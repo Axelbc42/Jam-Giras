@@ -21,6 +21,7 @@
 #include "scenes/Bar.h"
 #include "scenes/PauseMenu.h"
 #include "scenes/Diary.h"
+#include "scenes/Creditos.h"
 #include "scenes/puzzles/MirrorPuzzle.h"
 
 #include "utilities/CursorState.h"
@@ -123,6 +124,7 @@ void Game::initGame()
 	SceneManager::Instance()->AddScene(new PauseMenu("PauseMenu"));
 	SceneManager::Instance()->AddScene(new Diary("Diary"));
 	SceneManager::Instance()->AddScene(new MirrorPuzzle("MirrorPuzzle"));
+	SceneManager::Instance()->AddScene(new Creditos("Creditos"));
 
 	DiaryManager::Instance()->Init();
 
