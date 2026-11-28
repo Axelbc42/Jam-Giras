@@ -10,6 +10,8 @@ void Bar::Init()
 	_handsTickSFX = AssetManager::Instance()->GetSound(Sounds::CLICK);
 	//---Texturas
 	Texture2D btnTex = AssetManager::Instance()->GetTexture(Textures::BUTON1);
+	//---Fuentes
+	Font font = AssetManager::Instance()->GetFont(Fonts::MAIN); //Simplemente para poder definir los hovers en las constructoras de los botones
 
 	_clock = Create<GameObject>();
 	_bigHand = Create<GameObject>();
@@ -30,7 +32,6 @@ void Bar::Init()
 	_clock->Configure(asset->GetTexture(Textures::CLOCK), centerX - (wClock / 2.f), centerY - (hClock / 2.f), wClock, hClock);
 	_bigHand->Configure(asset->GetTexture(Textures::HAND), centerX - (wBigHand / 2.f), centerY - (hBigHand / 2.f), wBigHand, hBigHand, wBigHand / 2.f, hBigHand); //tiene rotacion
 	_smallHand->Configure(asset->GetTexture(Textures::HAND), centerX - (wSMHand / 2.f), centerY - (hSMHand / 2.f), wSMHand, hSMHand, wSMHand / 2.f, hSMHand);
-
 	//Botones por arriba
 	const float bottomClockBigHandOffset = centerY + (hClock / 2.f) + 15.f; //con un poco de offset
 	const float bigBtnWidth = 45.f;
@@ -39,11 +40,11 @@ void Bar::Init()
 	Create<Button>("-", Rectangle{ centerX - bigBtnWidth, bottomClockBigHandOffset, bigBtnWidth, bigBtnHeight }, [this] {
 		AudioManager::Instance()->PlaySound(_handsTickSFX);
 		_bigHand->SetRotationOverload(-30.f);
-		}, btnTex);
+		}, btnTex, BLACK, font, ORANGE);
 	Create<Button>("+", Rectangle{ centerX, bottomClockBigHandOffset, bigBtnWidth, bigBtnHeight }, [this] {
 		AudioManager::Instance()->PlaySound(_handsTickSFX);
 		_bigHand->SetRotationOverload(30.f);
-		}, btnTex);
+		}, btnTex, BLACK, font, ORANGE);
 
 	//---Botones manecilla pequeña
 	const float bottomClockSmallHandOffset = bottomClockBigHandOffset + 25.f;
@@ -52,11 +53,11 @@ void Bar::Init()
 	Create<Button>("-", Rectangle{ centerX - smallBtnWidth, bottomClockSmallHandOffset, smallBtnWidth, smallBtnHeight }, [this] {
 		AudioManager::Instance()->PlaySound(_handsTickSFX);
 		_smallHand->SetRotationOverload(-30.f);
-		}, btnTex);
+		}, btnTex, BLACK, font, DARKGRAY);
 	Create<Button>("+", Rectangle{ centerX, bottomClockSmallHandOffset, smallBtnWidth, smallBtnHeight }, [this] {
 		AudioManager::Instance()->PlaySound(_handsTickSFX);
 		_smallHand->SetRotationOverload(30.f);
-		}, btnTex);
+		}, btnTex, BLACK, font, DARKGRAY);
 
 
 }
@@ -67,7 +68,8 @@ void Bar::OnEnter() {
 	//---*Ejemplo de lo que podemos hacer con items o pjs respecto al reloj*---
 	if (s->onDayState()) {
 		_smallHand->SetActive(false);
-	}else {}
+	}
+	else {}
 	//------
 }
 
